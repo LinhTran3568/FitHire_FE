@@ -10,7 +10,9 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write \"src/**/*.{ts,tsx,css,json}\"",
-    "format:check": "prettier --check \"src/**/*.{ts,tsx,css,json}\""
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,css,json}\"",
+    "typecheck": "tsc -p tsconfig.app.json --noEmit",
+    "check:arch": "node ./scripts/check-architecture.cjs"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.21",
