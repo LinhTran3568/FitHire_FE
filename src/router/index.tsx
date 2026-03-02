@@ -10,20 +10,23 @@ const DashboardPage = lazy(() => import('@pages/DashboardPage'));
 const NotFoundPage = lazy(() => import('@pages/NotFoundPage'));
 
 // ── Route config ──────────────────────────────────────────────────────────────
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <AppLayout />,
-    children: [
-      { index: true, element: <HomePage /> },
-      { path: 'dashboard', element: <DashboardPage /> },
-    ],
-  },
-  {
-    path: '*',
-    element: <NotFoundPage />,
-  },
-]);
+const router = createBrowserRouter(
+  [
+    {
+      path: '/',
+      element: <AppLayout />,
+      children: [
+        { index: true, element: <HomePage /> },
+        { path: 'dashboard', element: <DashboardPage /> },
+      ],
+    },
+    {
+      path: '*',
+      element: <NotFoundPage />,
+    },
+  ],
+  { basename: import.meta.env.BASE_URL },
+);
 
 // ── Root loading fallback ─────────────────────────────────────────────────────
 function PageFallback() {
