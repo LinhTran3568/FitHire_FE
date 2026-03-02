@@ -43,7 +43,11 @@
     min-height: 100vh;
     background-color: var(--color-background);
     color: var(--color-text);
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family:
+      'Inter',
+      system-ui,
+      -apple-system,
+      sans-serif;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
   }

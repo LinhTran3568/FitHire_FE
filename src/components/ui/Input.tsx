@@ -50,18 +50,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="flex flex-col gap-1.5">
         {label && (
-          <label
-            htmlFor={inputId}
-            className="text-sm font-medium text-gray-700"
-          >
+          <label htmlFor={inputId} className="text-sm font-medium text-gray-700">
             {label}
           </label>
         )}
 
         <div className="relative flex items-center">
-          {leftAddon && (
-            <span className="absolute left-3 text-gray-400">{leftAddon}</span>
-          )}
+          {leftAddon && <span className="absolute left-3 text-gray-400">{leftAddon}</span>}
 
           <input
             ref={ref}
@@ -83,18 +78,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             {...props}
           />
 
-          {rightAddon && (
-            <span className="absolute right-3 text-gray-400">{rightAddon}</span>
-          )}
+          {rightAddon && <span className="absolute right-3 text-gray-400">{rightAddon}</span>}
         </div>
 
         {(helperText ?? errorMessage) && (
-          <p
-            className={cn(
-              'text-xs',
-              hasError ? 'text-red-500' : 'text-gray-500',
-            )}
-          >
+          <p className={cn('text-xs', hasError ? 'text-red-500' : 'text-gray-500')}>
             {errorMessage ?? helperText}
           </p>
         )}

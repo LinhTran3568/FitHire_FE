@@ -13,9 +13,7 @@ export default function NotFoundPage() {
       <p className="text-8xl font-extrabold text-blue-600">404</p>
       <div>
         <h1 className="text-2xl font-semibold text-gray-900">Page not found</h1>
-        <p className="mt-1 text-gray-500">
-          Sorry, the page you are looking for does not exist.
-        </p>
+        <p className="mt-1 text-gray-500">Sorry, the page you are looking for does not exist.</p>
       </div>
       <Button variant="primary" onClick={() => navigate('/')}>
         Back to Home

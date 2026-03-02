@@ -24,10 +24,8 @@ export function Sidebar() {
       )}
     >
       {/* Logo */}
-      <div className="flex h-16 items-center px-4 border-b border-gray-200">
-        <span className="text-xl font-bold text-blue-600">
-          {sidebarOpen ? 'MyApp' : 'M'}
-        </span>
+      <div className="flex h-16 items-center border-b border-gray-200 px-4">
+        <span className="text-xl font-bold text-blue-600">{sidebarOpen ? 'MyApp' : 'M'}</span>
       </div>
 
       {/* Navigation */}

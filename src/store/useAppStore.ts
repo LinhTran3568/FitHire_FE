@@ -35,8 +35,7 @@ export const useAppStore = create<AppState>()(
 
         // ── Sidebar ──────────────────────────────────────────────────────────
         sidebarOpen: true,
-        toggleSidebar: () =>
-          set({ sidebarOpen: !get().sidebarOpen }, false, 'toggleSidebar'),
+        toggleSidebar: () => set({ sidebarOpen: !get().sidebarOpen }, false, 'toggleSidebar'),
         setSidebarOpen: open => set({ sidebarOpen: open }, false, 'setSidebarOpen'),
 
         // ── Toasts ───────────────────────────────────────────────────────────
@@ -44,20 +43,13 @@ export const useAppStore = create<AppState>()(
         addToast: toast =>
           set(
             state => ({
-              toasts: [
-                ...state.toasts,
-                { ...toast, id: `${Date.now()}-${Math.random()}` },
-              ],
+              toasts: [...state.toasts, { ...toast, id: `${Date.now()}-${Math.random()}` }],
             }),
             false,
             'addToast',
           ),
         removeToast: id =>
-          set(
-            state => ({ toasts: state.toasts.filter(t => t.id !== id) }),
-            false,
-            'removeToast',
-          ),
+          set(state => ({ toasts: state.toasts.filter(t => t.id !== id) }), false, 'removeToast'),
       }),
       {
         name: 'app-storage',

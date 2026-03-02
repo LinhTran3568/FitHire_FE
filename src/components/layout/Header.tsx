@@ -22,7 +22,7 @@ export function Header() {
 
       {/* Right slot – add user menu, notifications, etc. here */}
       <div className="flex items-center gap-3">
-        <div className="h-8 w-8 rounded-full bg-blue-600 text-sm font-semibold text-white flex items-center justify-center">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-sm font-semibold text-white">
           U
         </div>
       </div>
