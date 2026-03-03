@@ -1,12 +1,5 @@
-import {
-  Badge,
-  Button,
-  ChatMessage,
-  SectionTitle,
-  SurfaceCard,
-} from '@components/ui';
+import { Badge, Button, ChatMessage, SectionTitle, SurfaceCard } from '@components/ui';
 import { Lightbulb, SendHorizonal, SquareCheckBig } from 'lucide-react';
-
 
 const chatMessages = [
   {

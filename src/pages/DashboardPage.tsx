@@ -1,7 +1,6 @@
 import { Badge, Button, ProgressBar, SectionTitle, SurfaceCard } from '@components/ui';
 import { Clock3, Sparkles, Target } from 'lucide-react';
 
-
 const recommendedJobs = [
   {
     id: 'jd-01',

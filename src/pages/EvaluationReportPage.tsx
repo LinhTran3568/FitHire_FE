@@ -1,11 +1,5 @@
-import {
-  Button,
-  ScoreCard,
-  SectionTitle,
-  SurfaceCard,
-} from '@components/ui';
+import { Button, ScoreCard, SectionTitle, SurfaceCard } from '@components/ui';
 import { RotateCcw, Share2 } from 'lucide-react';
-
 
 const deepDiveRows = [
   {
@@ -40,16 +34,25 @@ export default function EvaluationReportPage() {
       </div>
 
       <SurfaceCard className="space-y-4">
-        <h3 className="text-lg font-semibold text-slate-900">Deep Dive: Bạn nói vs AI khuyên nên nói</h3>
+        <h3 className="text-lg font-semibold text-slate-900">
+          Deep Dive: Bạn nói vs AI khuyên nên nói
+        </h3>
         <div className="space-y-3">
           {deepDiveRows.map((row, index) => (
-            <div key={row.youSaid} className="grid gap-3 rounded-xl border border-slate-200 p-4 lg:grid-cols-2">
+            <div
+              key={row.youSaid}
+              className="grid gap-3 rounded-xl border border-slate-200 p-4 lg:grid-cols-2"
+            >
               <div>
-                <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Bạn nói</p>
+                <p className="text-xs font-semibold tracking-wide text-slate-500 uppercase">
+                  Bạn nói
+                </p>
                 <p className="mt-2 text-sm text-slate-700">{row.youSaid}</p>
               </div>
               <div>
-                <p className="text-xs font-semibold uppercase tracking-wide text-blue-600">AI khuyên nên nói</p>
+                <p className="text-xs font-semibold tracking-wide text-blue-600 uppercase">
+                  AI khuyên nên nói
+                </p>
                 <p className="mt-2 text-sm text-slate-800">{row.aiSuggest}</p>
               </div>
               <p className="text-xs text-slate-400">Case #{index + 1}</p>

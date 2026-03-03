@@ -3,22 +3,18 @@ import { ArrowLeft, ArrowRight, SkipForward } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-
 const QUIZ_QUESTIONS = [
   {
     id: 'q1',
-    scenario:
-      'Dong nghiep cua ban dang gap kho khan va du an sap den han. Ban se lam gi dau tien?',
+    scenario: 'Dong nghiep cua ban dang gap kho khan va du an sap den han. Ban se lam gi dau tien?',
   },
   {
     id: 'q2',
-    scenario:
-      'Quan ly giao mot task gap khong nam trong ke hoach. Ban xu ly uu tien nhu the nao?',
+    scenario: 'Quan ly giao mot task gap khong nam trong ke hoach. Ban xu ly uu tien nhu the nao?',
   },
   {
     id: 'q3',
-    scenario:
-      'Nhom co xung dot ve huong trien khai ky thuat. Ban thuong phan ung ra sao?',
+    scenario: 'Nhom co xung dot ve huong trien khai ky thuat. Ban thuong phan ung ra sao?',
   },
   {
     id: 'q4',
@@ -27,8 +23,7 @@ const QUIZ_QUESTIONS = [
   },
   {
     id: 'q5',
-    scenario:
-      'Khi nhan feedback tieu cuc tu reviewer, ban thuong hanh dong nhu the nao?',
+    scenario: 'Khi nhan feedback tieu cuc tu reviewer, ban thuong hanh dong nhu the nao?',
   },
 ] as const;
 
@@ -96,7 +91,7 @@ export default function CultureQuizPage() {
         </div>
 
         <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <p className="text-xs font-semibold tracking-wide text-slate-500 uppercase">
             Scenario Question
           </p>
           <p className="mt-3 text-lg leading-relaxed text-slate-900">{currentQuestion.scenario}</p>
@@ -141,7 +136,9 @@ export default function CultureQuizPage() {
           </div>
 
           <Button onClick={goNext}>
-            <span>{questionIndex === QUIZ_QUESTIONS.length - 1 ? 'Nop bai test' : 'Cau tiep theo'}</span>
+            <span>
+              {questionIndex === QUIZ_QUESTIONS.length - 1 ? 'Nop bai test' : 'Cau tiep theo'}
+            </span>
             <ArrowRight size={16} />
           </Button>
         </div>

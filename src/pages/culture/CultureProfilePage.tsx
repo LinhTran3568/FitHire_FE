@@ -1,13 +1,6 @@
-import {
-  Badge,
-  Button,
-  CultureRadarChart,
-  SectionTitle,
-  SurfaceCard,
-} from '@components/ui';
+import { Badge, Button, CultureRadarChart, SectionTitle, SurfaceCard } from '@components/ui';
 import { BookmarkPlus, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
 
 const cultureDimensions = [
   { label: 'Sang tao', value: 84 },

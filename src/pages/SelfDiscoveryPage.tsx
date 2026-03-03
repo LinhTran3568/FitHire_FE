@@ -58,9 +58,9 @@ export default function SelfDiscoveryPage() {
           <h3 className="font-semibold">Insight tu AI</h3>
         </div>
         <p className="mt-3 leading-relaxed text-slate-700">
-          Ban phu hop cac moi truong hoc nhanh, trao quyen va co nhip do trien khai cao. De tang
-          kha nang trung tuyen, hay tap trung cai thien cach ke ve impact dinh luong trong cac du
-          an da lam.
+          Ban phu hop cac moi truong hoc nhanh, trao quyen va co nhip do trien khai cao. De tang kha
+          nang trung tuyen, hay tap trung cai thien cach ke ve impact dinh luong trong cac du an da
+          lam.
         </p>
 
         <div className="mt-4">

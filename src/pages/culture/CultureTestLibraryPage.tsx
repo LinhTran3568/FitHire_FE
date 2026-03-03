@@ -2,7 +2,6 @@ import { Badge, Button, SectionTitle, SurfaceCard } from '@components/ui';
 import { Brain, Building2, HeartHandshake, PlayCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-
 const testCards = [
   {
     id: 'personality',

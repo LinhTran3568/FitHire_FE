@@ -83,7 +83,13 @@ export function CultureRadarChart({ data, size = 320, className }: CultureRadarC
         <polygon points={polygonPoints} fill="#2563eb33" stroke="#2563eb" strokeWidth={2} />
 
         {points.map((point, index) => (
-          <circle key={`dot-${clampedData[index]?.label ?? index}`} cx={point.x} cy={point.y} r={4} fill="#1d4ed8" />
+          <circle
+            key={`dot-${clampedData[index]?.label ?? index}`}
+            cx={point.x}
+            cy={point.y}
+            r={4}
+            fill="#1d4ed8"
+          />
         ))}
       </svg>
 

@@ -1,12 +1,5 @@
-import {
-  Badge,
-  CircularGauge,
-  Button,
-  SectionTitle,
-  SurfaceCard,
-} from '@components/ui';
+import { Badge, CircularGauge, Button, SectionTitle, SurfaceCard } from '@components/ui';
 import { Building2, Link as LinkIcon, WandSparkles } from 'lucide-react';
-
 
 const alignmentPoints = [
   'Cung de cao su minh bach trong giao tiep va feedback.',
@@ -77,7 +70,10 @@ export default function CultureMatchingPage() {
             <h3 className="text-lg font-semibold text-slate-900">Diem cham</h3>
             <div className="mt-3 space-y-2">
               {alignmentPoints.map(point => (
-                <div key={point} className="rounded-lg border border-emerald-100 bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
+                <div
+                  key={point}
+                  className="rounded-lg border border-emerald-100 bg-emerald-50 px-3 py-2 text-sm text-emerald-800"
+                >
                   {point}
                 </div>
               ))}
@@ -88,7 +84,10 @@ export default function CultureMatchingPage() {
             <h3 className="text-lg font-semibold text-slate-900">Diem can luu y</h3>
             <div className="mt-3 space-y-2">
               {cautionPoints.map(point => (
-                <div key={point} className="rounded-lg border border-amber-100 bg-amber-50 px-3 py-2 text-sm text-amber-800">
+                <div
+                  key={point}
+                  className="rounded-lg border border-amber-100 bg-amber-50 px-3 py-2 text-sm text-amber-800"
+                >
                   {point}
                 </div>
               ))}

@@ -2,7 +2,6 @@ import { Badge, Button, SectionTitle, SurfaceCard } from '@components/ui';
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-
 const candidates = [
   {
     id: 'minh-nguyen',
@@ -93,7 +92,10 @@ export default function HrCandidatesPage() {
                     </Badge>
                   </td>
                   <td className="px-4 py-3">
-                    <Link to={`/hr/candidates/${candidate.id}`} className="text-blue-600 hover:text-blue-700">
+                    <Link
+                      to={`/hr/candidates/${candidate.id}`}
+                      className="text-blue-600 hover:text-blue-700"
+                    >
                       Xem chi tiết
                     </Link>
                   </td>

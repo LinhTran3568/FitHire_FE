@@ -1,7 +1,6 @@
 import { cn } from '@lib/utils';
 import type { ReactNode } from 'react';
 
-
 interface SectionTitleProps {
   title: string;
   subtitle?: string;

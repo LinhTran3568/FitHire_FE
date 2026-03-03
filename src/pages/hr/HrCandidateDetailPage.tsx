@@ -1,7 +1,6 @@
 import { Badge, Button, SectionTitle, SurfaceCard } from '@components/ui';
 import { Link, useParams } from 'react-router-dom';
 
-
 const candidateRecords = {
   'minh-nguyen': {
     name: 'Minh Nguyen',
@@ -39,7 +38,9 @@ const candidateRecords = {
 
 export default function HrCandidateDetailPage() {
   const { candidateId } = useParams();
-  const candidate = candidateId ? candidateRecords[candidateId as keyof typeof candidateRecords] : null;
+  const candidate = candidateId
+    ? candidateRecords[candidateId as keyof typeof candidateRecords]
+    : null;
 
   if (!candidate) {
     return (

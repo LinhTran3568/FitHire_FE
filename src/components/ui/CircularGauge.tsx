@@ -1,7 +1,6 @@
 import { cn } from '@lib/utils';
 import { useId } from 'react';
 
-
 interface CircularGaugeProps {
   value: number;
   size?: number;

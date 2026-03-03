@@ -1,7 +1,6 @@
 import { Button } from '@components/ui';
 import { useNavigate } from 'react-router-dom';
 
-
 /**
  * Catch-all 404 page.
  */

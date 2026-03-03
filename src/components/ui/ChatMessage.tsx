@@ -15,7 +15,9 @@ export function ChatMessage({ role, text, hint }: ChatMessageProps) {
         <div
           className={cn(
             'rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm',
-            isUser ? 'rounded-br-md bg-blue-600 text-white' : 'rounded-bl-md bg-slate-100 text-slate-800',
+            isUser
+              ? 'rounded-br-md bg-blue-600 text-white'
+              : 'rounded-bl-md bg-slate-100 text-slate-800',
           )}
         >
           {text}

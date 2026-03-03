@@ -1,13 +1,6 @@
-import {
-  Badge,
-  Button,
-  CircularGauge,
-  SectionTitle,
-  SurfaceCard,
-} from '@components/ui';
+import { Badge, Button, CircularGauge, SectionTitle, SurfaceCard } from '@components/ui';
 import { MessageCircleMore, UploadCloud } from 'lucide-react';
 import { useState } from 'react';
-
 
 const missingKeywords = [
   'Microservices',
@@ -48,12 +41,14 @@ export default function CvOptimizerPage() {
             <textarea
               id="jd-input"
               rows={10}
-              className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none ring-blue-500/20 placeholder:text-slate-400 focus:border-blue-500 focus:ring-4"
+              className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm ring-blue-500/20 outline-none placeholder:text-slate-400 focus:border-blue-500 focus:ring-4"
               placeholder="Dán link JD hoặc nội dung JD tại đây..."
             />
           </div>
 
-          <Button className="w-full justify-center rounded-xl py-6 text-base">Phân tích bằng AI</Button>
+          <Button className="w-full justify-center rounded-xl py-6 text-base">
+            Phân tích bằng AI
+          </Button>
         </SurfaceCard>
 
         <SurfaceCard className="space-y-5">
@@ -86,7 +81,7 @@ export default function CvOptimizerPage() {
       </div>
 
       {showAssistant && (
-        <div className="fixed bottom-6 right-6 z-50 w-[22rem] rounded-2xl border border-slate-200 bg-white shadow-2xl">
+        <div className="fixed right-6 bottom-6 z-50 w-[22rem] rounded-2xl border border-slate-200 bg-white shadow-2xl">
           <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3">
             <p className="text-sm font-semibold text-slate-800">CV Assistant</p>
             <button
