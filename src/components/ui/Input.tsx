@@ -1,6 +1,6 @@
+import { cn } from '@lib/utils';
 import { forwardRef } from 'react';
 
-import { cn } from '@lib/utils';
 import type { Size } from '@/types/index';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {

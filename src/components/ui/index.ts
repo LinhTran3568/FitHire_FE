@@ -1,4 +1,12 @@
 export { Badge } from './Badge';
 export { Button } from './Button';
+export { ChatMessage } from './ChatMessage';
+export { CircularGauge } from './CircularGauge';
+export { CultureRadarChart } from './CultureRadarChart';
+export { FeatureCard } from './FeatureCard';
 export { Input } from './Input';
+export { ProgressBar } from './ProgressBar';
+export { ScoreCard } from './ScoreCard';
+export { SectionTitle } from './SectionTitle';
 export { Spinner } from './Spinner';
+export { SurfaceCard } from './SurfaceCard';

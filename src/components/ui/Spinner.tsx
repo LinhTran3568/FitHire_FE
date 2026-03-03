@@ -1,4 +1,5 @@
 import { cn } from '@lib/utils';
+
 import type { Size } from '@/types/index';
 
 interface SpinnerProps {

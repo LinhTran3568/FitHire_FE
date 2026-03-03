@@ -16,6 +16,10 @@
     --color-danger: oklch(0.55 0.22 27);
     --color-success: oklch(0.55 0.2 145);
     --color-warning: oklch(0.72 0.18 75);
+    --landing-bg: oklch(0.2 0.06 278);
+    --landing-glow-a: oklch(0.78 0.15 278);
+    --landing-glow-b: oklch(0.65 0.2 250);
+    --landing-glow-c: oklch(0.55 0.22 240);
     --radius: 0.5rem;
   }
 
@@ -25,6 +29,10 @@
     --color-text: oklch(0.95 0 0);
     --color-text-muted: oklch(0.65 0 0);
     --color-border: oklch(0.28 0 0);
+    --landing-bg: oklch(0.2 0.06 278);
+    --landing-glow-a: oklch(0.78 0.15 278);
+    --landing-glow-b: oklch(0.65 0.2 250);
+    --landing-glow-c: oklch(0.55 0.22 240);
   }
 
   *,

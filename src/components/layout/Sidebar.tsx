@@ -1,12 +1,24 @@
-import { Home, LayoutDashboard } from 'lucide-react';
-import { NavLink } from 'react-router-dom';
-
 import { cn } from '@lib/utils';
 import { useAppStore } from '@store/useAppStore';
+import {
+  BarChart3,
+  BookOpen,
+  Compass,
+  FileSearch,
+  Home,
+  MessageSquareText,
+  UsersRound,
+} from 'lucide-react';
+import { NavLink } from 'react-router-dom';
 
 const NAV_ITEMS = [
-  { to: '/', label: 'Home', icon: Home, end: true },
-  { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, end: false },
+  { to: '/dashboard', label: 'Tong quan', icon: Home, end: true },
+  { to: '/cv-analyzer', label: 'Toi uu CV', icon: FileSearch, end: false },
+  { to: '/interview', label: 'Luyen phong van AI', icon: MessageSquareText, end: false },
+  { to: '/self-discovery', label: 'Kham pha ban than', icon: Compass, end: false },
+  { to: '/culture/tests', label: 'Culture Fit Test', icon: BookOpen, end: false },
+  { to: '/report', label: 'Bao cao ket qua', icon: BarChart3, end: false },
+  { to: '/hr/candidates', label: 'HR Dashboard', icon: UsersRound, end: false },
 ];
 
 /**
@@ -20,15 +32,13 @@ export function Sidebar() {
     <aside
       className={cn(
         'flex flex-col border-r border-gray-200 bg-white transition-all duration-300',
-        sidebarOpen ? 'w-56' : 'w-16',
+        sidebarOpen ? 'w-64' : 'w-16',
       )}
     >
-      {/* Logo */}
       <div className="flex h-16 items-center border-b border-gray-200 px-4">
-        <span className="text-xl font-bold text-blue-600">{sidebarOpen ? 'MyApp' : 'M'}</span>
+        <span className="text-xl font-bold text-blue-600">{sidebarOpen ? 'FitHire' : 'F'}</span>
       </div>
 
-      {/* Navigation */}
       <nav className="flex-1 overflow-y-auto py-4">
         <ul className="flex flex-col gap-1 px-2">
           {NAV_ITEMS.map(({ to, label, icon: Icon, end }) => (
@@ -46,7 +56,7 @@ export function Sidebar() {
                 }
               >
                 <Icon size={18} className="shrink-0" />
-                {sidebarOpen && <span>{label}</span>}
+                {sidebarOpen && <span className="truncate">{label}</span>}
               </NavLink>
             </li>
           ))}
