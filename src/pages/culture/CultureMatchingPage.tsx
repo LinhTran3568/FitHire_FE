@@ -1,30 +1,46 @@
-import { Badge, CircularGauge, Button, SectionTitle, SurfaceCard } from '@components/ui';
+﻿import { Badge, Button, CircularGauge, SectionTitle, SurfaceCard } from '@components/ui';
 import { Building2, Link as LinkIcon, WandSparkles } from 'lucide-react';
+import { useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 const alignmentPoints = [
-  'Cung de cao su minh bach trong giao tiep va feedback.',
-  'Cung uu tien tinh chu dong va toc do trien khai.',
-  'Co xu huong hoc nhanh qua du an thuc te.',
+  'Cùng đề cao sự minh bạch trong giao tiếp và feedback.',
+  'Cùng ưu tiên tính chủ động và tốc độ triển khai.',
+  'Có xu hướng học nhanh qua dự án thực tế.',
 ];
 
 const cautionPoints = [
-  'Cong ty co chu ky release gap, tan suat overtime cao theo mua.',
-  'Quy trinh phe duyet nhieu buoc, can kien nhan va ky luat cao.',
-  'Can tiep nhan feedback truc dien thuong xuyen tu cap quan ly.',
+  'Công ty có chu kỳ release gấp, tần suất overtime cao theo mùa.',
+  'Quy trình phê duyệt nhiều bước, cần kiên nhẫn và kỷ luật cao.',
+  'Cần tiếp nhận feedback trực diện thường xuyên từ cấp quản lý.',
 ];
 
 export default function CultureMatchingPage() {
+  const [searchParams] = useSearchParams();
+  const targetJob = searchParams.get('jobId');
+
+  const companyName = useMemo(() => {
+    if (!targetJob) return 'Công ty mục tiêu';
+
+    if (targetJob.includes('techify')) return 'Techify Vietnam';
+    if (targetJob.includes('nextgen')) return 'NextGen Solutions';
+    if (targetJob.includes('finstack')) return 'FinStack';
+    if (targetJob.includes('growthlab')) return 'GrowthLab';
+
+    return 'Công ty mục tiêu';
+  }, [targetJob]);
+
   return (
     <div className="space-y-6">
       <SectionTitle
         title="Culture Matching"
-        subtitle="So khop ho so van hoa cua ban voi cong ty/JD muc tieu."
+        subtitle="So khớp hồ sơ văn hóa của bạn với công ty/JD mục tiêu để tránh lệch kỳ vọng khi đi làm."
       />
 
       <SurfaceCard className="space-y-4">
         <div className="grid gap-3 md:grid-cols-2">
           <label className="space-y-2">
-            <span className="text-sm font-medium text-slate-700">Dan link JD</span>
+            <span className="text-sm font-medium text-slate-700">Dán link JD</span>
             <div className="flex items-center gap-2 rounded-xl border border-slate-300 px-3 py-2">
               <LinkIcon size={16} className="text-slate-400" />
               <input
@@ -36,13 +52,14 @@ export default function CultureMatchingPage() {
           </label>
 
           <label className="space-y-2">
-            <span className="text-sm font-medium text-slate-700">Hoac chon cong ty</span>
+            <span className="text-sm font-medium text-slate-700">Hoặc chọn công ty</span>
             <div className="flex items-center gap-2 rounded-xl border border-slate-300 px-3 py-2">
               <Building2 size={16} className="text-slate-400" />
               <select className="w-full bg-transparent text-sm outline-none">
                 <option>Techify Vietnam</option>
                 <option>NextGen Solutions</option>
                 <option>FinStack</option>
+                <option>GrowthLab</option>
               </select>
             </div>
           </label>
@@ -51,7 +68,7 @@ export default function CultureMatchingPage() {
         <div className="flex justify-end">
           <Button>
             <WandSparkles size={16} />
-            <span>Phan tich matching</span>
+            <span>Phân tích matching</span>
           </Button>
         </div>
       </SurfaceCard>
@@ -60,14 +77,14 @@ export default function CultureMatchingPage() {
         <SurfaceCard className="flex flex-col items-center justify-center">
           <CircularGauge value={85} label="Matching Score" />
           <p className="mt-4 text-center text-sm text-slate-600">
-            Ban khop <span className="font-semibold text-slate-900">85%</span> voi van hoa cua
-            <span className="font-semibold text-slate-900"> Cong ty X</span>.
+            Bạn khớp <span className="font-semibold text-slate-900">85%</span> với văn hóa của
+            <span className="font-semibold text-slate-900"> {companyName}</span>.
           </p>
         </SurfaceCard>
 
         <div className="space-y-5">
           <SurfaceCard>
-            <h3 className="text-lg font-semibold text-slate-900">Diem cham</h3>
+            <h3 className="text-lg font-semibold text-slate-900">Điểm chạm</h3>
             <div className="mt-3 space-y-2">
               {alignmentPoints.map(point => (
                 <div
@@ -81,7 +98,7 @@ export default function CultureMatchingPage() {
           </SurfaceCard>
 
           <SurfaceCard>
-            <h3 className="text-lg font-semibold text-slate-900">Diem can luu y</h3>
+            <h3 className="text-lg font-semibold text-slate-900">Điểm cần lưu ý</h3>
             <div className="mt-3 space-y-2">
               {cautionPoints.map(point => (
                 <div
@@ -96,12 +113,11 @@ export default function CultureMatchingPage() {
 
           <SurfaceCard>
             <div className="flex items-center gap-2">
-              <Badge variant="info">Loi khuyen tu FitHire</Badge>
+              <Badge variant="info">Lời khuyên từ FitHire</Badge>
             </div>
             <p className="mt-3 text-sm leading-relaxed text-slate-700">
-              Neu ban lam o day, hay chuan bi tinh than cho quy trinh nghiem ngat va milestone gap.
-              Doi lai, ban se hoc duoc rat nhieu ve cach van hanh du an quy mo lon va ky nang phoi
-              hop lien phong ban.
+              Nếu bạn vào môi trường này, hãy chuẩn bị trước kế hoạch học nhanh 30 ngày đầu: nắm quy
+              trình review, cách báo cáo tiến độ và tiêu chuẩn giao tiếp trong team.
             </p>
           </SurfaceCard>
         </div>

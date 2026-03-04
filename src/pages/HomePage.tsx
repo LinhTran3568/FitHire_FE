@@ -1,66 +1,66 @@
-import { Button, FeatureCard } from '@components/ui';
+﻿import { Button, FeatureCard } from '@components/ui';
 import { BriefcaseBusiness, FileText, ScanSearch } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const FEATURES = [
   {
     icon: ScanSearch,
-    title: 'AI Interview Preparation',
-    description: 'Generate tailored questions and smart answers',
+    title: 'Luyện phỏng vấn AI',
+    description: 'Phỏng vấn bằng voice + camera, đánh giá biểu cảm và tông giọng',
   },
   {
     icon: FileText,
-    title: 'Smart CV Builder',
-    description: 'Create and optimize CV with AI suggestions',
+    title: 'CV Studio thông minh',
+    description: 'Tạo CV từ hội thoại với AI hoặc upload CV để rà lỗi',
   },
   {
     icon: BriefcaseBusiness,
-    title: 'Intelligent Job Matching',
-    description: 'Discover jobs aligned with your skills',
+    title: 'Tìm việc theo CV',
+    description: 'Lọc việc theo lĩnh vực, vị trí, lương và độ khớp hồ sơ',
   },
 ] as const;
 
 export default function HomePage() {
   return (
-    <div className="mx-auto w-full max-w-7xl px-6 pt-12 pb-20 lg:px-10 lg:pt-16">
+    <div className="mx-auto w-full max-w-7xl px-6 pb-20 pt-12 lg:px-10 lg:pt-16">
       <section className="grid gap-10 pb-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
         <div className="space-y-8">
           <span className="inline-flex rounded-2xl border border-blue-200/40 bg-gradient-to-r from-sky-100 to-blue-200 px-5 py-3 text-base font-medium text-slate-700">
-            AI-powered Career Platform
+            Nền tảng AI cho sinh viên & người tìm việc
           </span>
 
-          <h1 className="max-w-2xl text-5xl leading-[1.05] font-bold tracking-tight text-slate-100 md:text-7xl lg:text-8xl">
+          <h1 className="max-w-2xl text-5xl font-bold leading-[1.05] tracking-tight text-slate-100 md:text-7xl lg:text-8xl">
             <span className="bg-gradient-to-r from-indigo-700 via-slate-200 to-slate-100 bg-clip-text text-transparent">
-              Build Smarter CVs.
+              Tạo CV chuẩn.
             </span>{' '}
-            Ace Interviews. Get Hired Faster.
+            Luyện phỏng vấn tốt. Tìm đúng việc.
           </h1>
 
           <p className="max-w-xl text-xl leading-relaxed text-slate-300 md:text-2xl">
-            AI-powered platform to create optimized CVs, prepare for interviews, and discover
-            best-fit jobs.
+            FitHire giúp bạn xây CV với AI, luyện phỏng vấn đa phương thức và chọn việc phù hợp hơn
+            ngay từ hồ sơ.
           </p>
 
           <div className="flex flex-wrap gap-4">
-            <Link to="/cv-analyzer">
+            <Link to="/cv-builder">
               <Button size="lg" className="rounded-xl px-7">
-                Create CV Now
+                Bắt đầu tạo CV
               </Button>
             </Link>
-            <Link to="/dashboard">
+            <Link to="/jobs">
               <Button
                 variant="outline"
                 size="lg"
                 className="rounded-xl border-white/80 bg-white px-7"
               >
-                Explore Jobs
+                Xem việc làm
               </Button>
             </Link>
           </div>
         </div>
 
         <div className="relative rounded-3xl border border-white/45 bg-slate-100/90 p-10 shadow-2xl shadow-black/25">
-          <div className="absolute -top-4 -left-4 z-10 flex h-24 w-24 items-center justify-center rounded-full border-4 border-blue-300 bg-gradient-to-br from-indigo-500 to-sky-400 text-5xl text-white">
+          <div className="absolute -left-4 -top-4 z-10 flex h-24 w-24 items-center justify-center rounded-full border-4 border-blue-300 bg-gradient-to-br from-indigo-500 to-sky-400 text-5xl text-white">
             V
           </div>
 
@@ -88,19 +88,19 @@ export default function HomePage() {
 
       <section className="mx-auto mt-12 max-w-4xl rounded-3xl border border-white/45 bg-white/20 p-10 text-center shadow-xl shadow-black/20 backdrop-blur-md md:p-14">
         <h2 className="text-4xl font-semibold tracking-tight text-slate-100 md:text-5xl">
-          Ready to level up your career?
+          Sẵn sàng nâng cấp hồ sơ ứng tuyển?
         </h2>
         <p className="mt-4 text-xl text-slate-200 md:text-2xl">
-          Join thousands of professionals optimizing their job search with AI.
+          Bắt đầu với CV của bạn và để AI đồng hành xuyên suốt hành trình tìm việc.
         </p>
         <div className="mt-8">
-          <Link to="/dashboard">
+          <Link to="/register">
             <Button
               variant="outline"
               size="lg"
               className="rounded-xl border-white/85 bg-white px-9"
             >
-              Get Started
+              Tạo tài khoản miễn phí
             </Button>
           </Link>
         </div>

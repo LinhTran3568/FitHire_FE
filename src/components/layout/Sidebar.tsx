@@ -1,46 +1,23 @@
-import { cn } from '@lib/utils';
-import { useAppStore } from '@store/useAppStore';
-import {
-  BarChart3,
-  BookOpen,
-  Compass,
-  FileSearch,
-  Home,
-  MessageSquareText,
-  UsersRound,
-} from 'lucide-react';
+﻿import { cn } from '@lib/utils';
+import { BriefcaseBusiness, BookOpen, FileSearch, FileUser, MicVocal } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
 const NAV_ITEMS = [
-  { to: '/dashboard', label: 'Tong quan', icon: Home, end: true },
-  { to: '/cv-analyzer', label: 'Toi uu CV', icon: FileSearch, end: false },
-  { to: '/interview', label: 'Luyen phong van AI', icon: MessageSquareText, end: false },
-  { to: '/self-discovery', label: 'Kham pha ban than', icon: Compass, end: false },
-  { to: '/culture/tests', label: 'Culture Fit Test', icon: BookOpen, end: false },
-  { to: '/report', label: 'Bao cao ket qua', icon: BarChart3, end: false },
-  { to: '/hr/candidates', label: 'HR Dashboard', icon: UsersRound, end: false },
+  { to: '/cv-builder', label: 'Tạo CV với AI', icon: FileSearch, end: false },
+  { to: '/my-cv', label: 'CV của tôi', icon: FileUser, end: false },
+  { to: '/jobs', label: 'Tìm việc', icon: BriefcaseBusiness, end: false },
+  { to: '/interview', label: 'Luyện phỏng vấn', icon: MicVocal, end: false },
+  { to: '/culture/tests', label: 'Test tính cách', icon: BookOpen, end: false },
 ];
 
 /**
- * Collapsible side navigation.
- * Collapses to icon-only mode when `sidebarOpen` is false.
+ * Full-width horizontal navigation for candidate flows.
  */
 export function Sidebar() {
-  const { sidebarOpen } = useAppStore();
-
   return (
-    <aside
-      className={cn(
-        'flex flex-col border-r border-gray-200 bg-white transition-all duration-300',
-        sidebarOpen ? 'w-64' : 'w-16',
-      )}
-    >
-      <div className="flex h-16 items-center border-b border-gray-200 px-4">
-        <span className="text-xl font-bold text-blue-600">{sidebarOpen ? 'FitHire' : 'F'}</span>
-      </div>
-
-      <nav className="flex-1 overflow-y-auto py-4">
-        <ul className="flex flex-col gap-1 px-2">
+    <aside className="border-b border-slate-200 bg-white">
+      <nav className="mx-auto w-full max-w-7xl overflow-x-auto px-4 sm:px-6 lg:px-10">
+        <ul className="flex min-w-max items-center gap-2 py-3">
           {NAV_ITEMS.map(({ to, label, icon: Icon, end }) => (
             <li key={to}>
               <NavLink
@@ -48,15 +25,15 @@ export function Sidebar() {
                 end={end}
                 className={({ isActive }) =>
                   cn(
-                    'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                    'inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
                     isActive
-                      ? 'bg-blue-50 text-blue-700'
-                      : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
+                      ? 'bg-blue-600 text-white'
+                      : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900',
                   )
                 }
               >
-                <Icon size={18} className="shrink-0" />
-                {sidebarOpen && <span className="truncate">{label}</span>}
+                <Icon size={16} className="shrink-0" />
+                <span>{label}</span>
               </NavLink>
             </li>
           ))}

@@ -1,31 +1,31 @@
-import { Badge, Button, SectionTitle, SurfaceCard } from '@components/ui';
+﻿import { Badge, Button, SectionTitle, SurfaceCard } from '@components/ui';
 import { Brain, Building2, HeartHandshake, PlayCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const testCards = [
   {
     id: 'personality',
-    title: 'Test Tinh cach (MBTI / Big Five)',
-    duration: '5 phut',
-    participants: '2,340',
+    title: 'Test tính cách (MBTI / Big Five)',
+    duration: '5 phút',
+    participants: '2.340',
     icon: Brain,
-    summary: 'Hieu ro diem manh, cach ra quyet dinh va phong cach lam viec cua ban.',
+    summary: 'Hiểu rõ điểm mạnh, cách ra quyết định và phong cách làm việc của bạn.',
   },
   {
     id: 'core-values',
-    title: 'Test Gia tri cot loi',
-    duration: '4 phut',
-    participants: '1,920',
+    title: 'Test giá trị cốt lõi',
+    duration: '4 phút',
+    participants: '1.920',
     icon: HeartHandshake,
-    summary: 'Xac dinh uu tien cua ban: luong thuong, thang tien, hay can bang work-life.',
+    summary: 'Xác định ưu tiên: lương thưởng, cơ hội phát triển hay cân bằng cuộc sống.',
   },
   {
     id: 'target-environment',
-    title: 'Test Moi truong muc tieu',
-    duration: '6 phut',
-    participants: '1,540',
+    title: 'Test môi trường mục tiêu',
+    duration: '6 phút',
+    participants: '1.540',
     icon: Building2,
-    summary: 'Ban phu hop startup nang dong hay corporation quy trinh ro rang.',
+    summary: 'Bạn hợp startup năng động hay doanh nghiệp quy trình rõ ràng.',
   },
 ] as const;
 
@@ -33,8 +33,8 @@ export default function CultureTestLibraryPage() {
   return (
     <div className="space-y-6">
       <SectionTitle
-        title="Culture Fit Test Library"
-        subtitle="Chon bai test phu hop de hieu ban than va tang do chinh xac khi matching voi cong ty."
+        title="Thư viện bài test"
+        subtitle="Chọn bài test phù hợp để hiểu bản thân và tăng độ chính xác khi matching với công ty."
       />
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -54,13 +54,13 @@ export default function CultureTestLibraryPage() {
               <div className="space-y-4">
                 <div className="flex flex-wrap gap-2">
                   <Badge variant="info">{test.duration}</Badge>
-                  <Badge variant="default">{test.participants} da tham gia</Badge>
+                  <Badge variant="default">{test.participants} đã tham gia</Badge>
                 </div>
 
                 <Link to={`/culture/tests/${test.id}`}>
                   <Button className="w-full">
                     <PlayCircle size={16} />
-                    <span>Bat dau bai test</span>
+                    <span>Bắt đầu bài test</span>
                   </Button>
                 </Link>
               </div>

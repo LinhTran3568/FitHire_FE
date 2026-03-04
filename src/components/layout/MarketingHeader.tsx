@@ -1,12 +1,12 @@
-import { Button } from '@components/ui';
+﻿import { Button } from '@components/ui';
 import { cn } from '@lib/utils';
 import { NavLink } from 'react-router-dom';
 
 const NAV_ITEMS = [
-  { to: '/', label: 'Home' },
-  { to: '/cv-analyzer', label: 'CV' },
-  { to: '/interview', label: 'Interview' },
-  { to: '/dashboard', label: 'Jobs' },
+  { to: '/', label: 'Trang chủ' },
+  { to: '/cv-builder', label: 'Tạo CV' },
+  { to: '/jobs', label: 'Tìm việc' },
+  { to: '/interview', label: 'Phỏng vấn AI' },
 ];
 
 export function MarketingHeader() {
@@ -38,13 +38,13 @@ export function MarketingHeader() {
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
-          <NavLink to="/dashboard">
+          <NavLink to="/login">
             <Button variant="ghost" className="text-slate-700 hover:text-slate-900">
-              Login
+              Đăng nhập
             </Button>
           </NavLink>
-          <NavLink to="/dashboard">
-            <Button className="rounded-xl px-6">Sign Up</Button>
+          <NavLink to="/register">
+            <Button className="rounded-xl px-6">Đăng ký</Button>
           </NavLink>
         </div>
       </div>
