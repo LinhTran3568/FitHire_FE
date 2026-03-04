@@ -1,7 +1,9 @@
-﻿import { AppLayout, MarketingLayout } from '@components/layout';
+import { AppLayout, MarketingLayout } from '@components/layout';
 import { Spinner } from '@components/ui';
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+
+import { ProtectedRoute, PublicOnlyRoute } from './AuthGuards';
 
 const HomePage = lazy(() => import('@pages/HomePage'));
 const CvOptimizerPage = lazy(() => import('@pages/CvOptimizerPage'));
@@ -25,26 +27,36 @@ const router = createBrowserRouter(
       children: [{ index: true, element: <HomePage /> }],
     },
     {
-      path: '/login',
-      element: <LoginPage />,
-    },
-    {
-      path: '/register',
-      element: <RegisterPage />,
-    },
-    {
-      path: '/',
-      element: <AppLayout />,
+      element: <PublicOnlyRoute />,
       children: [
-        { path: 'cv-builder', element: <CvOptimizerPage /> },
-        { path: 'my-cv', element: <MyCvPage /> },
-        { path: 'jobs', element: <JobsPage /> },
-        { path: 'jobs/:jobId', element: <JobDetailPage /> },
-        { path: 'interview', element: <InterviewPage /> },
-        { path: 'culture/tests', element: <CultureTestLibraryPage /> },
-        { path: 'culture/tests/:testId', element: <CultureQuizPage /> },
-        { path: 'culture/profile', element: <CultureProfilePage /> },
-        { path: 'culture/matching', element: <CultureMatchingPage /> },
+        {
+          path: '/login',
+          element: <LoginPage />,
+        },
+        {
+          path: '/register',
+          element: <RegisterPage />,
+        },
+      ],
+    },
+    {
+      element: <ProtectedRoute />,
+      children: [
+        {
+          path: '/',
+          element: <AppLayout />,
+          children: [
+            { path: 'cv-builder', element: <CvOptimizerPage /> },
+            { path: 'my-cv', element: <MyCvPage /> },
+            { path: 'jobs', element: <JobsPage /> },
+            { path: 'jobs/:jobId', element: <JobDetailPage /> },
+            { path: 'interview', element: <InterviewPage /> },
+            { path: 'culture/tests', element: <CultureTestLibraryPage /> },
+            { path: 'culture/tests/:testId', element: <CultureQuizPage /> },
+            { path: 'culture/profile', element: <CultureProfilePage /> },
+            { path: 'culture/matching', element: <CultureMatchingPage /> },
+          ],
+        },
       ],
     },
     { path: '*', element: <NotFoundPage /> },

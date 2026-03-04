@@ -1,24 +1,34 @@
-﻿import { Button } from '@components/ui';
+import { Button } from '@components/ui';
+import { useAuthStore } from '@features/auth/store/authStore';
 import { cn } from '@lib/utils';
 import { ChevronDown } from 'lucide-react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 
 const CV_FLOWS = [
   {
     to: '/cv-builder?flow=build',
-    label: 'Luồng 1: Tạo CV với AI',
+    label: 'Tạo CV',
     description: 'AI hỏi thông tin và tự tạo CV theo dữ liệu bạn cung cấp.',
   },
   {
     to: '/cv-builder?flow=review',
-    label: 'Luồng 2: Upload CV để rà lỗi',
+    label: 'Rà lỗi CV',
     description: 'Tải CV hiện có lên để chatbot kiểm tra lỗi và gợi ý sửa.',
   },
 ] as const;
 
 export function MarketingHeader() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const isAuthenticated = useAuthStore(state => state.isAuthenticated);
+  const clearAuth = useAuthStore(state => state.clearAuth);
   const cvActive = location.pathname === '/cv-builder';
+
+  const handleLogout = () => {
+    localStorage.removeItem('access_token');
+    clearAuth();
+    navigate('/login');
+  };
 
   return (
     <header className="sticky top-0 z-40 border-b border-white/40 bg-white/90 backdrop-blur-md">
@@ -51,7 +61,7 @@ export function MarketingHeader() {
                 cvActive ? 'text-blue-600' : 'text-slate-800 hover:text-blue-600',
               )}
             >
-              Tạo CV
+              CV
               <ChevronDown size={16} className="transition-transform group-hover:rotate-180" />
             </button>
 
@@ -95,14 +105,22 @@ export function MarketingHeader() {
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
-          <NavLink to="/login">
-            <Button variant="ghost" className="text-slate-700 hover:text-slate-900">
-              Đăng nhập
+          {isAuthenticated ? (
+            <Button variant="outline" onClick={handleLogout}>
+              Đăng xuất
             </Button>
-          </NavLink>
-          <NavLink to="/register">
-            <Button className="rounded-xl px-6">Đăng ký</Button>
-          </NavLink>
+          ) : (
+            <>
+              <NavLink to="/login">
+                <Button variant="ghost" className="text-slate-700 hover:text-slate-900">
+                  Đăng nhập
+                </Button>
+              </NavLink>
+              <NavLink to="/register">
+                <Button className="rounded-xl px-6">Đăng ký</Button>
+              </NavLink>
+            </>
+          )}
         </div>
       </div>
     </header>

@@ -4,19 +4,19 @@ import { Link } from 'react-router-dom';
 
 const FEATURES = [
   {
-    icon: ScanSearch,
-    title: 'Luyện phỏng vấn AI',
-    description: 'Phỏng vấn bằng voice + camera, đánh giá biểu cảm và tông giọng',
+    icon: FileText,
+    title: 'Bước 1: Xây CV có định hướng',
+    description: 'Điền thông tin theo gợi ý AI để tạo CV chuẩn ATS cho đúng vị trí mục tiêu.',
   },
   {
-    icon: FileText,
-    title: 'CV Studio thông minh',
-    description: 'Tạo CV từ hội thoại với AI hoặc upload CV để rà lỗi',
+    icon: ScanSearch,
+    title: 'Bước 2: Rà lỗi và nâng chất lượng',
+    description: 'Upload CV để kiểm tra chính tả, ngữ pháp và cải thiện cách diễn đạt thành tựu.',
   },
   {
     icon: BriefcaseBusiness,
-    title: 'Tìm việc theo CV',
-    description: 'Lọc việc theo lĩnh vực, vị trí, lương và độ khớp hồ sơ',
+    title: 'Bước 3: Tìm việc và luyện phỏng vấn',
+    description: 'Lọc việc theo mức độ khớp hồ sơ và luyện mock interview trước khi ứng tuyển.',
   },
 ] as const;
 
@@ -37,39 +37,39 @@ export default function HomePage() {
           </h1>
 
           <p className="max-w-xl text-lg leading-relaxed text-slate-600 md:text-xl">
-            FitHire giúp bạn xây CV với AI, luyện phỏng vấn đa phương thức và chọn việc phù hợp hơn
-            ngay từ hồ sơ.
+            FitHire giúp bạn đi theo một lộ trình rõ ràng: tạo CV, tối ưu chất lượng hồ sơ, sau đó
+            tìm đúng việc và chuẩn bị phỏng vấn với AI.
           </p>
 
           <div className="flex flex-wrap gap-4">
-            <Link to="/cv-builder">
+            <Link to="/cv-builder?flow=build">
               <Button size="lg" className="rounded-xl px-7">
                 Bắt đầu tạo CV
               </Button>
             </Link>
-            <Link to="/jobs">
+            <Link to="/cv-builder?flow=review">
               <Button
                 variant="outline"
                 size="lg"
                 className="rounded-xl border-slate-300 bg-white px-7 text-slate-700 hover:bg-slate-100"
               >
-                Xem việc làm
+                Tải CV để rà lỗi
               </Button>
             </Link>
           </div>
 
           <div className="grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3">
             <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-              <p className="text-2xl font-semibold text-slate-900">+3.200</p>
-              <p className="mt-1 text-sm text-slate-600">CV đã tạo với AI</p>
+              <p className="text-sm font-semibold text-slate-900">Intern/Fresher-first</p>
+              <p className="mt-1 text-sm text-slate-600">Tập trung nhu cầu ứng tuyển người mới đi làm.</p>
             </div>
             <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-              <p className="text-2xl font-semibold text-slate-900">+1.500</p>
-              <p className="mt-1 text-sm text-slate-600">Phiên mock interview</p>
+              <p className="text-sm font-semibold text-slate-900">CV chuẩn ATS</p>
+              <p className="mt-1 text-sm text-slate-600">Gợi ý nội dung rõ ràng, dễ qua vòng lọc hồ sơ.</p>
             </div>
             <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-              <p className="text-2xl font-semibold text-slate-900">86%</p>
-              <p className="mt-1 text-sm text-slate-600">Mức khớp việc trung bình</p>
+              <p className="text-sm font-semibold text-slate-900">Mock interview AI</p>
+              <p className="mt-1 text-sm text-slate-600">Nhận góp ý để cải thiện câu trả lời trước khi apply.</p>
             </div>
           </div>
         </div>
@@ -80,12 +80,7 @@ export default function HomePage() {
           </div>
 
           <div className="space-y-4 rounded-2xl border border-slate-200 bg-slate-50 p-5">
-            <div className="rounded-xl border border-blue-100 bg-blue-50 p-4">
-              <p className="text-sm font-medium text-blue-700">CV Assistant</p>
-              <p className="mt-2 text-sm text-slate-700">
-                Mình cần thêm thành tựu có số liệu để tăng điểm lọc CV.
-              </p>
-            </div>
+            <p className="text-sm font-semibold text-slate-900">Demo trải nghiệm chính</p>
 
             <div className="space-y-3 rounded-xl border border-slate-200 bg-white p-4">
               <p className="text-sm font-medium text-slate-800">Backend Java Intern</p>
@@ -93,26 +88,38 @@ export default function HomePage() {
                 <div className="h-full w-[86%] rounded-full bg-gradient-to-r from-blue-600 to-indigo-500" />
               </div>
               <p className="text-xs text-slate-500">Độ khớp hồ sơ: 86%</p>
+              <p className="text-sm text-slate-700">AI gợi ý: thêm thành tựu có số liệu để tăng sức thuyết phục.</p>
             </div>
 
-            <div className="grid gap-2 sm:grid-cols-2">
-              <div className="rounded-lg border border-slate-200 bg-white p-3">
-                <p className="text-xs text-slate-500">Biểu cảm</p>
-                <p className="text-lg font-semibold text-slate-900">82%</p>
-              </div>
-              <div className="rounded-lg border border-slate-200 bg-white p-3">
-                <p className="text-xs text-slate-500">Tông giọng</p>
-                <p className="text-lg font-semibold text-slate-900">78%</p>
-              </div>
+            <div className="rounded-xl border border-blue-100 bg-blue-50 p-4">
+              <p className="text-sm font-medium text-blue-700">Bước tiếp theo</p>
+              <p className="mt-1 text-sm text-slate-700">
+                Chạy mock interview theo JD để luyện cách trả lời trước khi nộp hồ sơ.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="py-4">
-        <h2 className="text-2xl font-semibold tracking-tight text-slate-900">Tính năng nổi bật</h2>
+      <section className="rounded-2xl border border-slate-200 bg-white px-4 py-4 shadow-sm sm:px-6">
+        <div className="flex flex-wrap items-center gap-2 text-sm">
+          <span className="font-semibold text-slate-900">Phù hợp cho:</span>
+          <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-slate-700">
+            Sinh viên năm cuối
+          </span>
+          <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-slate-700">
+            Intern/Fresher IT
+          </span>
+          <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-slate-700">
+            Người chuyển hướng nghề nghiệp
+          </span>
+        </div>
+      </section>
+
+      <section className="py-8">
+        <h2 className="text-2xl font-semibold tracking-tight text-slate-900">Lộ trình 3 bước rõ ràng</h2>
         <p className="mt-2 text-sm text-slate-600">
-          Thiết kế đồng bộ với luồng sử dụng chính của ứng viên từ CV đến phỏng vấn và tìm việc.
+          Tối ưu cho hành trình ứng tuyển thực tế: từ CV đến phỏng vấn và chọn công việc phù hợp.
         </p>
 
         <div className="mt-5 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
@@ -127,22 +134,22 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto mt-12 max-w-5xl rounded-3xl border border-slate-200 bg-white p-10 text-center shadow-sm shadow-slate-300/60 md:p-14">
+      <section className="mx-auto mt-8 max-w-5xl rounded-3xl border border-slate-200 bg-white p-10 text-center shadow-sm shadow-slate-300/60 md:p-14">
         <h2 className="text-3xl font-semibold tracking-tight text-slate-900 md:text-4xl">
-          Sẵn sàng nâng cấp hồ sơ ứng tuyển?
+          Sẵn sàng bắt đầu với CV của bạn?
         </h2>
         <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-600 md:text-xl">
-          Bắt đầu với CV của bạn và để AI đồng hành xuyên suốt hành trình tìm việc.
+          Ưu tiên bắt đầu từ CV để hệ thống gợi ý việc làm và phỏng vấn chính xác hơn.
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <Link to="/register">
+          <Link to="/cv-builder?flow=build">
             <Button size="lg" className="rounded-xl px-9">
-              Tạo tài khoản miễn phí
+              Bắt đầu tạo CV
             </Button>
           </Link>
-          <Link to="/jobs">
+          <Link to="/register">
             <Button variant="outline" size="lg" className="rounded-xl px-9">
-              Xem danh sách việc làm
+              Tạo tài khoản
             </Button>
           </Link>
         </div>
