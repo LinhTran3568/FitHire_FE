@@ -41,7 +41,7 @@ npm run dev
 ## 2. Cấu trúc thư mục
 
 ```
-fe-app/
+fithire/
 ├── public/                 # Static assets (favicon, robots.txt…)
 ├── src/
 │   ├── assets/             # Hình ảnh, font, icon tĩnh
@@ -415,4 +415,3 @@ src/features/product/
 3. **Services chỉ gọi API** — không xử lý UI.
 4. **Stores chỉ giữ state** — không gọi API trực tiếp.
 5. **Types first** — định nghĩa types trước khi code.
-
