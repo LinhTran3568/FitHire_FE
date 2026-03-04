@@ -1,6 +1,7 @@
 export { Badge } from './Badge';
 export { Button } from './Button';
 export { ChatMessage } from './ChatMessage';
+export { CompanyModal } from './CompanyModal';
 export { CircularGauge } from './CircularGauge';
 export { CultureRadarChart } from './CultureRadarChart';
 export { FeatureCard } from './FeatureCard';

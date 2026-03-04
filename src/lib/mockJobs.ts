@@ -313,6 +313,127 @@ export const mockJobs: JobPost[] = [
   },
 ];
 
+export interface CompanyInfo {
+  name: string;
+  industry: string;
+  size: string;
+  location: string;
+  founded: string;
+  website: string;
+  description: string;
+  perks: string[];
+}
+
+export const companyDirectory: Record<string, CompanyInfo> = {
+  'Techify Vietnam': {
+    name: 'Techify Vietnam',
+    industry: 'Công nghệ thông tin',
+    size: '200 - 500 nhân viên',
+    location: 'TP. Hồ Chí Minh',
+    founded: '2018',
+    website: 'techify.vn',
+    description:
+      'Techify Vietnam là công ty phần mềm chuyên xây dựng nền tảng tuyển dụng và HR-tech cho doanh nghiệp vừa và nhỏ tại Việt Nam. Sản phẩm chủ lực là hệ thống ATS và bộ công cụ onboarding tích hợp AI.',
+    perks: [
+      'Mentor 1-1 với Senior Engineer',
+      'Lộ trình rõ ràng lên Fresher',
+      'Team Agile hiện đại',
+    ],
+  },
+  'NextGen Solutions': {
+    name: 'NextGen Solutions',
+    industry: 'SaaS / Phần mềm',
+    size: '100 - 300 nhân viên',
+    location: 'Hà Nội',
+    founded: '2020',
+    website: 'nextgen.com.vn',
+    description:
+      'NextGen Solutions phát triển bộ sản phẩm SaaS cho quản lý vận hành doanh nghiệp, đặc biệt trong lĩnh vực logistics và bán lẻ. Công ty tập trung mạnh vào trải nghiệm người dùng và hiệu năng sản phẩm.',
+    perks: ['Hybrid 2 ngày/tuần', 'Hỗ trợ học cert frontend', 'Môi trường sáng tạo'],
+  },
+  FinStack: {
+    name: 'FinStack',
+    industry: 'Fintech',
+    size: '50 - 150 nhân viên',
+    location: 'Đà Nẵng',
+    founded: '2021',
+    website: 'finstack.io',
+    description:
+      'FinStack là startup fintech tập trung vào giải pháp thanh toán và quản lý tài chính cá nhân. Sản phẩm đang phục vụ hơn 300.000 người dùng trên toàn quốc với tốc độ tăng trưởng 40%/năm.',
+    perks: ['Remote 100%', 'Thưởng quý theo hiệu suất', 'Bảo hiểm toàn diện'],
+  },
+  GrowthLab: {
+    name: 'GrowthLab',
+    industry: 'EdTech / Product',
+    size: '30 - 80 nhân viên',
+    location: 'TP. Hồ Chí Minh',
+    founded: '2022',
+    website: 'growthlab.vn',
+    description:
+      'GrowthLab xây dựng nền tảng học tập trực tuyến kết hợp dữ liệu hành vi người dùng để cá nhân hóa lộ trình học. Đội ngũ product nhỏ nhưng di chuyển nhanh, đề cao metric-driven và A/B testing.',
+    perks: ['Training bởi Product Lead', 'Môi trường startup năng động', 'Hybrid linh hoạt'],
+  },
+  InsightX: {
+    name: 'InsightX',
+    industry: 'Data Analytics',
+    size: '80 - 200 nhân viên',
+    location: 'Hà Nội',
+    founded: '2019',
+    website: 'insightx.com.vn',
+    description:
+      'InsightX cung cấp giải pháp phân tích dữ liệu và BI cho doanh nghiệp lớn tại Đông Nam Á. Công ty có đội ngũ Data Engineer và Analyst hơn 100 người, chuyên sâu về real-time analytics và data visualization.',
+    perks: ['Mentor 1-1 với Senior Data Analyst', 'Hybrid linh hoạt', 'Lộ trình growth rõ ràng'],
+  },
+  'VisionX Studio': {
+    name: 'VisionX Studio',
+    industry: 'Design / Product',
+    size: '20 - 60 nhân viên',
+    location: 'TP. Hồ Chí Minh',
+    founded: '2021',
+    website: 'visionx.studio',
+    description:
+      'VisionX Studio là design agency chuyên xây dựng sản phẩm digital và design system cho các startup công nghệ. Đội ngũ trẻ, đam mê thiết kế tập trung vào UI/UX chất lượng cao và trải nghiệm người dùng.',
+    perks: ['Mentor từ Product Designer', 'Portfolio thực tế', 'Làm việc hybrid linh hoạt'],
+  },
+  RetailPro: {
+    name: 'RetailPro',
+    industry: 'Thương mại điện tử',
+    size: '300 - 700 nhân viên',
+    location: 'Cần Thơ',
+    founded: '2016',
+    website: 'retailpro.vn',
+    description:
+      'RetailPro phát triển nền tảng thương mại điện tử và phần mềm quản lý bán lẻ cho chuỗi cửa hàng trên toàn quốc. Đây là một trong những công ty công nghệ bán lẻ lớn nhất tại khu vực Đồng bằng sông Cửu Long.',
+    perks: ['Được đào tạo quy trình QA chuẩn', 'Lộ trình lên QA Fresher', 'Môi trường ổn định'],
+  },
+  QuantFlow: {
+    name: 'QuantFlow',
+    industry: 'Data Engineering / Fintech',
+    size: '100 - 250 nhân viên',
+    location: 'Hà Nội',
+    founded: '2020',
+    website: 'quantflow.ai',
+    description:
+      'QuantFlow xây dựng hạ tầng dữ liệu real-time cho các công ty tài chính và ngân hàng. Stack kỹ thuật hiện đại gồm Kafka, Spark, Airflow phục vụ hàng triệu sự kiện/giây.',
+    perks: ['Lương cạnh tranh 14-20 triệu', 'Hệ thống dữ liệu quy mô lớn', 'Lộ trình lên Middle'],
+  },
+  EduPlus: {
+    name: 'EduPlus',
+    industry: 'EdTech',
+    size: '50 - 120 nhân viên',
+    location: 'Đà Nẵng',
+    founded: '2021',
+    website: 'eduplus.vn',
+    description:
+      'EduPlus phát triển ứng dụng học tập cá nhân hóa cho học sinh và sinh viên Việt Nam. Sản phẩm kết hợp nội dung chất lượng cao với AI để tối ưu trải nghiệm học và tăng tỷ lệ hoàn thành khóa học.',
+    perks: ['Remote linh hoạt', 'Training growth & product writing', 'Startup giáo dục năng động'],
+  },
+};
+
+export function getCompanyInfo(companyName: string): CompanyInfo | undefined {
+  return companyDirectory[companyName];
+}
+
 export function getJobById(jobId: string): JobPost | undefined {
   return mockJobs.find(job => job.id === jobId);
 }

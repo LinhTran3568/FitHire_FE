@@ -9,7 +9,7 @@ import { MarketingHeader } from './MarketingHeader';
  */
 export function AppLayout() {
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50/20 to-slate-100">
       <MarketingHeader />
 
       <main className="mx-auto w-full max-w-7xl p-4 sm:p-6 lg:p-10">

@@ -1,11 +1,19 @@
 ﻿import { cn } from '@lib/utils';
-import { BriefcaseBusiness, BookOpen, FileSearch, FileUser, MicVocal } from 'lucide-react';
+import {
+  Bookmark,
+  BriefcaseBusiness,
+  BookOpen,
+  FileSearch,
+  FileUser,
+  MicVocal,
+} from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
 const NAV_ITEMS = [
   { to: '/cv-builder', label: 'Tạo CV với AI', icon: FileSearch, end: false },
   { to: '/my-cv', label: 'CV của tôi', icon: FileUser, end: false },
   { to: '/jobs', label: 'Tìm việc', icon: BriefcaseBusiness, end: false },
+  { to: '/saved-jobs', label: 'Việc đã lưu', icon: Bookmark, end: false },
   { to: '/interview', label: 'Luyện phỏng vấn', icon: MicVocal, end: false },
   { to: '/culture/tests', label: 'Test tính cách', icon: BookOpen, end: false },
 ];
@@ -15,9 +23,9 @@ const NAV_ITEMS = [
  */
 export function Sidebar() {
   return (
-    <aside className="border-b border-slate-200 bg-white">
+    <aside className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 shadow-md">
       <nav className="mx-auto w-full max-w-7xl overflow-x-auto px-4 sm:px-6 lg:px-10">
-        <ul className="flex min-w-max items-center gap-2 py-3">
+        <ul className="flex min-w-max items-center gap-1 py-2.5">
           {NAV_ITEMS.map(({ to, label, icon: Icon, end }) => (
             <li key={to}>
               <NavLink
@@ -25,10 +33,10 @@ export function Sidebar() {
                 end={end}
                 className={({ isActive }) =>
                   cn(
-                    'inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
+                    'inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium transition-all duration-200',
                     isActive
-                      ? 'bg-blue-600 text-white'
-                      : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900',
+                      ? 'bg-indigo-500/30 text-white shadow-sm ring-1 ring-indigo-400/50'
+                      : 'text-slate-300 hover:bg-white/10 hover:text-white',
                   )
                 }
               >
