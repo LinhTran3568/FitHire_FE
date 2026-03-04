@@ -1,24 +1,22 @@
-import { Outlet } from 'react-router-dom';
+﻿import { Outlet } from 'react-router-dom';
 
-import { Header } from './Header';
-import { Sidebar } from './Sidebar';
+import { MarketingFooter } from './MarketingFooter';
+import { MarketingHeader } from './MarketingHeader';
 
 /**
- * Main application shell.
- * Renders Sidebar + Header + page content via <Outlet />.
+ * Main page shell for feature routes.
+ * Keeps the same top nav style as Home and removes the extra app shell.
  */
 export function AppLayout() {
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-50">
-      <Sidebar />
+    <div className="min-h-screen bg-slate-50">
+      <MarketingHeader />
 
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <Header />
+      <main className="mx-auto w-full max-w-7xl p-4 sm:p-6 lg:p-10">
+        <Outlet />
+      </main>
 
-        <main className="flex-1 overflow-y-auto p-4 md:p-6">
-          <Outlet />
-        </main>
-      </div>
+      <MarketingFooter />
     </div>
   );
 }

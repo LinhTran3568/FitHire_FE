@@ -1,51 +1,124 @@
 import { Button } from '@components/ui';
+import { useAuthStore } from '@features/auth/store/authStore';
 import { cn } from '@lib/utils';
-import { NavLink } from 'react-router-dom';
+import { ChevronDown } from 'lucide-react';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import logoImg from '@assets/images/logo.png';
 
-const NAV_ITEMS = [
-  { to: '/', label: 'Home' },
-  { to: '/cv-analyzer', label: 'CV' },
-  { to: '/interview', label: 'Interview' },
-  { to: '/dashboard', label: 'Jobs' },
-];
+const CV_FLOWS = [
+  {
+    to: '/cv-builder?flow=build',
+    label: 'Tạo CV',
+    description: 'AI hỏi thông tin và tự tạo CV theo dữ liệu bạn cung cấp.',
+  },
+  {
+    to: '/cv-builder?flow=review',
+    label: 'Rà lỗi CV',
+    description: 'Tải CV hiện có lên để chatbot kiểm tra lỗi và gợi ý sửa.',
+  },
+] as const;
 
 export function MarketingHeader() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isAuthenticated = useAuthStore(state => state.isAuthenticated);
+  const clearAuth = useAuthStore(state => state.clearAuth);
+  const cvActive = location.pathname === '/cv-builder';
+
+  const handleLogout = () => {
+    localStorage.removeItem('access_token');
+    clearAuth();
+    navigate('/login');
+  };
+
   return (
     <header className="sticky top-0 z-40 border-b border-white/40 bg-white/90 backdrop-blur-md">
       <div className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-6 lg:px-10">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-sm font-semibold text-white shadow-sm">
-            F
-          </div>
-          <span className="text-2xl font-semibold text-slate-900">FitHire AI</span>
-        </div>
+        <Link to="/" className="flex items-center py-1">
+          <img src={logoImg} alt="FitHire AI" className="h-12 w-auto object-contain" />
+        </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
-          {NAV_ITEMS.map(item => (
-            <NavLink
-              key={item.label}
-              to={item.to}
-              className={({ isActive }) =>
-                cn(
-                  'text-base font-medium transition-colors',
-                  isActive ? 'text-blue-600' : 'text-slate-800 hover:text-blue-600',
-                )
-              }
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              cn(
+                'text-base font-medium transition-colors',
+                isActive ? 'text-blue-600' : 'text-slate-800 hover:text-blue-600',
+              )
+            }
+          >
+            Trang chủ
+          </NavLink>
+
+          <div className="group relative">
+            <button
+              type="button"
+              className={cn(
+                'inline-flex items-center gap-1 text-base font-medium transition-colors',
+                cvActive ? 'text-blue-600' : 'text-slate-800 hover:text-blue-600',
+              )}
             >
-              {item.label}
-            </NavLink>
-          ))}
+              CV
+              <ChevronDown size={16} className="transition-transform group-hover:rotate-180" />
+            </button>
+
+            <div className="pointer-events-none invisible absolute top-full left-0 z-50 w-[22rem] rounded-xl border border-slate-200 bg-white p-2 opacity-0 shadow-xl transition-all duration-150 group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100">
+              {CV_FLOWS.map(flow => (
+                <Link
+                  key={flow.to}
+                  to={flow.to}
+                  className="block rounded-lg px-3 py-2 transition hover:bg-blue-50"
+                >
+                  <p className="text-sm font-semibold text-slate-900">{flow.label}</p>
+                  <p className="mt-1 text-xs leading-relaxed text-slate-600">{flow.description}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <NavLink
+            to="/jobs"
+            className={({ isActive }) =>
+              cn(
+                'text-base font-medium transition-colors',
+                isActive ? 'text-blue-600' : 'text-slate-800 hover:text-blue-600',
+              )
+            }
+          >
+            Tìm việc
+          </NavLink>
+
+          <NavLink
+            to="/interview"
+            className={({ isActive }) =>
+              cn(
+                'text-base font-medium transition-colors',
+                isActive ? 'text-blue-600' : 'text-slate-800 hover:text-blue-600',
+              )
+            }
+          >
+            Phỏng vấn AI
+          </NavLink>
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
-          <NavLink to="/dashboard">
-            <Button variant="ghost" className="text-slate-700 hover:text-slate-900">
-              Login
+          {isAuthenticated ? (
+            <Button variant="outline" onClick={handleLogout}>
+              Đăng xuất
             </Button>
-          </NavLink>
-          <NavLink to="/dashboard">
-            <Button className="rounded-xl px-6">Sign Up</Button>
-          </NavLink>
+          ) : (
+            <>
+              <NavLink to="/login">
+                <Button variant="ghost" className="text-slate-700 hover:text-slate-900">
+                  Đăng nhập
+                </Button>
+              </NavLink>
+              <NavLink to="/register">
+                <Button className="rounded-xl px-6">Đăng ký</Button>
+              </NavLink>
+            </>
+          )}
         </div>
       </div>
     </header>

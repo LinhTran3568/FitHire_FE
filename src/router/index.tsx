@@ -3,18 +3,20 @@ import { Spinner } from '@components/ui';
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
+import { ProtectedRoute, PublicOnlyRoute } from './AuthGuards';
+
 const HomePage = lazy(() => import('@pages/HomePage'));
-const DashboardPage = lazy(() => import('@pages/DashboardPage'));
 const CvOptimizerPage = lazy(() => import('@pages/CvOptimizerPage'));
 const InterviewPage = lazy(() => import('@pages/InterviewPage'));
-const SelfDiscoveryPage = lazy(() => import('@pages/SelfDiscoveryPage'));
-const EvaluationReportPage = lazy(() => import('@pages/EvaluationReportPage'));
 const CultureTestLibraryPage = lazy(() => import('@pages/culture/CultureTestLibraryPage'));
 const CultureQuizPage = lazy(() => import('@pages/culture/CultureQuizPage'));
 const CultureProfilePage = lazy(() => import('@pages/culture/CultureProfilePage'));
 const CultureMatchingPage = lazy(() => import('@pages/culture/CultureMatchingPage'));
-const HrCandidatesPage = lazy(() => import('@pages/hr/HrCandidatesPage'));
-const HrCandidateDetailPage = lazy(() => import('@pages/hr/HrCandidateDetailPage'));
+const JobsPage = lazy(() => import('@pages/JobsPage'));
+const JobDetailPage = lazy(() => import('@pages/JobDetailPage'));
+const MyCvPage = lazy(() => import('@pages/MyCvPage'));
+const LoginPage = lazy(() => import('@pages/LoginPage'));
+const RegisterPage = lazy(() => import('@pages/RegisterPage'));
 const NotFoundPage = lazy(() => import('@pages/NotFoundPage'));
 
 const router = createBrowserRouter(
@@ -25,20 +27,36 @@ const router = createBrowserRouter(
       children: [{ index: true, element: <HomePage /> }],
     },
     {
-      path: '/',
-      element: <AppLayout />,
+      element: <PublicOnlyRoute />,
       children: [
-        { path: 'dashboard', element: <DashboardPage /> },
-        { path: 'cv-analyzer', element: <CvOptimizerPage /> },
-        { path: 'interview', element: <InterviewPage /> },
-        { path: 'self-discovery', element: <SelfDiscoveryPage /> },
-        { path: 'culture/tests', element: <CultureTestLibraryPage /> },
-        { path: 'culture/tests/:testId', element: <CultureQuizPage /> },
-        { path: 'culture/profile', element: <CultureProfilePage /> },
-        { path: 'culture/matching', element: <CultureMatchingPage /> },
-        { path: 'report', element: <EvaluationReportPage /> },
-        { path: 'hr/candidates', element: <HrCandidatesPage /> },
-        { path: 'hr/candidates/:candidateId', element: <HrCandidateDetailPage /> },
+        {
+          path: '/login',
+          element: <LoginPage />,
+        },
+        {
+          path: '/register',
+          element: <RegisterPage />,
+        },
+      ],
+    },
+    {
+      element: <ProtectedRoute />,
+      children: [
+        {
+          path: '/',
+          element: <AppLayout />,
+          children: [
+            { path: 'cv-builder', element: <CvOptimizerPage /> },
+            { path: 'my-cv', element: <MyCvPage /> },
+            { path: 'jobs', element: <JobsPage /> },
+            { path: 'jobs/:jobId', element: <JobDetailPage /> },
+            { path: 'interview', element: <InterviewPage /> },
+            { path: 'culture/tests', element: <CultureTestLibraryPage /> },
+            { path: 'culture/tests/:testId', element: <CultureQuizPage /> },
+            { path: 'culture/profile', element: <CultureProfilePage /> },
+            { path: 'culture/matching', element: <CultureMatchingPage /> },
+          ],
+        },
       ],
     },
     { path: '*', element: <NotFoundPage /> },

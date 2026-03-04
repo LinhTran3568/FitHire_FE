@@ -28,8 +28,11 @@ export const useAuthStore = create<AuthState>()(
       }),
       {
         name: 'auth-storage',
-        // Only persist token, re-fetch user on load
-        partialize: state => ({ accessToken: state.accessToken }),
+        partialize: state => ({
+          user: state.user,
+          accessToken: state.accessToken,
+          isAuthenticated: state.isAuthenticated,
+        }),
       },
     ),
     { name: 'AuthStore' },

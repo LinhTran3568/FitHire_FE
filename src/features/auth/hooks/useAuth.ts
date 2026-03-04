@@ -27,7 +27,7 @@ export function useLogin() {
       const user = await authService.getMe();
       setAuth(user, data.accessToken);
 
-      navigate('/dashboard');
+      navigate('/jobs');
     },
     onError: (error: Error) => {
       console.error('Login failed:', error.message);
