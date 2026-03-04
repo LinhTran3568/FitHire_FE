@@ -1,6 +1,7 @@
 ﻿import { Badge, Button, SectionTitle, SurfaceCard } from '@components/ui';
 import { Bot, FileUp, Sparkles, WandSparkles } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 type BuilderTab = 'build' | 'review';
 
@@ -21,7 +22,9 @@ const initialDraft: CvDraft = {
 };
 
 export default function CvOptimizerPage() {
-  const [activeTab, setActiveTab] = useState<BuilderTab>('build');
+  const [searchParams] = useSearchParams();
+  const activeTab: BuilderTab = searchParams.get('flow') === 'review' ? 'review' : 'build';
+
   const [draft, setDraft] = useState<CvDraft>(initialDraft);
   const [generatedCv, setGeneratedCv] = useState<string>('');
 
@@ -58,21 +61,14 @@ export default function CvOptimizerPage() {
         subtitle="Tạo CV với AI hoặc upload CV hiện có để chatbot rà lỗi chính tả, ngữ pháp và đề xuất cách sửa."
       />
 
-      <SurfaceCard>
-        <div className="flex flex-wrap gap-2">
-          <Button
-            variant={activeTab === 'build' ? 'primary' : 'outline'}
-            onClick={() => setActiveTab('build')}
-          >
-            Luồng 1: Tạo CV với AI
-          </Button>
-          <Button
-            variant={activeTab === 'review' ? 'primary' : 'outline'}
-            onClick={() => setActiveTab('review')}
-          >
-            Luồng 2: Upload CV để rà lỗi
-          </Button>
-        </div>
+      <SurfaceCard className="flex flex-wrap items-center justify-between gap-2">
+        <p className="text-sm text-slate-600">
+          Chọn luồng từ menu <span className="font-semibold text-slate-800">Tạo CV</span> trên thanh
+          điều hướng.
+        </p>
+        <Badge variant="info">
+          {activeTab === 'build' ? 'Đang mở: Luồng 1 - Tạo CV với AI' : 'Đang mở: Luồng 2 - Upload CV'}
+        </Badge>
       </SurfaceCard>
 
       {activeTab === 'build' && (

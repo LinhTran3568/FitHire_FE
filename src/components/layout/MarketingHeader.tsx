@@ -1,15 +1,25 @@
 ﻿import { Button } from '@components/ui';
 import { cn } from '@lib/utils';
-import { NavLink } from 'react-router-dom';
+import { ChevronDown } from 'lucide-react';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 
-const NAV_ITEMS = [
-  { to: '/', label: 'Trang chủ' },
-  { to: '/cv-builder', label: 'Tạo CV' },
-  { to: '/jobs', label: 'Tìm việc' },
-  { to: '/interview', label: 'Phỏng vấn AI' },
-];
+const CV_FLOWS = [
+  {
+    to: '/cv-builder?flow=build',
+    label: 'Luồng 1: Tạo CV với AI',
+    description: 'AI hỏi thông tin và tự tạo CV theo dữ liệu bạn cung cấp.',
+  },
+  {
+    to: '/cv-builder?flow=review',
+    label: 'Luồng 2: Upload CV để rà lỗi',
+    description: 'Tải CV hiện có lên để chatbot kiểm tra lỗi và gợi ý sửa.',
+  },
+] as const;
 
 export function MarketingHeader() {
+  const location = useLocation();
+  const cvActive = location.pathname === '/cv-builder';
+
   return (
     <header className="sticky top-0 z-40 border-b border-white/40 bg-white/90 backdrop-blur-md">
       <div className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-6 lg:px-10">
@@ -21,20 +31,67 @@ export function MarketingHeader() {
         </div>
 
         <nav className="hidden items-center gap-8 md:flex">
-          {NAV_ITEMS.map(item => (
-            <NavLink
-              key={item.label}
-              to={item.to}
-              className={({ isActive }) =>
-                cn(
-                  'text-base font-medium transition-colors',
-                  isActive ? 'text-blue-600' : 'text-slate-800 hover:text-blue-600',
-                )
-              }
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              cn(
+                'text-base font-medium transition-colors',
+                isActive ? 'text-blue-600' : 'text-slate-800 hover:text-blue-600',
+              )
+            }
+          >
+            Trang chủ
+          </NavLink>
+
+          <div className="group relative">
+            <button
+              type="button"
+              className={cn(
+                'inline-flex items-center gap-1 text-base font-medium transition-colors',
+                cvActive ? 'text-blue-600' : 'text-slate-800 hover:text-blue-600',
+              )}
             >
-              {item.label}
-            </NavLink>
-          ))}
+              Tạo CV
+              <ChevronDown size={16} className="transition-transform group-hover:rotate-180" />
+            </button>
+
+            <div className="pointer-events-none invisible absolute left-0 top-full z-50 w-[22rem] rounded-xl border border-slate-200 bg-white p-2 opacity-0 shadow-xl transition-all duration-150 group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100">
+              {CV_FLOWS.map(flow => (
+                <Link
+                  key={flow.to}
+                  to={flow.to}
+                  className="block rounded-lg px-3 py-2 transition hover:bg-blue-50"
+                >
+                  <p className="text-sm font-semibold text-slate-900">{flow.label}</p>
+                  <p className="mt-1 text-xs leading-relaxed text-slate-600">{flow.description}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <NavLink
+            to="/jobs"
+            className={({ isActive }) =>
+              cn(
+                'text-base font-medium transition-colors',
+                isActive ? 'text-blue-600' : 'text-slate-800 hover:text-blue-600',
+              )
+            }
+          >
+            Tìm việc
+          </NavLink>
+
+          <NavLink
+            to="/interview"
+            className={({ isActive }) =>
+              cn(
+                'text-base font-medium transition-colors',
+                isActive ? 'text-blue-600' : 'text-slate-800 hover:text-blue-600',
+              )
+            }
+          >
+            Phỏng vấn AI
+          </NavLink>
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
