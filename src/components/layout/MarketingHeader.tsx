@@ -1,7 +1,8 @@
 import { Button } from '@components/ui';
 import { useAuthStore } from '@features/auth/store/authStore';
 import { cn } from '@lib/utils';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, LogOut, User, UserCircle } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import logoImg from '@assets/images/logo.png';
 
@@ -22,12 +23,27 @@ export function MarketingHeader() {
   const location = useLocation();
   const navigate = useNavigate();
   const isAuthenticated = useAuthStore(state => state.isAuthenticated);
+  const user = useAuthStore(state => state.user);
   const clearAuth = useAuthStore(state => state.clearAuth);
   const cvActive = location.pathname === '/cv-builder';
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!dropdownOpen) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [dropdownOpen]);
 
   const handleLogout = () => {
     localStorage.removeItem('access_token');
     clearAuth();
+    setDropdownOpen(false);
     navigate('/login');
   };
 
@@ -104,9 +120,48 @@ export function MarketingHeader() {
 
         <div className="hidden items-center gap-3 md:flex">
           {isAuthenticated ? (
-            <Button variant="outline" onClick={handleLogout}>
-              Đăng xuất
-            </Button>
+            <div className="relative" ref={dropdownRef}>
+              <button
+                type="button"
+                onClick={() => setDropdownOpen(prev => !prev)}
+                className="flex items-center gap-2 rounded-full p-1 text-slate-700 transition-colors hover:bg-slate-100 focus:outline-none"
+              >
+                {user?.avatarUrl ? (
+                  <img
+                    src={user.avatarUrl}
+                    alt={user.name}
+                    className="h-9 w-9 rounded-full object-cover ring-2 ring-blue-100"
+                  />
+                ) : (
+                  <UserCircle size={36} className="text-blue-600" />
+                )}
+              </button>
+
+              {dropdownOpen && (
+                <div className="absolute top-full right-0 z-50 mt-2 w-56 rounded-xl border border-slate-200 bg-white py-2 shadow-xl">
+                  <div className="border-b border-slate-100 px-4 py-3">
+                    <p className="truncate text-sm font-semibold text-slate-900">{user?.name}</p>
+                    <p className="truncate text-xs text-slate-500">{user?.email}</p>
+                  </div>
+                  <Link
+                    to="/profile"
+                    onClick={() => setDropdownOpen(false)}
+                    className="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 transition-colors hover:bg-blue-50 hover:text-blue-600"
+                  >
+                    <User size={16} />
+                    Hồ sơ của tôi
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="flex w-full items-center gap-2 px-4 py-2 text-sm text-red-500 transition-colors hover:bg-red-50"
+                  >
+                    <LogOut size={16} />
+                    Đăng xuất
+                  </button>
+                </div>
+              )}
+            </div>
           ) : (
             <>
               <NavLink to="/login">

@@ -15,6 +15,8 @@ const CultureMatchingPage = lazy(() => import('@pages/culture/CultureMatchingPag
 const JobsPage = lazy(() => import('@pages/JobsPage'));
 const JobDetailPage = lazy(() => import('@pages/JobDetailPage'));
 const MyCvPage = lazy(() => import('@pages/MyCvPage'));
+const DashboardPage = lazy(() => import('@pages/DashboardPage'));
+const ProfilePage = lazy(() => import('@pages/ProfilePage'));
 const LoginPage = lazy(() => import('@pages/LoginPage'));
 const RegisterPage = lazy(() => import('@pages/RegisterPage'));
 const NotFoundPage = lazy(() => import('@pages/NotFoundPage'));
@@ -46,6 +48,8 @@ const router = createBrowserRouter(
           path: '/',
           element: <AppLayout />,
           children: [
+            { path: 'dashboard', element: <DashboardPage /> },
+            { path: 'profile', element: <ProfilePage /> },
             { path: 'cv-builder', element: <CvOptimizerPage /> },
             { path: 'my-cv', element: <MyCvPage /> },
             { path: 'jobs', element: <JobsPage /> },
