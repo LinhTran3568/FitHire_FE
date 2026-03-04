@@ -138,7 +138,7 @@ export function MarketingHeader() {
               </button>
 
               {dropdownOpen && (
-                <div className="absolute right-0 top-full z-50 mt-2 w-56 rounded-xl border border-slate-200 bg-white py-2 shadow-xl">
+                <div className="absolute top-full right-0 z-50 mt-2 w-56 rounded-xl border border-slate-200 bg-white py-2 shadow-xl">
                   <div className="border-b border-slate-100 px-4 py-3">
                     <p className="truncate text-sm font-semibold text-slate-900">{user?.name}</p>
                     <p className="truncate text-xs text-slate-500">{user?.email}</p>
