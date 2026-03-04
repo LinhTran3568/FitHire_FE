@@ -89,8 +89,7 @@ const scenarioQuestions: ScenarioQuestion[] = [
   {
     id: 'feedback',
     title: 'Tình huống 2: Nhận feedback trái chiều',
-    situation:
-      'Bạn nhận hai luồng góp ý ngược nhau từ PM và Tech Lead về giải pháp kỹ thuật.',
+    situation: 'Bạn nhận hai luồng góp ý ngược nhau từ PM và Tech Lead về giải pháp kỹ thuật.',
     options: [
       {
         id: 'feedback-product',
@@ -115,8 +114,7 @@ const scenarioQuestions: ScenarioQuestion[] = [
   {
     id: 'collaboration',
     title: 'Tình huống 3: Hợp tác liên phòng ban',
-    situation:
-      'Bạn cần phối hợp với Design, QA và DevOps để release tính năng trong tuần này.',
+    situation: 'Bạn cần phối hợp với Design, QA và DevOps để release tính năng trong tuần này.',
     options: [
       {
         id: 'collab-remote',
@@ -256,7 +254,7 @@ export default function CultureMatchingPage() {
           <div className="space-y-4 bg-gradient-to-r from-blue-600 to-indigo-600 p-5 text-white">
             <div className="flex items-center gap-2">
               <Flame size={18} />
-              <p className="text-sm font-semibold uppercase tracking-wide">Culture Quest</p>
+              <p className="text-sm font-semibold tracking-wide uppercase">Culture Quest</p>
             </div>
             <p className="text-sm text-blue-100">
               Hoàn thành các thẻ tình huống để mở khóa kết quả phù hợp văn hóa của bạn.
@@ -289,7 +287,6 @@ export default function CultureMatchingPage() {
                 <span>{companyName}</span>
               </div>
             </div>
-
           </div>
         </div>
       </SurfaceCard>
@@ -303,12 +300,16 @@ export default function CultureMatchingPage() {
               <SurfaceCard key={question.id} className="space-y-4">
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-wide text-blue-600">
+                    <p className="text-xs font-semibold tracking-wide text-blue-600 uppercase">
                       Thẻ tình huống #{questionIndex + 1}
                     </p>
                     <h3 className="mt-1 text-lg font-semibold text-slate-900">{question.title}</h3>
                   </div>
-                  {selectedOptionId ? <Badge variant="success">Đã chọn</Badge> : <Badge>Chưa chọn</Badge>}
+                  {selectedOptionId ? (
+                    <Badge variant="success">Đã chọn</Badge>
+                  ) : (
+                    <Badge>Chưa chọn</Badge>
+                  )}
                 </div>
 
                 <p className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
@@ -368,8 +369,7 @@ export default function CultureMatchingPage() {
 
             {!isSubmitted ? (
               <p className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-600">
-                Kết quả cuối sẽ xuất hiện sau khi bạn hoàn thành toàn bộ thẻ tình huống và bấm
-                {' '}
+                Kết quả cuối sẽ xuất hiện sau khi bạn hoàn thành toàn bộ thẻ tình huống và bấm{' '}
                 <span className="font-semibold">Submit để xem kết quả</span>.
               </p>
             ) : (
@@ -378,7 +378,9 @@ export default function CultureMatchingPage() {
                   <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
                     <div className="flex items-center gap-2">
                       <Sparkles size={17} className="text-emerald-600" />
-                      <p className="text-sm font-semibold text-emerald-700">Mức tương thích cao nhất</p>
+                      <p className="text-sm font-semibold text-emerald-700">
+                        Mức tương thích cao nhất
+                      </p>
                     </div>
                     <p className="mt-1 text-base font-semibold text-slate-900">{topMatch.name}</p>
                     <p className="mt-1 text-sm text-slate-700">{topMatch.description}</p>
@@ -401,12 +403,17 @@ export default function CultureMatchingPage() {
 
                       <div className="h-2 rounded-full bg-slate-200">
                         <div
-                          className={cn('h-full rounded-full transition-all duration-500', profile.barClass)}
+                          className={cn(
+                            'h-full rounded-full transition-all duration-500',
+                            profile.barClass,
+                          )}
                           style={{ width: `${profile.percentage}%` }}
                         />
                       </div>
 
-                      <p className="mt-2 text-xs leading-relaxed text-slate-600">{profile.description}</p>
+                      <p className="mt-2 text-xs leading-relaxed text-slate-600">
+                        {profile.description}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -417,8 +424,8 @@ export default function CultureMatchingPage() {
           <SurfaceCard className="space-y-2">
             <h4 className="font-semibold text-slate-900">Gợi ý hành động</h4>
             <p className="text-sm text-slate-700">
-              Dùng kết quả top 1 + top 2 để ưu tiên công ty phù hợp phong cách làm việc, rồi quay lại trang
-              việc làm để lọc JD theo mức độ tương thích.
+              Dùng kết quả top 1 + top 2 để ưu tiên công ty phù hợp phong cách làm việc, rồi quay
+              lại trang việc làm để lọc JD theo mức độ tương thích.
             </p>
           </SurfaceCard>
         </div>

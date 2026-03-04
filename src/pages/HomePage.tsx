@@ -22,14 +22,14 @@ const FEATURES = [
 
 export default function HomePage() {
   return (
-    <div className="mx-auto w-full max-w-7xl px-6 pb-24 pt-10 lg:px-10 lg:pt-14">
+    <div className="mx-auto w-full max-w-7xl px-6 pt-10 pb-24 lg:px-10 lg:pt-14">
       <section className="grid gap-10 pb-14 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
         <div className="space-y-8">
           <span className="inline-flex rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-medium text-blue-700">
             Nền tảng AI cho sinh viên & người tìm việc
           </span>
 
-          <h1 className="max-w-2xl text-5xl font-bold leading-[1.05] tracking-tight text-slate-900 md:text-6xl lg:text-7xl">
+          <h1 className="max-w-2xl text-5xl leading-[1.05] font-bold tracking-tight text-slate-900 md:text-6xl lg:text-7xl">
             <span className="bg-gradient-to-r from-blue-700 via-indigo-700 to-slate-900 bg-clip-text text-transparent">
               Tạo CV chuẩn.
             </span>{' '}
@@ -61,21 +61,27 @@ export default function HomePage() {
           <div className="grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3">
             <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
               <p className="text-sm font-semibold text-slate-900">Intern/Fresher-first</p>
-              <p className="mt-1 text-sm text-slate-600">Tập trung nhu cầu ứng tuyển người mới đi làm.</p>
+              <p className="mt-1 text-sm text-slate-600">
+                Tập trung nhu cầu ứng tuyển người mới đi làm.
+              </p>
             </div>
             <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
               <p className="text-sm font-semibold text-slate-900">CV chuẩn ATS</p>
-              <p className="mt-1 text-sm text-slate-600">Gợi ý nội dung rõ ràng, dễ qua vòng lọc hồ sơ.</p>
+              <p className="mt-1 text-sm text-slate-600">
+                Gợi ý nội dung rõ ràng, dễ qua vòng lọc hồ sơ.
+              </p>
             </div>
             <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
               <p className="text-sm font-semibold text-slate-900">Mock interview AI</p>
-              <p className="mt-1 text-sm text-slate-600">Nhận góp ý để cải thiện câu trả lời trước khi apply.</p>
+              <p className="mt-1 text-sm text-slate-600">
+                Nhận góp ý để cải thiện câu trả lời trước khi apply.
+              </p>
             </div>
           </div>
         </div>
 
         <div className="relative rounded-3xl border border-slate-200 bg-white p-8 shadow-sm shadow-slate-300/60">
-          <div className="absolute -left-4 -top-4 z-10 flex h-20 w-20 items-center justify-center rounded-full border-4 border-white bg-gradient-to-br from-blue-600 to-indigo-500 text-3xl text-white shadow-sm">
+          <div className="absolute -top-4 -left-4 z-10 flex h-20 w-20 items-center justify-center rounded-full border-4 border-white bg-gradient-to-br from-blue-600 to-indigo-500 text-3xl text-white shadow-sm">
             AI
           </div>
 
@@ -88,7 +94,9 @@ export default function HomePage() {
                 <div className="h-full w-[86%] rounded-full bg-gradient-to-r from-blue-600 to-indigo-500" />
               </div>
               <p className="text-xs text-slate-500">Độ khớp hồ sơ: 86%</p>
-              <p className="text-sm text-slate-700">AI gợi ý: thêm thành tựu có số liệu để tăng sức thuyết phục.</p>
+              <p className="text-sm text-slate-700">
+                AI gợi ý: thêm thành tựu có số liệu để tăng sức thuyết phục.
+              </p>
             </div>
 
             <div className="rounded-xl border border-blue-100 bg-blue-50 p-4">
@@ -117,7 +125,9 @@ export default function HomePage() {
       </section>
 
       <section className="py-8">
-        <h2 className="text-2xl font-semibold tracking-tight text-slate-900">Lộ trình 3 bước rõ ràng</h2>
+        <h2 className="text-2xl font-semibold tracking-tight text-slate-900">
+          Lộ trình 3 bước rõ ràng
+        </h2>
         <p className="mt-2 text-sm text-slate-600">
           Tối ưu cho hành trình ứng tuyển thực tế: từ CV đến phỏng vấn và chọn công việc phù hợp.
         </p>

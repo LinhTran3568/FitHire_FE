@@ -173,7 +173,9 @@ export default function CvOptimizerPage() {
                   value={draft.fullName}
                   onChange={event => setDraft(prev => ({ ...prev, fullName: event.target.value }))}
                   className={`w-full rounded-lg border px-3 py-2 outline-none focus:border-blue-500 ${
-                    showBuildValidation && !draft.fullName.trim() ? 'border-red-300' : 'border-slate-300'
+                    showBuildValidation && !draft.fullName.trim()
+                      ? 'border-red-300'
+                      : 'border-slate-300'
                   }`}
                   placeholder="Nguyễn Văn A"
                 />
@@ -183,9 +185,13 @@ export default function CvOptimizerPage() {
                 <span className="font-medium text-slate-700">Vị trí mục tiêu *</span>
                 <input
                   value={draft.targetRole}
-                  onChange={event => setDraft(prev => ({ ...prev, targetRole: event.target.value }))}
+                  onChange={event =>
+                    setDraft(prev => ({ ...prev, targetRole: event.target.value }))
+                  }
                   className={`w-full rounded-lg border px-3 py-2 outline-none focus:border-blue-500 ${
-                    showBuildValidation && !draft.targetRole.trim() ? 'border-red-300' : 'border-slate-300'
+                    showBuildValidation && !draft.targetRole.trim()
+                      ? 'border-red-300'
+                      : 'border-slate-300'
                   }`}
                   placeholder="Backend Java Intern"
                 />
@@ -199,7 +205,9 @@ export default function CvOptimizerPage() {
                 value={draft.skills}
                 onChange={event => setDraft(prev => ({ ...prev, skills: event.target.value }))}
                 className={`w-full rounded-lg border px-3 py-2 outline-none focus:border-blue-500 ${
-                  showBuildValidation && !draft.skills.trim() ? 'border-red-300' : 'border-slate-300'
+                  showBuildValidation && !draft.skills.trim()
+                    ? 'border-red-300'
+                    : 'border-slate-300'
                 }`}
                 placeholder="Java, Spring Boot, MySQL, Docker..."
               />
@@ -212,7 +220,9 @@ export default function CvOptimizerPage() {
                 value={draft.projects}
                 onChange={event => setDraft(prev => ({ ...prev, projects: event.target.value }))}
                 className={`w-full rounded-lg border px-3 py-2 outline-none focus:border-blue-500 ${
-                  showBuildValidation && !draft.projects.trim() ? 'border-red-300' : 'border-slate-300'
+                  showBuildValidation && !draft.projects.trim()
+                    ? 'border-red-300'
+                    : 'border-slate-300'
                 }`}
                 placeholder="Mô tả dự án, vai trò và công nghệ bạn đã dùng..."
               />
@@ -223,9 +233,13 @@ export default function CvOptimizerPage() {
               <textarea
                 rows={3}
                 value={draft.achievements}
-                onChange={event => setDraft(prev => ({ ...prev, achievements: event.target.value }))}
+                onChange={event =>
+                  setDraft(prev => ({ ...prev, achievements: event.target.value }))
+                }
                 className={`w-full rounded-lg border px-3 py-2 outline-none focus:border-blue-500 ${
-                  showBuildValidation && !draft.achievements.trim() ? 'border-red-300' : 'border-slate-300'
+                  showBuildValidation && !draft.achievements.trim()
+                    ? 'border-red-300'
+                    : 'border-slate-300'
                 }`}
                 placeholder="Ví dụ: giảm thời gian phản hồi API 30%, tăng test coverage lên 85%..."
               />
@@ -275,7 +289,7 @@ export default function CvOptimizerPage() {
                   <p className="text-sm font-semibold">AI đã tạo CV thành công</p>
                 </div>
 
-                <pre className="whitespace-pre-wrap text-sm leading-relaxed text-slate-800">
+                <pre className="text-sm leading-relaxed whitespace-pre-wrap text-slate-800">
                   {generatedCv}
                 </pre>
 
@@ -299,7 +313,9 @@ export default function CvOptimizerPage() {
               <h3 className="font-semibold">Chatbot hướng dẫn</h3>
             </div>
 
-            <p className="text-sm text-slate-700">Mình cần bạn cung cấp đủ thông tin sau để tạo CV chất lượng:</p>
+            <p className="text-sm text-slate-700">
+              Mình cần bạn cung cấp đủ thông tin sau để tạo CV chất lượng:
+            </p>
 
             <div className="space-y-2">
               {missingFields.length === 0 ? (
@@ -317,7 +333,8 @@ export default function CvOptimizerPage() {
             </div>
 
             <p className="rounded-lg bg-blue-50 p-3 text-sm text-slate-700">
-              Gợi ý: luôn viết thành tựu theo cấu trúc <strong>hành động + kết quả + số liệu</strong>.
+              Gợi ý: luôn viết thành tựu theo cấu trúc{' '}
+              <strong>hành động + kết quả + số liệu</strong>.
             </p>
           </SurfaceCard>
         </div>
@@ -336,16 +353,24 @@ export default function CvOptimizerPage() {
                 onChange={event => onSelectCvFile(event.target.files?.[0])}
               />
               <FileUp size={22} className="mx-auto text-blue-600" />
-              <p className="mt-2 text-sm text-slate-700">Nhấn để upload CV (PDF/DOC/DOCX, tối đa 5MB)</p>
-              {uploadedFile && <p className="mt-1 text-xs text-slate-500">Đã chọn: {uploadedFile.name}</p>}
+              <p className="mt-2 text-sm text-slate-700">
+                Nhấn để upload CV (PDF/DOC/DOCX, tối đa 5MB)
+              </p>
+              {uploadedFile && (
+                <p className="mt-1 text-xs text-slate-500">Đã chọn: {uploadedFile.name}</p>
+              )}
             </label>
 
             <div className="rounded-xl border border-slate-200 bg-white p-4">
-              <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Xem trước CV</p>
+              <p className="text-xs font-semibold tracking-wide text-slate-500 uppercase">
+                Xem trước CV
+              </p>
               {uploadedFile ? (
                 <div className="mt-3 rounded-lg bg-slate-50 p-4 text-sm text-slate-700">
                   <p className="font-medium text-slate-900">{uploadedFile.name}</p>
-                  <p className="mt-1 text-xs text-slate-500">Dung lượng: {formatFileSize(uploadedFile.size)}</p>
+                  <p className="mt-1 text-xs text-slate-500">
+                    Dung lượng: {formatFileSize(uploadedFile.size)}
+                  </p>
                   <p className="mt-2">
                     Tệp đã sẵn sàng để AI phân tích lỗi chính tả, ngữ pháp và chất lượng diễn đạt.
                   </p>
@@ -387,8 +412,8 @@ export default function CvOptimizerPage() {
 
             {reviewStatus === 'idle' && (
               <p className="rounded-lg bg-slate-100 p-3 text-sm text-slate-700">
-                Upload CV và bấm “Đánh giá lỗi CV bằng AI” để nhận nhận xét chính tả, ngữ pháp và cách
-                viết tốt hơn.
+                Upload CV và bấm “Đánh giá lỗi CV bằng AI” để nhận nhận xét chính tả, ngữ pháp và
+                cách viết tốt hơn.
               </p>
             )}
 
@@ -403,7 +428,10 @@ export default function CvOptimizerPage() {
 
                 <div className="space-y-2 text-sm">
                   {reviewInsights.map(item => (
-                    <div key={item} className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-slate-700">
+                    <div
+                      key={item}
+                      className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-slate-700"
+                    >
                       {item}
                     </div>
                   ))}
@@ -428,7 +456,8 @@ export default function CvOptimizerPage() {
 
             {reviewStatus === 'error' && (
               <p className="rounded-lg bg-red-50 p-3 text-sm text-red-700">
-                Hệ thống chưa xử lý được file hiện tại. Bạn kiểm tra lại định dạng hoặc thử tải file khác.
+                Hệ thống chưa xử lý được file hiện tại. Bạn kiểm tra lại định dạng hoặc thử tải file
+                khác.
               </p>
             )}
           </SurfaceCard>
@@ -437,4 +466,3 @@ export default function CvOptimizerPage() {
     </div>
   );
 }
-

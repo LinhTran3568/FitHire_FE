@@ -12,7 +12,9 @@ export default function NotFoundPage() {
       <p className="text-8xl font-extrabold text-blue-600">404</p>
       <div>
         <h1 className="text-2xl font-semibold text-gray-900">Không tìm thấy trang</h1>
-        <p className="mt-1 text-gray-500">Trang bạn truy cập không tồn tại hoặc đã được di chuyển.</p>
+        <p className="mt-1 text-gray-500">
+          Trang bạn truy cập không tồn tại hoặc đã được di chuyển.
+        </p>
       </div>
       <Button variant="primary" onClick={() => navigate('/')}>
         Về trang chủ

@@ -63,7 +63,7 @@ export function MarketingHeader() {
               <ChevronDown size={16} className="transition-transform group-hover:rotate-180" />
             </button>
 
-            <div className="pointer-events-none invisible absolute left-0 top-full z-50 w-[22rem] rounded-xl border border-slate-200 bg-white p-2 opacity-0 shadow-xl transition-all duration-150 group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100">
+            <div className="pointer-events-none invisible absolute top-full left-0 z-50 w-[22rem] rounded-xl border border-slate-200 bg-white p-2 opacity-0 shadow-xl transition-all duration-150 group-hover:pointer-events-auto group-hover:visible group-hover:opacity-100">
               {CV_FLOWS.map(flow => (
                 <Link
                   key={flow.to}

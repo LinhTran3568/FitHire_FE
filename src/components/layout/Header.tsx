@@ -24,7 +24,7 @@ export function Header() {
         <div className="flex items-center gap-2">
           <button className="relative rounded-full p-2 text-slate-600 hover:bg-slate-100 hover:text-slate-900">
             <Bell size={18} />
-            <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-blue-600" />
+            <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-blue-600" />
           </button>
           <Link to="/login">
             <Button variant="outline" size="sm">

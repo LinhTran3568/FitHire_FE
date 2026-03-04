@@ -42,7 +42,9 @@ export default function JobDetailPage() {
   const isSaved = savedJobs.includes(job.id);
 
   const toggleSaveJob = () => {
-    setSavedJobs(prev => (prev.includes(job.id) ? prev.filter(id => id !== job.id) : [...prev, job.id]));
+    setSavedJobs(prev =>
+      prev.includes(job.id) ? prev.filter(id => id !== job.id) : [...prev, job.id],
+    );
   };
 
   return (
@@ -71,16 +73,28 @@ export default function JobDetailPage() {
 
       <SurfaceCard>
         <div className="flex flex-wrap items-center gap-2">
-          <a href="#job-overview" className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs text-slate-700">
+          <a
+            href="#job-overview"
+            className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs text-slate-700"
+          >
             Tổng quan
           </a>
-          <a href="#job-jd" className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs text-slate-700">
+          <a
+            href="#job-jd"
+            className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs text-slate-700"
+          >
             JD chi tiết
           </a>
-          <a href="#job-fit" className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs text-slate-700">
+          <a
+            href="#job-fit"
+            className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs text-slate-700"
+          >
             Độ phù hợp
           </a>
-          <a href="#apply" className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs text-slate-700">
+          <a
+            href="#apply"
+            className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs text-slate-700"
+          >
             Ứng tuyển
           </a>
         </div>
@@ -97,7 +111,9 @@ export default function JobDetailPage() {
         <p className="text-sm leading-relaxed text-slate-700">{job.summary}</p>
 
         <div className="rounded-xl border border-blue-100 bg-blue-50 p-4">
-          <p className="text-sm font-semibold text-blue-700">Vì sao công việc này phù hợp với bạn?</p>
+          <p className="text-sm font-semibold text-blue-700">
+            Vì sao công việc này phù hợp với bạn?
+          </p>
           <ul className="mt-2 space-y-1 text-sm text-slate-700">
             {job.skills.slice(0, 4).map(skill => (
               <li key={skill}>• JD đang ưu tiên kỹ năng: {skill}</li>
@@ -122,7 +138,9 @@ export default function JobDetailPage() {
 
             <div className="mt-3 grid gap-4 md:grid-cols-2">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Trách nhiệm chính</p>
+                <p className="text-xs font-semibold tracking-wide text-slate-500 uppercase">
+                  Trách nhiệm chính
+                </p>
                 <ul className="mt-2 space-y-2 text-sm text-slate-700">
                   {job.responsibilities.map(item => (
                     <li key={item}>• {item}</li>
@@ -131,7 +149,9 @@ export default function JobDetailPage() {
               </div>
 
               <div>
-                <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Yêu cầu ứng viên</p>
+                <p className="text-xs font-semibold tracking-wide text-slate-500 uppercase">
+                  Yêu cầu ứng viên
+                </p>
                 <ul className="mt-2 space-y-2 text-sm text-slate-700">
                   {job.requirements.map(item => (
                     <li key={item}>• {item}</li>
@@ -195,9 +215,7 @@ export default function JobDetailPage() {
           <h3 className="font-semibold">Ứng tuyển</h3>
         </div>
 
-        <p className="text-sm text-slate-700">
-          Bạn có thể nộp hồ sơ ngay với CV hiện tại.
-        </p>
+        <p className="text-sm text-slate-700">Bạn có thể nộp hồ sơ ngay với CV hiện tại.</p>
 
         <div className="flex flex-wrap gap-2">
           <Button>Ứng tuyển ngay</Button>

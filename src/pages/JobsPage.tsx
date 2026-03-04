@@ -1,18 +1,19 @@
 ﻿import { Badge, Button, SectionTitle, SurfaceCard } from '@components/ui';
 import { useDebounce } from '@hooks/useDebounce';
 import { useLocalStorage } from '@hooks/useLocalStorage';
-import {
-  formatPostedDate,
-  formatSalaryVnd,
-  type JobPost,
-  mockJobs,
-} from '@lib/mockJobs';
+import { formatPostedDate, formatSalaryVnd, type JobPost, mockJobs } from '@lib/mockJobs';
 import { cn } from '@lib/utils';
 import { BookmarkCheck, BookmarkPlus, Filter, RotateCcw, Search } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 
-const FIELD_OPTIONS = ['Tất cả', 'Công nghệ thông tin', 'Dữ liệu', 'Kiểm thử phần mềm', 'Sản phẩm'] as const;
+const FIELD_OPTIONS = [
+  'Tất cả',
+  'Công nghệ thông tin',
+  'Dữ liệu',
+  'Kiểm thử phần mềm',
+  'Sản phẩm',
+] as const;
 const POSITION_OPTIONS = ['Tất cả', 'Intern', 'Fresher', 'Junior'] as const;
 const WORK_MODE_OPTIONS = ['Tất cả', 'Onsite', 'Hybrid', 'Remote'] as const;
 const SALARY_OPTIONS = [0, 5000000, 8000000, 12000000] as const;
@@ -53,7 +54,9 @@ export default function JobsPage() {
 
   const [keywordInput, setKeywordInput] = useState(searchParams.get('q') ?? '');
   const [field, setField] = useState<FieldFilter>(
-    isValidEnum(searchParams.get('field'), FIELD_OPTIONS) ? (searchParams.get('field') as FieldFilter) : 'Tất cả',
+    isValidEnum(searchParams.get('field'), FIELD_OPTIONS)
+      ? (searchParams.get('field') as FieldFilter)
+      : 'Tất cả',
   );
   const [position, setPosition] = useState<PositionFilter>(
     isValidEnum(searchParams.get('position'), POSITION_OPTIONS)
@@ -92,12 +95,23 @@ export default function JobsPage() {
     if (!useCvFilter) next.set('cv_match', '0');
 
     setSearchParams(next, { replace: true });
-  }, [debouncedKeyword, field, location, position, salaryMin, setSearchParams, useCvFilter, workMode]);
+  }, [
+    debouncedKeyword,
+    field,
+    location,
+    position,
+    salaryMin,
+    setSearchParams,
+    useCvFilter,
+    workMode,
+  ]);
 
   const filteredJobs = useMemo(() => {
     let jobs = mockJobs.filter(job => {
       if (debouncedKeyword) {
-        const haystack = [job.title, job.company, job.summary, ...job.skills].join(' ').toLowerCase();
+        const haystack = [job.title, job.company, job.summary, ...job.skills]
+          .join(' ')
+          .toLowerCase();
         if (!haystack.includes(debouncedKeyword.toLowerCase())) return false;
       }
 
@@ -117,7 +131,8 @@ export default function JobsPage() {
   }, [debouncedKeyword, field, location, position, salaryMin, useCvFilter, workMode]);
 
   const recentViewedJobs = useMemo(
-    () => recentJobs.map(jobId => mockJobs.find(job => job.id === jobId)).filter(Boolean) as JobPost[],
+    () =>
+      recentJobs.map(jobId => mockJobs.find(job => job.id === jobId)).filter(Boolean) as JobPost[],
     [recentJobs],
   );
 
@@ -141,7 +156,9 @@ export default function JobsPage() {
   };
 
   const toggleSaveJob = (jobId: string) => {
-    setSavedJobs(prev => (prev.includes(jobId) ? prev.filter(id => id !== jobId) : [...prev, jobId]));
+    setSavedJobs(prev =>
+      prev.includes(jobId) ? prev.filter(id => id !== jobId) : [...prev, jobId],
+    );
   };
 
   return (
@@ -343,7 +360,11 @@ export default function JobsPage() {
           <h3 className="text-sm font-semibold text-slate-900">Việc đã xem gần đây</h3>
           <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
             {recentViewedJobs.map(job => (
-              <Link key={`recent-${job.id}`} to={`/jobs/${job.id}`} className="rounded-lg border border-slate-200 bg-slate-50 p-3 transition hover:bg-white">
+              <Link
+                key={`recent-${job.id}`}
+                to={`/jobs/${job.id}`}
+                className="rounded-lg border border-slate-200 bg-slate-50 p-3 transition hover:bg-white"
+              >
                 <p className="text-sm font-semibold text-slate-900">{job.title}</p>
                 <p className="mt-1 text-xs text-slate-500">{job.company}</p>
               </Link>

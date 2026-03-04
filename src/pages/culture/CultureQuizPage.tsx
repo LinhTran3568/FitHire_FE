@@ -56,7 +56,8 @@ const QUESTION_BANK: Record<string, QuizQuestion[]> = {
   'target-environment': [
     {
       id: 'e1',
-      scenario: 'Bạn thích làm việc ở nơi mọi người có thể ra quyết định nhanh mà không qua nhiều cấp duyệt.',
+      scenario:
+        'Bạn thích làm việc ở nơi mọi người có thể ra quyết định nhanh mà không qua nhiều cấp duyệt.',
     },
     {
       id: 'e2',
@@ -158,7 +159,9 @@ export default function CultureQuizPage() {
         </div>
 
         <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Câu hỏi tình huống</p>
+          <p className="text-xs font-semibold tracking-wide text-slate-500 uppercase">
+            Câu hỏi tình huống
+          </p>
           <p className="mt-3 text-lg leading-relaxed text-slate-900">{currentQuestion.scenario}</p>
         </div>
 

@@ -193,7 +193,8 @@ export const mockJobs: JobPost[] = [
     postedAt: '2026-02-26',
     matchScore: 62,
     skills: ['Figma', 'UI Design', 'Design System', 'User Research'],
-    summary: 'Thiết kế giao diện cho sản phẩm mobile/web, phối hợp chặt với team Product và Frontend.',
+    summary:
+      'Thiết kế giao diện cho sản phẩm mobile/web, phối hợp chặt với team Product và Frontend.',
     responsibilities: [
       'Thiết kế wireframe và prototype theo user flow.',
       'Chuẩn hóa component trong design system.',
@@ -257,7 +258,8 @@ export const mockJobs: JobPost[] = [
     postedAt: '2026-02-24',
     matchScore: 64,
     skills: ['Spark', 'Airflow', 'Kafka', 'ETL'],
-    summary: 'Xây dựng pipeline dữ liệu thời gian thực phục vụ báo cáo vận hành và machine learning.',
+    summary:
+      'Xây dựng pipeline dữ liệu thời gian thực phục vụ báo cáo vận hành và machine learning.',
     responsibilities: [
       'Phát triển và tối ưu data pipeline ETL/ELT.',
       'Giám sát chất lượng dữ liệu và xử lý dữ liệu lỗi.',
@@ -289,7 +291,8 @@ export const mockJobs: JobPost[] = [
     postedAt: '2026-02-23',
     matchScore: 49,
     skills: ['Content Strategy', 'SEO', 'Copywriting', 'User Journey'],
-    summary: 'Xây dựng nội dung cho sản phẩm EdTech, tối ưu trải nghiệm onboarding và giữ chân người dùng.',
+    summary:
+      'Xây dựng nội dung cho sản phẩm EdTech, tối ưu trải nghiệm onboarding và giữ chân người dùng.',
     responsibilities: [
       'Viết nội dung in-app và email lifecycle.',
       'Phân tích user journey để tối ưu nội dung theo từng nhóm.',

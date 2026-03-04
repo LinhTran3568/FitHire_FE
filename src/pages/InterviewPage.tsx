@@ -59,7 +59,8 @@ function buildHintFromAnswer(answer: string) {
 
 function getPermissionText(permission: DevicePermission, kind: 'mic' | 'camera') {
   if (permission === 'granted') return kind === 'mic' ? 'Mic đã cấp quyền' : 'Camera đã cấp quyền';
-  if (permission === 'denied') return kind === 'mic' ? 'Mic bị từ chối quyền' : 'Camera bị từ chối quyền';
+  if (permission === 'denied')
+    return kind === 'mic' ? 'Mic bị từ chối quyền' : 'Camera bị từ chối quyền';
   if (permission === 'unsupported') return 'Trình duyệt không hỗ trợ thiết bị';
   return kind === 'mic' ? 'Mic chưa xác thực quyền' : 'Camera chưa xác thực quyền';
 }
@@ -358,8 +359,8 @@ export default function InterviewPage() {
 
         {(micPermission === 'denied' || cameraPermission === 'denied') && (
           <p className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-800">
-            Bạn đang từ chối quyền mic/camera. Hệ thống vẫn cho luyện bằng văn bản, nhưng phần đánh giá
-            biểu cảm và tông giọng sẽ kém chính xác.
+            Bạn đang từ chối quyền mic/camera. Hệ thống vẫn cho luyện bằng văn bản, nhưng phần đánh
+            giá biểu cảm và tông giọng sẽ kém chính xác.
           </p>
         )}
       </SurfaceCard>
@@ -368,7 +369,7 @@ export default function InterviewPage() {
         <SurfaceCard className="flex min-h-[38rem] flex-col gap-4">
           <div className="grid gap-4 lg:grid-cols-2">
             <div className="rounded-xl border border-slate-200 bg-slate-100 p-4">
-              <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Camera</p>
+              <p className="text-xs font-semibold tracking-wide text-slate-500 uppercase">Camera</p>
               <div className="mt-3 flex h-40 items-center justify-center rounded-lg border border-slate-300 bg-white text-slate-500">
                 <Camera size={18} />
                 <span className="ml-2 text-sm">
@@ -380,7 +381,9 @@ export default function InterviewPage() {
             </div>
 
             <div className="rounded-xl border border-slate-200 bg-slate-100 p-4">
-              <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Âm thanh</p>
+              <p className="text-xs font-semibold tracking-wide text-slate-500 uppercase">
+                Âm thanh
+              </p>
               <div className="mt-3 flex h-40 flex-col items-center justify-center rounded-lg border border-slate-300 bg-white text-slate-500">
                 <Waves size={20} />
                 <p className="mt-2 text-center text-sm">
@@ -400,14 +403,18 @@ export default function InterviewPage() {
               <span className="font-semibold text-slate-900">{progressPercent}%</span>
             </div>
             <div className="h-2 rounded-full bg-slate-200">
-              <div className="h-full rounded-full bg-blue-600 transition-all duration-300" style={{ width: `${progressPercent}%` }} />
+              <div
+                className="h-full rounded-full bg-blue-600 transition-all duration-300"
+                style={{ width: `${progressPercent}%` }}
+              />
             </div>
           </div>
 
           <div className="flex-1 space-y-3 overflow-y-auto rounded-xl border border-slate-200 bg-slate-50 p-4">
             {messages.length === 0 ? (
               <p className="text-sm text-slate-600">
-                Nhấn <span className="font-semibold">Bắt đầu phiên phỏng vấn</span> để nhận câu hỏi đầu tiên.
+                Nhấn <span className="font-semibold">Bắt đầu phiên phỏng vấn</span> để nhận câu hỏi
+                đầu tiên.
               </p>
             ) : (
               messages.map(message => (
@@ -434,7 +441,11 @@ export default function InterviewPage() {
               }
             />
             <div className="mt-3 flex justify-end">
-              <Button size="sm" onClick={handleSendAnswer} disabled={sessionState !== 'running' || !draftAnswer.trim()}>
+              <Button
+                size="sm"
+                onClick={handleSendAnswer}
+                disabled={sessionState !== 'running' || !draftAnswer.trim()}
+              >
                 <SendHorizonal size={16} />
                 <span>Gửi câu trả lời</span>
               </Button>
@@ -468,7 +479,8 @@ export default function InterviewPage() {
             <h3 className="font-semibold text-slate-900">Đánh giá tông giọng</h3>
             {voiceScore === null ? (
               <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-600">
-                Chưa có dữ liệu giọng nói để đánh giá. Hệ thống chỉ chấm tông giọng khi có câu trả lời bằng voice.
+                Chưa có dữ liệu giọng nói để đánh giá. Hệ thống chỉ chấm tông giọng khi có câu trả
+                lời bằng voice.
               </div>
             ) : (
               <div>
@@ -499,7 +511,8 @@ export default function InterviewPage() {
               {completedBaseSet && <Badge variant="warning">Đã xong bộ câu hỏi chính</Badge>}
             </div>
             <p className="text-sm text-slate-600">
-              Trang này chỉ tập trung luyện tập theo câu hỏi và gợi ý cải thiện. Không có nút kết thúc chấm điểm cứng.
+              Trang này chỉ tập trung luyện tập theo câu hỏi và gợi ý cải thiện. Không có nút kết
+              thúc chấm điểm cứng.
             </p>
           </SurfaceCard>
         </div>

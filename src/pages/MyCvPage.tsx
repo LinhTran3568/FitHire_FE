@@ -43,7 +43,9 @@ export default function MyCvPage() {
                   <p className="text-sm text-slate-500">Cập nhật: {cv.updatedAt}</p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Badge variant={cv.status === 'Đang dùng' ? 'success' : 'default'}>{cv.status}</Badge>
+                  <Badge variant={cv.status === 'Đang dùng' ? 'success' : 'default'}>
+                    {cv.status}
+                  </Badge>
                   <Button variant="outline" size="sm">
                     <FilePenLine size={14} />
                     <span>Chỉnh sửa</span>
@@ -60,8 +62,8 @@ export default function MyCvPage() {
             <h3 className="font-semibold">Gợi ý AI</h3>
           </div>
           <p className="text-sm leading-relaxed text-slate-700">
-            CV hiện tại thiếu số liệu định lượng trong phần kinh nghiệm. Hãy bổ sung KPI, kết quả trước
-            và sau khi triển khai để tăng điểm lọc hồ sơ.
+            CV hiện tại thiếu số liệu định lượng trong phần kinh nghiệm. Hãy bổ sung KPI, kết quả
+            trước và sau khi triển khai để tăng điểm lọc hồ sơ.
           </p>
           <Link to="/cv-builder">
             <Button className="w-full">Tạo hoặc tối ưu CV ngay</Button>
