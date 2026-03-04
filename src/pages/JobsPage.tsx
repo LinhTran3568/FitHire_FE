@@ -1,9 +1,24 @@
-﻿import { Badge, Button, SectionTitle, SurfaceCard } from '@components/ui';
+﻿import { Badge, Button, CompanyModal, SurfaceCard } from '@components/ui';
 import { useDebounce } from '@hooks/useDebounce';
 import { useLocalStorage } from '@hooks/useLocalStorage';
-import { formatPostedDate, formatSalaryVnd, type JobPost, mockJobs } from '@lib/mockJobs';
+import {
+  formatPostedDate,
+  formatSalaryVnd,
+  getCompanyInfo,
+  type CompanyInfo,
+  type JobPost,
+  mockJobs,
+} from '@lib/mockJobs';
 import { cn } from '@lib/utils';
-import { BookmarkCheck, BookmarkPlus, Filter, RotateCcw, Search } from 'lucide-react';
+import {
+  BookmarkCheck,
+  BookmarkPlus,
+  BriefcaseBusiness,
+  Filter,
+  MapPin,
+  RotateCcw,
+  Search,
+} from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 
@@ -79,6 +94,12 @@ export default function JobsPage() {
   const [savedJobs, setSavedJobs] = useLocalStorage<string[]>('saved_jobs', []);
   const [recentJobs] = useLocalStorage<string[]>('recent_jobs', []);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [selectedCompany, setSelectedCompany] = useState<CompanyInfo | null>(null);
+
+  const openCompany = (name: string) => {
+    const info = getCompanyInfo(name);
+    if (info) setSelectedCompany(info);
+  };
 
   const debouncedKeyword = useDebounce(keywordInput.trim(), 300);
   const isLoading = keywordInput.trim() !== debouncedKeyword;
@@ -162,11 +183,24 @@ export default function JobsPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <SectionTitle
-        title="Tìm việc"
-        subtitle="Lọc công việc theo CV, lĩnh vực, vị trí, địa điểm và mức lương để chọn đúng cơ hội phù hợp."
-      />
+    <div className="space-y-5">
+      {/* Gradient banner */}
+      <div className="rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-900 px-6 py-5 text-white">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h1 className="text-2xl font-bold">Tìm việc</h1>
+            <p className="mt-1 text-sm text-slate-300">
+              Lọc công việc theo CV, lĩnh vực, vị trí, địa điểm và mức lương phù hợp.
+            </p>
+          </div>
+          <div className="flex items-center gap-3 text-sm">
+            <div className="rounded-xl bg-white/10 px-4 py-2 text-center">
+              <p className="text-lg font-bold">{filteredJobs.length}</p>
+              <p className="text-xs text-slate-300">Việc phù hợp</p>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <SurfaceCard className="space-y-4">
         <div className="flex justify-end">
@@ -267,13 +301,13 @@ export default function JobsPage() {
           </label>
 
           <div className="space-y-2 text-sm">
-            <span className="font-medium text-slate-700">Lọc theo CV</span>
+            <span className="font-medium text-slate-700">Độ phù hợp</span>
             <button
               type="button"
               onClick={() => setUseCvFilter(prev => !prev)}
               className="flex h-[42px] w-full items-center justify-between rounded-lg border border-slate-300 bg-white px-3 text-slate-700"
             >
-              <span>Ưu tiên việc khớp CV</span>
+              <span>Ưu tiên theo độ phù hợp</span>
               <Badge variant={useCvFilter ? 'success' : 'default'}>
                 {useCvFilter ? 'Bật' : 'Tắt'}
               </Badge>
@@ -342,7 +376,7 @@ export default function JobsPage() {
               onClick={() => setUseCvFilter(true)}
               className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs text-slate-700"
             >
-              Không ưu tiên khớp CV ×
+              Không ưu tiên độ phù hợp ×
             </button>
           )}
 
@@ -392,33 +426,72 @@ export default function JobsPage() {
             const isSaved = savedJobs.includes(job.id);
 
             return (
-              <SurfaceCard key={job.id} className="space-y-4">
+              <div
+                key={job.id}
+                className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-indigo-200 hover:shadow-md"
+              >
                 <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div>
-                    <h3 className="text-lg font-semibold text-slate-900">{job.title}</h3>
-                    <p className="mt-1 text-sm text-slate-600">
-                      {job.company} • {job.location} • {job.position} • {job.workMode}
-                    </p>
-                    <p className="mt-1 text-xs text-slate-500">{formatPostedDate(job.postedAt)}</p>
+                  <div className="flex items-start gap-4">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-blue-600">
+                      <BriefcaseBusiness size={20} className="text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-slate-900 transition group-hover:text-indigo-700">
+                        {job.title}
+                      </h3>
+                      <button
+                        type="button"
+                        onClick={() => openCompany(job.company)}
+                        className="mt-0.5 text-sm font-medium text-indigo-600 underline-offset-2 transition hover:underline"
+                      >
+                        {job.company}
+                      </button>
+                      <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-slate-500">
+                        <span className="flex items-center gap-1">
+                          <MapPin size={12} />
+                          {job.location}
+                        </span>
+                        <span>•</span>
+                        <span>{job.position}</span>
+                        <span>•</span>
+                        <span>{job.workMode}</span>
+                        <span>•</span>
+                        <span>{formatPostedDate(job.postedAt)}</span>
+                      </div>
+                    </div>
                   </div>
-                  <Badge variant={job.matchScore >= 85 ? 'success' : 'info'}>
-                    Khớp CV: {job.matchScore}%
-                  </Badge>
+
+                  <div
+                    className={`flex flex-col items-center rounded-xl px-3 py-2 ${
+                      job.matchScore >= 85
+                        ? 'bg-emerald-50 ring-1 ring-emerald-200'
+                        : 'bg-blue-50 ring-1 ring-blue-200'
+                    }`}
+                  >
+                    <p
+                      className={`text-xl font-bold ${
+                        job.matchScore >= 85 ? 'text-emerald-700' : 'text-blue-700'
+                      }`}
+                    >
+                      {job.matchScore}%
+                    </p>
+                    <p className="text-xs text-slate-500">Độ phù hợp</p>
+                  </div>
                 </div>
 
-                <p className="text-sm leading-relaxed text-slate-700">{job.summary}</p>
+                <p className="mt-3 text-sm leading-relaxed text-slate-600">{job.summary}</p>
 
-                <div className="flex flex-wrap gap-2 text-xs">
+                <div className="mt-3 flex flex-wrap gap-2 text-xs">
                   <Badge variant="default">{job.field}</Badge>
                   <Badge variant="default">{formatSalaryVnd(job.salaryMin, job.salaryMax)}</Badge>
                   <Badge variant="default">Kỹ năng: {job.skills.slice(0, 2).join(', ')}</Badge>
                 </div>
 
-                <p className="text-xs text-slate-500">
+                <p className="mt-2 text-xs text-slate-400">
                   Vì sao phù hợp: yêu cầu chính có {job.skills.slice(0, 3).join(', ')}.
                 </p>
 
-                <div className="flex flex-wrap gap-2">
+                <div className="mt-4 flex flex-wrap gap-2">
                   <Link to={`/jobs/${job.id}`}>
                     <Button variant="outline">Xem chi tiết</Button>
                   </Link>
@@ -427,10 +500,14 @@ export default function JobsPage() {
                     <span>{isSaved ? 'Đã lưu' : 'Lưu việc'}</span>
                   </Button>
                 </div>
-              </SurfaceCard>
+              </div>
             );
           })}
       </div>
+
+      {selectedCompany && (
+        <CompanyModal company={selectedCompany} onClose={() => setSelectedCompany(null)} />
+      )}
     </div>
   );
 }

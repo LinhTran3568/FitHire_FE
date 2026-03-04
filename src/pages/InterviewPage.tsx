@@ -1,4 +1,4 @@
-import { Badge, Button, ChatMessage, SectionTitle, SurfaceCard } from '@components/ui';
+import { Badge, Button, ChatMessage, SurfaceCard } from '@components/ui';
 import { getJobById } from '@lib/mockJobs';
 import { Camera, CameraOff, Mic, MicOff, SendHorizonal, Waves } from 'lucide-react';
 import { useMemo, useState } from 'react';
@@ -310,10 +310,28 @@ export default function InterviewPage() {
 
   return (
     <div className="space-y-6">
-      <SectionTitle
-        title="Luyện phỏng vấn AI"
-        subtitle="Phỏng vấn bằng giọng nói + camera, nhận gợi ý theo biểu cảm và tông giọng để cải thiện từng câu trả lời."
-      />
+      {/* Gradient banner */}
+      <div className="rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-violet-900 px-6 py-5 text-white">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h1 className="text-2xl font-bold">Luyện phỏng vấn AI</h1>
+            <p className="mt-1 text-sm text-slate-300">
+              Phỏng vấn bằng giọng nói + camera, nhận gợi ý theo biểu cảm và tông giọng để cải thiện
+              từng câu trả lời.
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="rounded-xl bg-white/10 px-4 py-2 text-center">
+              <p className="text-xl font-bold">{answeredCount}</p>
+              <p className="text-xs text-slate-300">Câu đã trả lời</p>
+            </div>
+            <div className="rounded-xl bg-white/10 px-4 py-2 text-center">
+              <p className="text-xl font-bold">{questionSet.length}</p>
+              <p className="text-xs text-slate-300">Tổng câu hỏi</p>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <SurfaceCard className="space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
@@ -368,9 +386,9 @@ export default function InterviewPage() {
       <div className="grid gap-5 xl:grid-cols-[1fr_22rem]">
         <SurfaceCard className="flex min-h-[38rem] flex-col gap-4">
           <div className="grid gap-4 lg:grid-cols-2">
-            <div className="rounded-xl border border-slate-200 bg-slate-100 p-4">
-              <p className="text-xs font-semibold tracking-wide text-slate-500 uppercase">Camera</p>
-              <div className="mt-3 flex h-40 items-center justify-center rounded-lg border border-slate-300 bg-white text-slate-500">
+            <div className="rounded-xl border border-indigo-900/40 bg-gradient-to-br from-slate-800 to-indigo-900/60 p-4">
+              <p className="text-xs font-semibold tracking-wide text-slate-400 uppercase">Camera</p>
+              <div className="mt-3 flex h-40 items-center justify-center rounded-lg border border-slate-700 bg-slate-900 text-slate-400">
                 <Camera size={18} />
                 <span className="ml-2 text-sm">
                   {cameraEnabled && cameraPermission === 'granted'
@@ -380,11 +398,11 @@ export default function InterviewPage() {
               </div>
             </div>
 
-            <div className="rounded-xl border border-slate-200 bg-slate-100 p-4">
-              <p className="text-xs font-semibold tracking-wide text-slate-500 uppercase">
+            <div className="rounded-xl border border-indigo-900/40 bg-gradient-to-br from-slate-800 to-violet-900/60 p-4">
+              <p className="text-xs font-semibold tracking-wide text-slate-400 uppercase">
                 Âm thanh
               </p>
-              <div className="mt-3 flex h-40 flex-col items-center justify-center rounded-lg border border-slate-300 bg-white text-slate-500">
+              <div className="mt-3 flex h-40 flex-col items-center justify-center rounded-lg border border-slate-700 bg-slate-900 text-slate-400">
                 <Waves size={20} />
                 <p className="mt-2 text-center text-sm">
                   {micEnabled && micPermission === 'granted'
@@ -395,16 +413,16 @@ export default function InterviewPage() {
             </div>
           </div>
 
-          <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+          <div className="rounded-xl border border-slate-200 bg-gradient-to-r from-indigo-50 to-slate-50 p-3">
             <div className="mb-2 flex items-center justify-between text-sm">
               <span className="font-medium text-slate-700">
                 Câu hỏi hiện tại: {currentQuestionNumber}/{questionSet.length}
               </span>
-              <span className="font-semibold text-slate-900">{progressPercent}%</span>
+              <span className="font-bold text-indigo-700">{progressPercent}%</span>
             </div>
             <div className="h-2 rounded-full bg-slate-200">
               <div
-                className="h-full rounded-full bg-blue-600 transition-all duration-300"
+                className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 transition-all duration-300"
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
