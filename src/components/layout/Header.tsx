@@ -1,6 +1,7 @@
 ﻿import { Button } from '@components/ui';
 import { Bell, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import logoImg from '@assets/images/logo.png';
 
 /**
  * Top application header.
@@ -8,12 +9,9 @@ import { Link } from 'react-router-dom';
 export function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur">
-      <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-10">
-        <Link to="/" className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-xs font-semibold text-white">
-            F
-          </div>
-          <span className="text-sm font-semibold text-slate-900">FitHire AI</span>
+      <div className="mx-auto flex h-24 w-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-10">
+        <Link to="/" className="flex items-center">
+          <img src={logoImg} alt="FitHire AI" className="h-20 w-auto object-contain" />
         </Link>
 
         <div className="hidden max-w-sm flex-1 md:flex">

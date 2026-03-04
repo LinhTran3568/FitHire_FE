@@ -3,6 +3,7 @@ import { useAuthStore } from '@features/auth/store/authStore';
 import { cn } from '@lib/utils';
 import { ChevronDown } from 'lucide-react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import logoImg from '@assets/images/logo.png';
 
 const CV_FLOWS = [
   {
@@ -33,12 +34,9 @@ export function MarketingHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-white/40 bg-white/90 backdrop-blur-md">
       <div className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-6 lg:px-10">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-sm font-semibold text-white shadow-sm">
-            F
-          </div>
-          <span className="text-2xl font-semibold text-slate-900">FitHire AI</span>
-        </div>
+        <Link to="/" className="flex items-center py-1">
+          <img src={logoImg} alt="FitHire AI" className="h-12 w-auto object-contain" />
+        </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
           <NavLink
