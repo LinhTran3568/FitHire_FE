@@ -18,6 +18,7 @@ const MyCvPage = lazy(() => import('@pages/MyCvPage'));
 const DashboardPage = lazy(() => import('@pages/DashboardPage'));
 const ProfilePage = lazy(() => import('@pages/ProfilePage'));
 const SavedJobsPage = lazy(() => import('@pages/SavedJobsPage'));
+const SubscriptionPage = lazy(() => import('@pages/SubscriptionPage'));
 const LoginPage = lazy(() => import('@pages/LoginPage'));
 const RegisterPage = lazy(() => import('@pages/RegisterPage'));
 const NotFoundPage = lazy(() => import('@pages/NotFoundPage'));
@@ -27,7 +28,10 @@ const router = createBrowserRouter(
     {
       path: '/',
       element: <MarketingLayout />,
-      children: [{ index: true, element: <HomePage /> }],
+      children: [
+        { index: true, element: <HomePage /> },
+        { path: 'subscription', element: <SubscriptionPage /> },
+      ],
     },
     {
       element: <PublicOnlyRoute />,

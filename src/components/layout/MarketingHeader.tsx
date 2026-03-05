@@ -1,16 +1,16 @@
+import logoImg from '@assets/images/logo.png';
 import { Button } from '@components/ui';
 import { useAuthStore } from '@features/auth/store/authStore';
 import { cn } from '@lib/utils';
-import { Bookmark, ChevronDown, FileUser, LogOut, User, UserCircle } from 'lucide-react';
+import { Bookmark, ChevronDown, Crown, FileUser, LogOut, User, UserCircle } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
-import logoImg from '@assets/images/logo.png';
 
 const CV_FLOWS = [
   {
     to: '/cv-builder?flow=build',
     label: 'Tạo CV',
-    description: 'AI hỏi thông tin và tự tạo CV theo dữ liệu bạn cung cấp.',
+    description: 'AI hỏi thông tin và tự tạo CV dựa trên dữ liệu bạn cung cấp.',
   },
   {
     to: '/cv-builder?flow=review',
@@ -116,6 +116,18 @@ export function MarketingHeader() {
           >
             Phỏng vấn AI
           </NavLink>
+
+          <NavLink
+            to="/subscription"
+            className={({ isActive }) =>
+              cn(
+                'text-base font-medium transition-colors',
+                isActive ? 'text-blue-600' : 'text-slate-800 hover:text-blue-600',
+              )
+            }
+          >
+            Gói Pro
+          </NavLink>
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
@@ -166,6 +178,14 @@ export function MarketingHeader() {
                   >
                     <Bookmark size={16} />
                     Việc đã lưu
+                  </Link>
+                  <Link
+                    to="/subscription"
+                    onClick={() => setDropdownOpen(false)}
+                    className="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 transition-colors hover:bg-blue-50 hover:text-blue-600"
+                  >
+                    <Crown size={16} />
+                    Gói Pro
                   </Link>
                   <button
                     type="button"
