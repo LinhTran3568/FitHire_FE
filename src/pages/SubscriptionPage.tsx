@@ -171,7 +171,10 @@ export default function SubscriptionPage() {
               </thead>
               <tbody>
                 {PLANS.map(plan => (
-                  <tr key={`row-${plan.id}`} className="border-b border-slate-100 align-top last:border-b-0">
+                  <tr
+                    key={`row-${plan.id}`}
+                    className="border-b border-slate-100 align-top last:border-b-0"
+                  >
                     <td className="px-4 py-3 font-semibold text-slate-900">{plan.name}</td>
                     <td className="px-4 py-3 text-slate-700">{plan.price}</td>
                     <td className="px-4 py-3 text-slate-700">
@@ -196,8 +199,8 @@ export default function SubscriptionPage() {
             <h3 className="text-lg font-semibold text-slate-900">Ghi chú giá</h3>
           </div>
           <p className="text-sm leading-relaxed text-slate-600">
-            Giá gói và giới hạn sử dụng có thể được điều chỉnh theo chính sách vận hành và chi phí hệ
-            thống trong từng giai đoạn.
+            Giá gói và giới hạn sử dụng có thể được điều chỉnh theo chính sách vận hành và chi phí
+            hệ thống trong từng giai đoạn.
           </p>
         </SurfaceCard>
       </div>
