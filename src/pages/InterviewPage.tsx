@@ -4,7 +4,7 @@ import { Camera, CameraOff, Mic, MicOff, SendHorizonal, Waves } from 'lucide-rea
 import { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-type SessionState = 'idle' | 'running' | 'paused';
+type SessionState = 'idle' | 'running' | 'paused' | 'completed';
 type DevicePermission = 'unknown' | 'granted' | 'denied' | 'unsupported';
 type MessageRole = 'assistant' | 'user';
 
@@ -22,11 +22,86 @@ const generalQuestions = [
   'Bạn học kỹ năng mới ra sao trong 30 ngày đầu khi vào một team mới?',
 ];
 
-const continuousPrompts = [
-  'Bây giờ thử trả lời lại câu vừa rồi theo format: Hành động -> Số liệu -> Tác động.',
-  'Hãy diễn đạt câu trả lời trong tối đa 45 giây để luyện tính súc tích.',
-  'Giả sử interviewer hỏi sâu hơn, bạn sẽ thêm bằng chứng nào để tăng độ thuyết phục?',
+const DEMO_QUESTION_LIMIT = 4;
+const ACTION_KEYWORDS = [
+  'xây dựng',
+  'triển khai',
+  'thực hiện',
+  'phối hợp',
+  'phân tích',
+  'xử lý',
+  'tối ưu',
+  'thiết kế',
+  'đề xuất',
 ];
+const RESULT_KEYWORDS = ['kết quả', 'tăng', 'giảm', 'đạt', 'cải thiện', 'hoàn thành', 'tiết kiệm'];
+const CONTEXT_KEYWORDS = ['bối cảnh', 'nhiệm vụ', 'vai trò', 'trong dự án', 'khi', 'tình huống'];
+
+interface AnswerEvaluation {
+  question: string;
+  answer: string;
+  score: number;
+  strengths: string[];
+  improvements: string[];
+}
+
+function includesAny(text: string, keywords: string[]) {
+  return keywords.some(keyword => text.includes(keyword));
+}
+
+function evaluateAnswer(answer: string, question: string): AnswerEvaluation {
+  const trimmed = answer.trim();
+  const lowered = trimmed.toLowerCase();
+
+  const hasNumber = /\d/.test(trimmed);
+  const hasAction = includesAny(lowered, ACTION_KEYWORDS);
+  const hasResult = includesAny(lowered, RESULT_KEYWORDS);
+  const hasContext = includesAny(lowered, CONTEXT_KEYWORDS);
+  const lengthScore = clamp(Math.round((trimmed.length / 180) * 25), 0, 25);
+
+  const score = clamp(
+    35 +
+      lengthScore +
+      (hasNumber ? 15 : 0) +
+      (hasAction ? 15 : 0) +
+      (hasResult ? 20 : 0) +
+      (hasContext ? 10 : 0),
+    0,
+    100,
+  );
+
+  const strengths: string[] = [];
+  const improvements: string[] = [];
+
+  if (lengthScore >= 18) strengths.push('Diễn đạt đủ ý');
+  else improvements.push('Bổ sung bối cảnh và cách triển khai cụ thể hơn');
+
+  if (hasNumber) strengths.push('Có số liệu minh chứng');
+  else improvements.push('Thêm số liệu định lượng để tăng sức thuyết phục');
+
+  if (hasAction) strengths.push('Nêu rõ hành động cá nhân');
+  else improvements.push('Làm rõ bạn trực tiếp làm gì trong tình huống');
+
+  if (hasResult) strengths.push('Có kết quả/tác động cuối cùng');
+  else improvements.push('Chốt câu trả lời bằng kết quả đo lường được');
+
+  if (hasContext) strengths.push('Có bối cảnh và vai trò');
+  else improvements.push('Thêm bối cảnh để câu trả lời mạch lạc hơn');
+
+  return {
+    question,
+    answer,
+    score,
+    strengths,
+    improvements,
+  };
+}
+
+function getScoreTextColor(score: number) {
+  if (score >= 80) return 'text-emerald-600';
+  if (score >= 65) return 'text-amber-600';
+  return 'text-rose-600';
+}
 
 function clamp(value: number, min: number, max: number) {
   return Math.max(min, Math.min(max, value));
@@ -79,12 +154,10 @@ export default function InterviewPage() {
   const [messages, setMessages] = useState<InterviewMessage[]>([]);
   const [draftAnswer, setDraftAnswer] = useState('');
   const [questionIndex, setQuestionIndex] = useState(0);
-  const [completedBaseSet, setCompletedBaseSet] = useState(false);
-  const [continuousPromptIndex, setContinuousPromptIndex] = useState(0);
   const [voiceSamplesCount] = useState(0);
 
   const questionSet = useMemo(() => {
-    if (!targetJob) return generalQuestions;
+    if (!targetJob) return generalQuestions.slice(0, DEMO_QUESTION_LIMIT);
 
     const primarySkills = targetJob.skills.slice(0, 2).join(', ');
     const topRequirement = targetJob.requirements[0] ?? 'kỹ năng chuyên môn phù hợp';
@@ -95,7 +168,7 @@ export default function InterviewPage() {
       `Hãy kể một dự án có liên quan tới ${primarySkills} theo cấu trúc STAR.`,
       `Nếu nhận nhiệm vụ "${firstResponsibility}", bạn sẽ bắt đầu từ đâu trong tuần đầu?`,
       `Yêu cầu JD nhấn mạnh "${topRequirement}". Bạn sẽ chứng minh năng lực này bằng ví dụ nào?`,
-    ];
+    ].slice(0, DEMO_QUESTION_LIMIT);
   }, [targetJob]);
 
   const sessionLabel = useMemo(() => {
@@ -108,6 +181,51 @@ export default function InterviewPage() {
     () => messages.filter(message => message.role === 'user').length,
     [messages],
   );
+
+  const answerEvaluations = useMemo(() => {
+    const userAnswers = messages.filter(message => message.role === 'user');
+    return userAnswers
+      .slice(0, questionSet.length)
+      .map((message, index) =>
+        evaluateAnswer(message.text, questionSet[index] ?? `Câu ${index + 1}`),
+      );
+  }, [messages, questionSet]);
+
+  const overallAnswerScore = useMemo(() => {
+    if (answerEvaluations.length === 0) return 0;
+    const total = answerEvaluations.reduce((sum, item) => sum + item.score, 0);
+    return Math.round(total / answerEvaluations.length);
+  }, [answerEvaluations]);
+
+  const answerInsights = useMemo(() => {
+    if (answerEvaluations.length === 0) {
+      return {
+        topStrength: 'Chưa có dữ liệu',
+        topImprovement: 'Hoàn thành phiên demo để nhận nhận xét chi tiết.',
+      };
+    }
+
+    const strengthCount = new Map<string, number>();
+    const improvementCount = new Map<string, number>();
+
+    answerEvaluations.forEach(item => {
+      item.strengths.forEach(strength => {
+        strengthCount.set(strength, (strengthCount.get(strength) ?? 0) + 1);
+      });
+      item.improvements.forEach(improvement => {
+        improvementCount.set(improvement, (improvementCount.get(improvement) ?? 0) + 1);
+      });
+    });
+
+    const topStrength =
+      [...strengthCount.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ??
+      'Bạn đã có nền tảng trả lời tốt.';
+    const topImprovement =
+      [...improvementCount.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ??
+      'Không có điểm yếu lớn, hãy giữ cấu trúc STAR.';
+
+    return { topStrength, topImprovement };
+  }, [answerEvaluations]);
 
   const progressPercent = useMemo(
     () => Math.round((Math.min(answeredCount, questionSet.length) / questionSet.length) * 100),
@@ -131,6 +249,7 @@ export default function InterviewPage() {
   const sessionStatusBadge = useMemo(() => {
     if (sessionState === 'running') return { text: 'Đang phỏng vấn', variant: 'success' as const };
     if (sessionState === 'paused') return { text: 'Đang tạm dừng', variant: 'warning' as const };
+    if (sessionState === 'completed') return { text: 'Đã kết thúc demo', variant: 'info' as const };
     return { text: 'Chưa bắt đầu', variant: 'default' as const };
   }, [sessionState]);
 
@@ -226,6 +345,8 @@ export default function InterviewPage() {
   };
 
   const handleSessionAction = async () => {
+    if (sessionState === 'completed') return;
+
     if (sessionState === 'idle') {
       await ensureBasePermissions();
       setSessionState('running');
@@ -238,10 +359,6 @@ export default function InterviewPage() {
       return;
     }
 
-    if (completedBaseSet) {
-      appendAssistantMessage(continuousPrompts[continuousPromptIndex]);
-      setContinuousPromptIndex(prev => (prev + 1) % continuousPrompts.length);
-    }
     setSessionState('running');
   };
 
@@ -297,16 +414,13 @@ export default function InterviewPage() {
       return;
     }
 
-    setCompletedBaseSet(true);
-    setSessionState('paused');
+    setSessionState('completed');
     appendAssistantMessage(
-      'Bạn đã hoàn thành bộ câu hỏi chính. Hãy bấm "Tiếp tục phiên phỏng vấn" để luyện thêm các câu mở rộng theo JD.',
+      `Bạn đã hoàn thành ${questionSet.length}/${questionSet.length} câu hỏi demo. Phiên phỏng vấn đã kết thúc.`,
     );
   };
 
-  const currentQuestionNumber = completedBaseSet
-    ? questionSet.length
-    : Math.min(questionIndex + 1, questionSet.length);
+  const currentQuestionNumber = Math.min(questionIndex + 1, questionSet.length);
 
   return (
     <div className="space-y-6">
@@ -347,11 +461,12 @@ export default function InterviewPage() {
             <Button
               variant={sessionState === 'running' ? 'secondary' : 'primary'}
               onClick={handleSessionAction}
-              disabled={isRequestingMedia}
+              disabled={isRequestingMedia || sessionState === 'completed'}
             >
               {sessionState === 'idle' && 'Bắt đầu phiên phỏng vấn'}
               {sessionState === 'running' && 'Tạm dừng phiên phỏng vấn'}
               {sessionState === 'paused' && 'Tiếp tục phiên phỏng vấn'}
+              {sessionState === 'completed' && 'Phiên demo đã kết thúc'}
             </Button>
 
             <Button variant="outline" onClick={handleToggleMic}>
@@ -455,7 +570,9 @@ export default function InterviewPage() {
               placeholder={
                 sessionState === 'running'
                   ? 'Nhập câu trả lời của bạn hoặc nói trực tiếp qua mic...'
-                  : 'Bắt đầu/tiếp tục phiên phỏng vấn để gửi câu trả lời...'
+                  : sessionState === 'completed'
+                    ? `Phiên demo đã kết thúc sau ${questionSet.length} câu hỏi.`
+                    : 'Bắt đầu/tiếp tục phiên phỏng vấn để gửi câu trả lời...'
               }
             />
             <div className="mt-3 flex justify-end">
@@ -521,16 +638,83 @@ export default function InterviewPage() {
             </ul>
           </SurfaceCard>
 
+          <SurfaceCard className="space-y-3">
+            <h3 className="font-semibold text-slate-900">Đánh giá câu trả lời</h3>
+
+            {sessionState !== 'completed' ? (
+              <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-600">
+                Hoàn thành {questionSet.length}/{questionSet.length} câu demo để xem điểm nội dung
+                và góp ý chi tiết cho từng câu.
+              </div>
+            ) : (
+              <>
+                <div>
+                  <div className="mb-2 flex items-center justify-between text-sm">
+                    <span className="text-slate-700">Điểm trung bình nội dung</span>
+                    <span className={`font-semibold ${getScoreTextColor(overallAnswerScore)}`}>
+                      {overallAnswerScore}/100
+                    </span>
+                  </div>
+                  <div className="h-2 rounded-full bg-slate-200">
+                    <div
+                      className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-blue-500 transition-all duration-500"
+                      style={{ width: `${overallAnswerScore}%` }}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm">
+                  <p className="text-slate-800">
+                    <span className="font-semibold text-emerald-700">Điểm mạnh nổi bật:</span>{' '}
+                    {answerInsights.topStrength}.
+                  </p>
+                  <p className="text-slate-800">
+                    <span className="font-semibold text-amber-700">Ưu tiên cải thiện:</span>{' '}
+                    {answerInsights.topImprovement}.
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  {answerEvaluations.map((evaluation, index) => (
+                    <div
+                      key={`answer-eval-${index}`}
+                      className="rounded-xl border border-slate-200 bg-white p-3"
+                    >
+                      <div className="mb-1 flex items-center justify-between gap-2">
+                        <p className="text-sm font-semibold text-slate-900">Câu {index + 1}</p>
+                        <span
+                          className={`text-sm font-bold ${getScoreTextColor(evaluation.score)}`}
+                        >
+                          {evaluation.score}/100
+                        </span>
+                      </div>
+                      <p className="text-xs leading-relaxed text-slate-500">
+                        {evaluation.question}
+                      </p>
+                      <p className="mt-1 text-xs text-slate-700">
+                        <span className="font-medium">Gợi ý:</span>{' '}
+                        {evaluation.improvements[0] ??
+                          'Câu trả lời tốt, tiếp tục giữ cấu trúc này.'}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+          </SurfaceCard>
+
           <SurfaceCard className="space-y-2">
             <h3 className="font-semibold text-slate-900">Trạng thái luyện tập</h3>
             <div className="flex flex-wrap gap-2">
               <Badge variant="info">Câu đã trả lời: {answeredCount}</Badge>
               <Badge variant="success">Session: {sessionStatusBadge.text}</Badge>
-              {completedBaseSet && <Badge variant="warning">Đã xong bộ câu hỏi chính</Badge>}
+              {sessionState === 'completed' && (
+                <Badge variant="warning">Đã kết thúc sau {questionSet.length} câu demo</Badge>
+              )}
             </div>
             <p className="text-sm text-slate-600">
-              Trang này chỉ tập trung luyện tập theo câu hỏi và gợi ý cải thiện. Không có nút kết
-              thúc chấm điểm cứng.
+              Chế độ demo chỉ gồm {questionSet.length} câu hỏi. Sau khi trả lời đủ, phiên sẽ tự động
+              kết thúc.
             </p>
           </SurfaceCard>
         </div>
