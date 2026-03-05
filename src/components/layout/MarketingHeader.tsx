@@ -50,8 +50,12 @@ export function MarketingHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-white/40 bg-white/90 backdrop-blur-md">
       <div className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-6 lg:px-10">
-        <Link to="/" className="flex items-center py-1">
-          <img src={logoImg} alt="FitHire AI" className="h-12 w-auto object-contain" />
+        <Link to="/" className="flex items-center">
+          <img
+            src={logoImg}
+            alt="FitHire AI"
+            className="h-20 w-auto object-contain drop-shadow-md transition-transform hover:scale-105"
+          />
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
