@@ -10,9 +10,10 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 export default function JobDetailPage() {
+  const navigate = useNavigate();
   const { jobId } = useParams();
   const job = jobId ? getJobById(jobId) : undefined;
 
@@ -54,12 +55,10 @@ export default function JobDetailPage() {
         subtitle={`${job.company} • ${job.location} • ${job.workMode} • ${formatSalaryVnd(job.salaryMin, job.salaryMax)}`}
         action={
           <div className="flex flex-wrap gap-2">
-            <Link to="/jobs">
-              <Button variant="ghost" size="sm">
-                <ArrowLeft size={16} />
-                <span>Quay lại</span>
-              </Button>
-            </Link>
+            <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>
+              <ArrowLeft size={16} />
+              <span>Quay lại</span>
+            </Button>
             <Button size="sm" variant="outline" onClick={toggleSaveJob}>
               {isSaved ? <BookmarkCheck size={16} /> : <BookmarkPlus size={16} />}
               <span>{isSaved ? 'Đã lưu việc' : 'Lưu việc này'}</span>
