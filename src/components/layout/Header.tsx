@@ -1,7 +1,7 @@
-﻿import { Button } from '@components/ui';
+import logoImg from '@assets/images/logo.png';
+import { Button } from '@components/ui';
 import { Bell, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import logoImg from '@assets/images/logo.png';
 
 /**
  * Top application header.

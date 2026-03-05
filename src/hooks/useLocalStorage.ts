@@ -34,14 +34,14 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
     [key],
   );
 
-  const removeValue = useCallback(() => {
+  const removeValue = () => {
     try {
       window.localStorage.removeItem(key);
       setStoredValue(initialValue);
     } catch (error) {
       console.error(error);
     }
-  }, [initialValue]);
+  };
 
   return [storedValue, setValue, removeValue] as const;
 }

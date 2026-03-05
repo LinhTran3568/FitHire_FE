@@ -109,8 +109,6 @@ export function MarketingHeader() {
             Tìm việc
           </NavLink>
 
-
-
           <NavLink
             to="/subscription"
             className={({ isActive }) =>

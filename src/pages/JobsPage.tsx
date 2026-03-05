@@ -1,12 +1,7 @@
 ﻿import { Badge, Button, SurfaceCard } from '@components/ui';
 import { useDebounce } from '@hooks/useDebounce';
 import { useLocalStorage } from '@hooks/useLocalStorage';
-import {
-  formatPostedDate,
-  formatSalaryVnd,
-  type JobPost,
-  mockJobs,
-} from '@lib/mockJobs';
+import { formatPostedDate, formatSalaryVnd, type JobPost, mockJobs } from '@lib/mockJobs';
 import { cn } from '@lib/utils';
 import {
   BookmarkCheck,
@@ -93,9 +88,6 @@ export default function JobsPage() {
   const [savedJobs, setSavedJobs] = useLocalStorage<string[]>('saved_jobs', []);
   const [recentJobs] = useLocalStorage<string[]>('recent_jobs', []);
   const [filtersOpen, setFiltersOpen] = useState(false);
-
-
-
 
   const debouncedKeyword = useDebounce(keywordInput.trim(), 300);
   const isLoading = keywordInput.trim() !== debouncedKeyword;
@@ -452,9 +444,7 @@ export default function JobsPage() {
                       <h3 className="text-lg font-bold text-slate-900 transition group-hover:text-indigo-700">
                         {job.title}
                       </h3>
-                      <p className="mt-0.5 text-sm font-medium text-indigo-600">
-                        {job.company}
-                      </p>
+                      <p className="mt-0.5 text-sm font-medium text-indigo-600">{job.company}</p>
                       <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-slate-500">
                         <span className="flex items-center gap-1">
                           <MapPin size={12} />
@@ -471,14 +461,16 @@ export default function JobsPage() {
                   </div>
 
                   <div
-                    className={`flex flex-col items-center rounded-xl px-3 py-2 ${job.matchScore >= 85
-                      ? 'bg-emerald-50 ring-1 ring-emerald-200'
-                      : 'bg-blue-50 ring-1 ring-blue-200'
-                      }`}
+                    className={`flex flex-col items-center rounded-xl px-3 py-2 ${
+                      job.matchScore >= 85
+                        ? 'bg-emerald-50 ring-1 ring-emerald-200'
+                        : 'bg-blue-50 ring-1 ring-blue-200'
+                    }`}
                   >
                     <p
-                      className={`text-xl font-bold ${job.matchScore >= 85 ? 'text-emerald-700' : 'text-blue-700'
-                        }`}
+                      className={`text-xl font-bold ${
+                        job.matchScore >= 85 ? 'text-emerald-700' : 'text-blue-700'
+                      }`}
                     >
                       {job.matchScore}%
                     </p>
@@ -515,8 +507,6 @@ export default function JobsPage() {
             );
           })}
       </div>
-
-
     </div>
   );
 }

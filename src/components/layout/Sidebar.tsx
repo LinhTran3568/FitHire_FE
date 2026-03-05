@@ -1,11 +1,5 @@
 ﻿import { cn } from '@lib/utils';
-import {
-  Bookmark,
-  BriefcaseBusiness,
-  BookOpen,
-  FileSearch,
-  FileUser,
-} from 'lucide-react';
+import { Bookmark, BriefcaseBusiness, BookOpen, FileSearch, FileUser } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
 const NAV_ITEMS = [
