@@ -5,7 +5,6 @@ import {
   BookOpen,
   FileSearch,
   FileUser,
-  MicVocal,
 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
@@ -14,7 +13,7 @@ const NAV_ITEMS = [
   { to: '/my-cv', label: 'CV của tôi', icon: FileUser, end: false },
   { to: '/jobs', label: 'Tìm việc', icon: BriefcaseBusiness, end: false },
   { to: '/saved-jobs', label: 'Việc đã lưu', icon: Bookmark, end: false },
-  { to: '/interview', label: 'Luyện phỏng vấn', icon: MicVocal, end: false },
+
   { to: '/culture/tests', label: 'Test tính cách', icon: BookOpen, end: false },
 ];
 

@@ -105,17 +105,7 @@ export function MarketingHeader() {
             Tìm việc
           </NavLink>
 
-          <NavLink
-            to="/interview"
-            className={({ isActive }) =>
-              cn(
-                'text-base font-medium transition-colors',
-                isActive ? 'text-blue-600' : 'text-slate-800 hover:text-blue-600',
-              )
-            }
-          >
-            Phỏng vấn AI
-          </NavLink>
+
 
           <NavLink
             to="/subscription"
