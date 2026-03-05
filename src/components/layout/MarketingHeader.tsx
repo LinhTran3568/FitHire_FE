@@ -2,7 +2,7 @@ import logoImg from '@assets/images/logo.png';
 import { Button } from '@components/ui';
 import { useAuthStore } from '@features/auth/store/authStore';
 import { cn } from '@lib/utils';
-import { Bookmark, ChevronDown, Crown, FileUser, LogOut, User, UserCircle } from 'lucide-react';
+import { Bookmark, ChevronDown, FileUser, LogOut, User, UserCircle } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 
@@ -172,14 +172,6 @@ export function MarketingHeader() {
                   >
                     <Bookmark size={16} />
                     Việc đã lưu
-                  </Link>
-                  <Link
-                    to="/subscription"
-                    onClick={() => setDropdownOpen(false)}
-                    className="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 transition-colors hover:bg-blue-50 hover:text-blue-600"
-                  >
-                    <Crown size={16} />
-                    Gói Pro
                   </Link>
                   <button
                     type="button"
