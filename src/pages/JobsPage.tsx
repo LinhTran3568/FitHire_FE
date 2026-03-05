@@ -1,14 +1,7 @@
-﻿import { Badge, Button, CompanyModal, SurfaceCard } from '@components/ui';
+﻿import { Badge, Button, SurfaceCard } from '@components/ui';
 import { useDebounce } from '@hooks/useDebounce';
 import { useLocalStorage } from '@hooks/useLocalStorage';
-import {
-  formatPostedDate,
-  formatSalaryVnd,
-  getCompanyInfo,
-  type CompanyInfo,
-  type JobPost,
-  mockJobs,
-} from '@lib/mockJobs';
+import { formatPostedDate, formatSalaryVnd, type JobPost, mockJobs } from '@lib/mockJobs';
 import { cn } from '@lib/utils';
 import {
   BookmarkCheck,
@@ -20,7 +13,7 @@ import {
   Search,
 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
 const FIELD_OPTIONS = [
   'Tất cả',
@@ -65,6 +58,7 @@ function renderSkeletonCards() {
 }
 
 export default function JobsPage() {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [keywordInput, setKeywordInput] = useState(searchParams.get('q') ?? '');
@@ -94,12 +88,6 @@ export default function JobsPage() {
   const [savedJobs, setSavedJobs] = useLocalStorage<string[]>('saved_jobs', []);
   const [recentJobs] = useLocalStorage<string[]>('recent_jobs', []);
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const [selectedCompany, setSelectedCompany] = useState<CompanyInfo | null>(null);
-
-  const openCompany = (name: string) => {
-    const info = getCompanyInfo(name);
-    if (info) setSelectedCompany(info);
-  };
 
   const debouncedKeyword = useDebounce(keywordInput.trim(), 300);
   const isLoading = keywordInput.trim() !== debouncedKeyword;
@@ -428,24 +416,35 @@ export default function JobsPage() {
             return (
               <div
                 key={job.id}
-                className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-indigo-200 hover:shadow-md"
+                onClick={() => navigate(`/jobs/${job.id}`)}
+                className="group cursor-pointer rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-indigo-200 hover:shadow-md"
               >
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="flex items-start gap-4">
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-blue-600">
-                      <BriefcaseBusiness size={20} className="text-white" />
+                    <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-100 bg-white p-2 shadow-sm ring-1 ring-slate-200/50 transition group-hover:border-indigo-100 group-hover:shadow-md">
+                      {job.logoUrl ? (
+                        <img
+                          src={job.logoUrl}
+                          alt={job.company}
+                          className="h-full w-full object-contain"
+                          onError={e => {
+                            (e.target as HTMLImageElement).src =
+                              'https://ui-avatars.com/api/?name=' +
+                              encodeURIComponent(job.company) +
+                              '&background=6366f1&color=fff';
+                          }}
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-indigo-500 to-blue-600">
+                          <BriefcaseBusiness size={28} className="text-white" />
+                        </div>
+                      )}
                     </div>
                     <div>
                       <h3 className="text-lg font-bold text-slate-900 transition group-hover:text-indigo-700">
                         {job.title}
                       </h3>
-                      <button
-                        type="button"
-                        onClick={() => openCompany(job.company)}
-                        className="mt-0.5 text-sm font-medium text-indigo-600 underline-offset-2 transition hover:underline"
-                      >
-                        {job.company}
-                      </button>
+                      <p className="mt-0.5 text-sm font-medium text-indigo-600">{job.company}</p>
                       <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-slate-500">
                         <span className="flex items-center gap-1">
                           <MapPin size={12} />
@@ -492,10 +491,14 @@ export default function JobsPage() {
                 </p>
 
                 <div className="mt-4 flex flex-wrap gap-2">
-                  <Link to={`/jobs/${job.id}`}>
-                    <Button variant="outline">Xem chi tiết</Button>
-                  </Link>
-                  <Button variant="ghost" onClick={() => toggleSaveJob(job.id)}>
+                  <Button variant="outline">Xem chi tiết</Button>
+                  <Button
+                    variant="ghost"
+                    onClick={e => {
+                      e.stopPropagation();
+                      toggleSaveJob(job.id);
+                    }}
+                  >
                     {isSaved ? <BookmarkCheck size={16} /> : <BookmarkPlus size={16} />}
                     <span>{isSaved ? 'Đã lưu' : 'Lưu việc'}</span>
                   </Button>
@@ -504,10 +507,6 @@ export default function JobsPage() {
             );
           })}
       </div>
-
-      {selectedCompany && (
-        <CompanyModal company={selectedCompany} onClose={() => setSelectedCompany(null)} />
-      )}
     </div>
   );
 }

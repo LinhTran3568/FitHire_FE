@@ -2,7 +2,7 @@ import logoImg from '@assets/images/logo.png';
 import { Button } from '@components/ui';
 import { useAuthStore } from '@features/auth/store/authStore';
 import { cn } from '@lib/utils';
-import { Bookmark, ChevronDown, Crown, FileUser, LogOut, User, UserCircle } from 'lucide-react';
+import { Bookmark, ChevronDown, FileUser, LogOut, User, UserCircle } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 
@@ -50,8 +50,12 @@ export function MarketingHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-white/40 bg-white/90 backdrop-blur-md">
       <div className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-6 lg:px-10">
-        <Link to="/" className="flex items-center py-1">
-          <img src={logoImg} alt="FitHire AI" className="h-12 w-auto object-contain" />
+        <Link to="/" className="flex items-center">
+          <img
+            src={logoImg}
+            alt="FitHire AI"
+            className="h-20 w-auto object-contain drop-shadow-md transition-transform hover:scale-105"
+          />
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
@@ -103,18 +107,6 @@ export function MarketingHeader() {
             }
           >
             Tìm việc
-          </NavLink>
-
-          <NavLink
-            to="/interview"
-            className={({ isActive }) =>
-              cn(
-                'text-base font-medium transition-colors',
-                isActive ? 'text-blue-600' : 'text-slate-800 hover:text-blue-600',
-              )
-            }
-          >
-            Phỏng vấn AI
           </NavLink>
 
           <NavLink
@@ -178,14 +170,6 @@ export function MarketingHeader() {
                   >
                     <Bookmark size={16} />
                     Việc đã lưu
-                  </Link>
-                  <Link
-                    to="/subscription"
-                    onClick={() => setDropdownOpen(false)}
-                    className="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 transition-colors hover:bg-blue-50 hover:text-blue-600"
-                  >
-                    <Crown size={16} />
-                    Gói Pro
                   </Link>
                   <button
                     type="button"

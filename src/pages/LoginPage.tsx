@@ -32,7 +32,7 @@ export default function LoginPage() {
 
   const redirectTo = (() => {
     const state = location.state as { from?: string } | null;
-    if (!state?.from || state.from === '/login') return '/jobs';
+    if (!state?.from || state.from === '/login') return '/';
     return state.from;
   })();
 
