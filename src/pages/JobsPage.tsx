@@ -429,8 +429,24 @@ export default function JobsPage() {
               >
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="flex items-start gap-4">
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-blue-600">
-                      <BriefcaseBusiness size={20} className="text-white" />
+                    <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-slate-100 bg-white p-2 shadow-sm ring-1 ring-slate-200/50 transition group-hover:border-indigo-100 group-hover:shadow-md">
+                      {job.logoUrl ? (
+                        <img
+                          src={job.logoUrl}
+                          alt={job.company}
+                          className="h-full w-full object-contain"
+                          onError={e => {
+                            (e.target as HTMLImageElement).src =
+                              'https://ui-avatars.com/api/?name=' +
+                              encodeURIComponent(job.company) +
+                              '&background=6366f1&color=fff';
+                          }}
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-indigo-500 to-blue-600">
+                          <BriefcaseBusiness size={28} className="text-white" />
+                        </div>
+                      )}
                     </div>
                     <div>
                       <h3 className="text-lg font-bold text-slate-900 transition group-hover:text-indigo-700">

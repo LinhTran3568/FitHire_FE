@@ -15,6 +15,7 @@
   responsibilities: string[];
   requirements: string[];
   benefits: string[];
+  logoUrl?: string;
 }
 
 export const mockJobs: JobPost[] = [
@@ -50,6 +51,7 @@ export const mockJobs: JobPost[] = [
       'Trợ cấp 5-8 triệu/tháng theo năng lực.',
       'Có cơ hội lên Fresher chính thức sau kỳ thực tập.',
     ],
+    logoUrl: '/logos/techify_logo.png',
   },
   {
     id: 'frontend-react-fresher-nextgen',
@@ -82,6 +84,7 @@ export const mockJobs: JobPost[] = [
       'Hybrid 2 ngày/tuần, linh hoạt giờ giấc.',
       'Hỗ trợ học cert frontend chính hãng.',
     ],
+    logoUrl: '/logos/nextgen_logo.png',
   },
   {
     id: 'qa-automation-junior-finstack',
@@ -114,6 +117,7 @@ export const mockJobs: JobPost[] = [
       'Bảo hiểm đầy đủ, khám sức khỏe định kỳ.',
       'Lộ trình phát triển lên QA Lead rõ ràng.',
     ],
+    logoUrl: '/logos/finstack_logo.png',
   },
   {
     id: 'product-analyst-intern-growthlab',
@@ -147,6 +151,7 @@ export const mockJobs: JobPost[] = [
       'Trợ cấp 6-9 triệu/tháng.',
       'Môi trường năng động, đề xuất ý tưởng nhanh.',
     ],
+    logoUrl: '/logos/growthlab_logo.png',
   },
   {
     id: 'data-analyst-fresher-insightx',
@@ -179,6 +184,7 @@ export const mockJobs: JobPost[] = [
       'Mentor 1-1 với Senior Data Analyst.',
       'Hybrid linh hoạt, môi trường học nhanh.',
     ],
+    logoUrl: '/logos/insightx_logo.png',
   },
   {
     id: 'ui-ux-design-intern-visionx',
@@ -212,6 +218,7 @@ export const mockJobs: JobPost[] = [
       'Mentor trực tiếp từ Product Designer.',
       'Làm việc hybrid linh hoạt theo lịch học.',
     ],
+    logoUrl: '/logos/visionx_logo.png',
   },
   {
     id: 'manual-qa-intern-retailpro',
@@ -244,6 +251,7 @@ export const mockJobs: JobPost[] = [
       'Được đào tạo quy trình QA chuẩn doanh nghiệp.',
       'Cơ hội lên QA Fresher sau kỳ thực tập.',
     ],
+    logoUrl: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=100&h=100&fit=crop',
   },
   {
     id: 'data-engineer-junior-quantflow',
@@ -277,6 +285,7 @@ export const mockJobs: JobPost[] = [
       'Tham gia hệ thống dữ liệu quy mô lớn.',
       'Lộ trình phát triển lên Middle Data Engineer.',
     ],
+    logoUrl: 'https://images.unsplash.com/photo-1551288049-bbda4865cda1?w=100&h=100&fit=crop',
   },
   {
     id: 'content-product-fresher-eduplus',
@@ -310,6 +319,7 @@ export const mockJobs: JobPost[] = [
       'Được training về growth và product writing.',
       'Môi trường startup giáo dục năng động.',
     ],
+    logoUrl: 'https://images.unsplash.com/photo-1523240715639-99a8088fb180?w=100&h=100&fit=crop',
   },
 ];
 
