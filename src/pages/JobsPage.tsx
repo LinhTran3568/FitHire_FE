@@ -1,11 +1,9 @@
-﻿import { Badge, Button, CompanyModal, SurfaceCard } from '@components/ui';
+﻿import { Badge, Button, SurfaceCard } from '@components/ui';
 import { useDebounce } from '@hooks/useDebounce';
 import { useLocalStorage } from '@hooks/useLocalStorage';
 import {
   formatPostedDate,
   formatSalaryVnd,
-  getCompanyInfo,
-  type CompanyInfo,
   type JobPost,
   mockJobs,
 } from '@lib/mockJobs';
@@ -20,7 +18,7 @@ import {
   Search,
 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
 const FIELD_OPTIONS = [
   'Tất cả',
@@ -65,6 +63,7 @@ function renderSkeletonCards() {
 }
 
 export default function JobsPage() {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [keywordInput, setKeywordInput] = useState(searchParams.get('q') ?? '');
@@ -94,12 +93,9 @@ export default function JobsPage() {
   const [savedJobs, setSavedJobs] = useLocalStorage<string[]>('saved_jobs', []);
   const [recentJobs] = useLocalStorage<string[]>('recent_jobs', []);
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const [selectedCompany, setSelectedCompany] = useState<CompanyInfo | null>(null);
 
-  const openCompany = (name: string) => {
-    const info = getCompanyInfo(name);
-    if (info) setSelectedCompany(info);
-  };
+
+
 
   const debouncedKeyword = useDebounce(keywordInput.trim(), 300);
   const isLoading = keywordInput.trim() !== debouncedKeyword;
@@ -428,7 +424,8 @@ export default function JobsPage() {
             return (
               <div
                 key={job.id}
-                className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-indigo-200 hover:shadow-md"
+                onClick={() => navigate(`/jobs/${job.id}`)}
+                className="group cursor-pointer rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-indigo-200 hover:shadow-md"
               >
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="flex items-start gap-4">
@@ -439,13 +436,9 @@ export default function JobsPage() {
                       <h3 className="text-lg font-bold text-slate-900 transition group-hover:text-indigo-700">
                         {job.title}
                       </h3>
-                      <button
-                        type="button"
-                        onClick={() => openCompany(job.company)}
-                        className="mt-0.5 text-sm font-medium text-indigo-600 underline-offset-2 transition hover:underline"
-                      >
+                      <p className="mt-0.5 text-sm font-medium text-indigo-600">
                         {job.company}
-                      </button>
+                      </p>
                       <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-slate-500">
                         <span className="flex items-center gap-1">
                           <MapPin size={12} />
@@ -462,16 +455,14 @@ export default function JobsPage() {
                   </div>
 
                   <div
-                    className={`flex flex-col items-center rounded-xl px-3 py-2 ${
-                      job.matchScore >= 85
-                        ? 'bg-emerald-50 ring-1 ring-emerald-200'
-                        : 'bg-blue-50 ring-1 ring-blue-200'
-                    }`}
+                    className={`flex flex-col items-center rounded-xl px-3 py-2 ${job.matchScore >= 85
+                      ? 'bg-emerald-50 ring-1 ring-emerald-200'
+                      : 'bg-blue-50 ring-1 ring-blue-200'
+                      }`}
                   >
                     <p
-                      className={`text-xl font-bold ${
-                        job.matchScore >= 85 ? 'text-emerald-700' : 'text-blue-700'
-                      }`}
+                      className={`text-xl font-bold ${job.matchScore >= 85 ? 'text-emerald-700' : 'text-blue-700'
+                        }`}
                     >
                       {job.matchScore}%
                     </p>
@@ -492,10 +483,14 @@ export default function JobsPage() {
                 </p>
 
                 <div className="mt-4 flex flex-wrap gap-2">
-                  <Link to={`/jobs/${job.id}`}>
-                    <Button variant="outline">Xem chi tiết</Button>
-                  </Link>
-                  <Button variant="ghost" onClick={() => toggleSaveJob(job.id)}>
+                  <Button variant="outline">Xem chi tiết</Button>
+                  <Button
+                    variant="ghost"
+                    onClick={e => {
+                      e.stopPropagation();
+                      toggleSaveJob(job.id);
+                    }}
+                  >
                     {isSaved ? <BookmarkCheck size={16} /> : <BookmarkPlus size={16} />}
                     <span>{isSaved ? 'Đã lưu' : 'Lưu việc'}</span>
                   </Button>
@@ -505,9 +500,7 @@ export default function JobsPage() {
           })}
       </div>
 
-      {selectedCompany && (
-        <CompanyModal company={selectedCompany} onClose={() => setSelectedCompany(null)} />
-      )}
+
     </div>
   );
 }
