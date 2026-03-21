@@ -9,7 +9,7 @@ const cvVersions = [
     updatedAt: '04/03/2026',
     status: 'Đang dùng',
     score: 82,
-    color: 'from-violet-500 to-indigo-600',
+    color: 'from-blue-500 to-indigo-600',
   },
   {
     id: 'cv-02',
@@ -25,7 +25,7 @@ export default function MyCvPage() {
   return (
     <div className="space-y-6">
       {/* Gradient banner */}
-      <div className="rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-violet-900 p-6 text-white">
+      <div className="rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-900 p-6 text-white">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold">CV của tôi</h1>
@@ -141,7 +141,7 @@ export default function MyCvPage() {
                 {
                   num: '3',
                   text: 'Dùng từ khóa từ mô tả công việc mục tiêu',
-                  color: 'bg-violet-100 text-violet-700',
+                  color: 'bg-blue-100 text-blue-700',
                 },
               ].map(item => (
                 <li key={item.num} className="flex items-start gap-2">

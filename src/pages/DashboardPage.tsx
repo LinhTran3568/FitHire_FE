@@ -37,9 +37,9 @@ const QUICK_LINKS = [
     to: '/cv-builder',
     label: 'Tạo CV',
     icon: FileText,
-    color: 'from-violet-500 to-purple-600',
-    bg: 'bg-violet-50',
-    border: 'border-violet-200',
+    color: 'from-blue-500 to-indigo-600',
+    bg: 'bg-blue-50',
+    border: 'border-blue-200',
   },
   {
     to: '/jobs',
@@ -96,7 +96,7 @@ export default function DashboardPage() {
       {/* Stats row */}
       <div className="grid gap-4 md:grid-cols-3">
         <SurfaceCard className="flex items-center gap-4">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600">
             <Target size={20} className="text-white" />
           </div>
           <div>

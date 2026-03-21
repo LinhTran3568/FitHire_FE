@@ -425,7 +425,7 @@ export default function InterviewPage() {
   return (
     <div className="space-y-6">
       {/* Gradient banner */}
-      <div className="rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-violet-900 px-6 py-5 text-white">
+      <div className="rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-900 px-6 py-5 text-white">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <h1 className="text-2xl font-bold">Luyện phỏng vấn AI</h1>
@@ -513,7 +513,7 @@ export default function InterviewPage() {
               </div>
             </div>
 
-            <div className="rounded-xl border border-indigo-900/40 bg-gradient-to-br from-slate-800 to-violet-900/60 p-4">
+            <div className="rounded-xl border border-indigo-900/40 bg-gradient-to-br from-slate-800 to-blue-900/60 p-4">
               <p className="text-xs font-semibold tracking-wide text-slate-400 uppercase">
                 Âm thanh
               </p>
@@ -537,7 +537,7 @@ export default function InterviewPage() {
             </div>
             <div className="h-2 rounded-full bg-slate-200">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 transition-all duration-300"
+                className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-blue-500 transition-all duration-300"
                 style={{ width: `${progressPercent}%` }}
               />
             </div>

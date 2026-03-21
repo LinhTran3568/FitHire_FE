@@ -12,8 +12,8 @@ export default function RegisterPage() {
   return (
     <div className="flex min-h-screen">
       {/* Left panel */}
-      <div className="relative hidden w-1/2 flex-col justify-between overflow-hidden bg-gradient-to-br from-violet-950 via-indigo-950 to-blue-900 p-12 lg:flex">
-        <div className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-violet-600/25 blur-3xl" />
+      <div className="relative hidden w-1/2 flex-col justify-between overflow-hidden bg-gradient-to-br from-blue-950 via-indigo-950 to-blue-900 p-12 lg:flex">
+        <div className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-blue-600/25 blur-3xl" />
         <div className="pointer-events-none absolute bottom-0 left-0 h-80 w-80 rounded-full bg-blue-500/20 blur-3xl" />
 
         <Link
@@ -42,7 +42,7 @@ export default function RegisterPage() {
             {PERKS.map(perk => (
               <li key={perk.text} className="flex items-center gap-3 text-sm text-slate-200">
                 <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10">
-                  <perk.icon size={15} className="text-violet-300" />
+                  <perk.icon size={15} className="text-blue-300" />
                 </span>
                 {perk.text}
               </li>
@@ -81,7 +81,7 @@ export default function RegisterPage() {
 
             <button
               type="button"
-              className="mt-2 w-full rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 py-3 text-base font-semibold text-white shadow-lg shadow-violet-200 transition-all hover:scale-[1.02] hover:shadow-violet-300"
+              className="mt-2 w-full rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 py-3 text-base font-semibold text-white shadow-lg shadow-blue-200 transition-all hover:scale-[1.02] hover:shadow-blue-300"
             >
               Tạo tài khoản
             </button>

@@ -96,102 +96,74 @@ export default function SubscriptionPage() {
           </div>
         </SurfaceCard>
 
-        <div className="grid gap-5 lg:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 items-stretch">
           {PLANS.map(plan => (
             <SurfaceCard
               key={plan.id}
-              className={`relative h-full border ${
+              className={`flex flex-col border ${
                 plan.highlighted
-                  ? 'border-blue-300 bg-gradient-to-b from-blue-50 via-white to-indigo-50 shadow-blue-100'
-                  : 'border-slate-200 bg-white'
+                  ? 'border-blue-300 bg-gradient-to-b from-blue-50/80 via-white to-white shadow-xl shadow-blue-500/10 scale-105 z-10 relative'
+                  : 'border-slate-200 bg-white shadow-sm'
               }`}
             >
-              {plan.badge && (
-                <Badge
-                  className={`absolute top-4 right-4 ${
-                    plan.highlighted ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-700'
-                  }`}
-                >
-                  {plan.badge}
-                </Badge>
-              )}
-
-              <div className="mb-5 flex items-start justify-between gap-3">
-                <div>
-                  <h3 className="text-2xl font-bold text-slate-900">{plan.name}</h3>
-                  <p className="mt-1 text-sm text-slate-500">{plan.description}</p>
+              <div className="flex flex-col gap-4 flex-1">
+                <div className="flex items-center gap-3">
+                  <div
+                    className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${
+                      plan.highlighted ? 'bg-blue-600 text-white shadow-md shadow-blue-500/30' : 'bg-slate-100 text-slate-700'
+                    }`}
+                  >
+                    <plan.icon size={22} />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-slate-900 leading-tight">{plan.name}</h3>
+                    {plan.badge && (
+                      <Badge
+                        className={
+                          plan.highlighted
+                            ? 'bg-blue-100 text-blue-700 mt-1'
+                            : 'bg-slate-100 text-slate-700 mt-1'
+                        }
+                      >
+                        {plan.badge}
+                      </Badge>
+                    )}
+                  </div>
                 </div>
-                <div
-                  className={`flex h-10 w-10 items-center justify-center rounded-xl ${
-                    plan.highlighted ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-700'
-                  }`}
-                >
-                  <plan.icon size={18} />
+                
+                <p className="text-sm text-slate-500 min-h-[40px] leading-relaxed">{plan.description}</p>
+
+                <div className="mt-2 text-center pb-4 border-b border-slate-100">
+                  <p className="text-3xl font-extrabold tracking-tight text-slate-900">
+                    {plan.price}
+                  </p>
                 </div>
               </div>
 
-              <p className="text-3xl font-extrabold tracking-tight text-slate-900">{plan.price}</p>
-
-              <Button
-                className={`mt-5 w-full rounded-xl ${
-                  plan.highlighted ? 'bg-blue-600 hover:bg-blue-700' : ''
-                }`}
-                variant={plan.highlighted ? 'primary' : 'outline'}
-              >
-                {plan.highlighted ? 'Chọn gói Pro' : 'Chọn gói này'}
-              </Button>
-
-              <div className="mt-6 space-y-2.5">
+              <div className="mt-5 flex-1 space-y-3">
                 {plan.details.map(detail => (
-                  <div key={detail} className="flex items-start gap-2">
-                    <span className="mt-0.5 rounded-full bg-emerald-100 p-1 text-emerald-600">
-                      <Check size={12} />
+                  <div key={detail} className="flex items-start gap-2.5">
+                    <span className="mt-0.5 rounded-full bg-emerald-100 p-1 text-emerald-600 shrink-0">
+                      <Check size={12} strokeWidth={3} />
                     </span>
-                    <p className="text-sm text-slate-700">{detail}</p>
+                    <p className="text-sm text-slate-700 leading-snug">{detail}</p>
                   </div>
                 ))}
+              </div>
+
+              <div className="mt-8">
+                <Button
+                  className={`w-full rounded-xl py-6 font-bold text-base ${
+                    plan.highlighted ? 'shadow-lg shadow-blue-500/30' : ''
+                  }`}
+                  variant={plan.highlighted ? 'primary' : 'outline'}
+                >
+                  {plan.highlighted ? 'Chọn gói Pro' : 'Bắt đầu ngay'}
+                </Button>
               </div>
             </SurfaceCard>
           ))}
         </div>
-
-        <SurfaceCard>
-          <div className="mb-4 flex items-center gap-2">
-            <Target size={16} className="text-indigo-600" />
-            <h3 className="text-lg font-semibold text-slate-900">Bảng giá chi tiết</h3>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="min-w-full border-collapse text-left text-sm">
-              <thead>
-                <tr className="border-b border-slate-200 text-slate-500">
-                  <th className="px-4 py-3 font-semibold">Gói</th>
-                  <th className="px-4 py-3 font-semibold">Giá</th>
-                  <th className="px-4 py-3 font-semibold">Tính năng chi tiết</th>
-                </tr>
-              </thead>
-              <tbody>
-                {PLANS.map(plan => (
-                  <tr
-                    key={`row-${plan.id}`}
-                    className="border-b border-slate-100 align-top last:border-b-0"
-                  >
-                    <td className="px-4 py-3 font-semibold text-slate-900">{plan.name}</td>
-                    <td className="px-4 py-3 text-slate-700">{plan.price}</td>
-                    <td className="px-4 py-3 text-slate-700">
-                      <ul className="space-y-1.5">
-                        {plan.details.map(detail => (
-                          <li key={`${plan.id}-${detail}`} className="leading-relaxed">
-                            - {detail}
-                          </li>
-                        ))}
-                      </ul>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </SurfaceCard>
 
         <SurfaceCard>
           <div className="mb-2 flex items-center gap-2">

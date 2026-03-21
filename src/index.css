@@ -112,25 +112,37 @@
   }
 
   .glass {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
   }
 
   .glass-dark {
     background: rgba(15, 23, 42, 0.6);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
   }
 
   .card-hover {
     transition:
-      transform 0.2s ease,
-      box-shadow 0.2s ease;
+      transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+      box-shadow 0.3s ease, border-color 0.3s ease;
   }
   .card-hover:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 32px rgba(99, 102, 241, 0.12);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px -5px rgba(99, 102, 241, 0.15),
+      0 10px 15px -5px rgba(99, 102, 241, 0.1);
+    border-color: rgba(99, 102, 241, 0.3);
+  }
+
+  .dark .card-hover:hover {
+    box-shadow: 0 15px 35px -5px rgba(99, 102, 241, 0.3),
+      0 10px 15px -5px rgba(99, 102, 241, 0.2);
+    border-color: rgba(99, 102, 241, 0.5);
   }
 
   .gradient-border {
@@ -157,34 +169,39 @@
    ========================================= */
 @layer base {
   :root {
+    /* Meticulous Light Mode Colors */
     --color-primary: oklch(0.55 0.2 264);
     --color-primary-hover: oklch(0.48 0.22 264);
     --color-secondary: oklch(0.65 0.15 200);
-    --color-background: oklch(0.98 0 0);
-    --color-surface: oklch(1 0 0);
-    --color-text: oklch(0.15 0 0);
-    --color-text-muted: oklch(0.5 0 0);
-    --color-border: oklch(0.9 0 0);
-    --color-danger: oklch(0.55 0.22 27);
-    --color-success: oklch(0.55 0.2 145);
-    --color-warning: oklch(0.72 0.18 75);
-    --landing-bg: oklch(0.2 0.06 278);
-    --landing-glow-a: oklch(0.78 0.15 278);
-    --landing-glow-b: oklch(0.65 0.2 250);
-    --landing-glow-c: oklch(0.55 0.22 240);
-    --radius: 0.5rem;
+    --color-background: oklch(0.98 0.01 220); /* Slightly cold white for modern feel */
+    --color-surface: oklch(1 0 0); /* Pure white surface */
+    --color-text: oklch(0.25 0 0); /* Softer black */
+    --color-text-muted: oklch(0.55 0 0);
+    --color-border: oklch(0.9 0.02 220);
+    --color-danger: oklch(0.6 0.25 25);
+    --color-success: oklch(0.6 0.2 145);
+    --color-warning: oklch(0.75 0.2 75);
+    --landing-bg: oklch(0.98 0.01 220);
+    --landing-glow-a: oklch(0.85 0.1 278);
+    --landing-glow-b: oklch(0.75 0.15 250);
+    --landing-glow-c: oklch(0.65 0.2 240);
+    --radius: 0.75rem;
   }
 
   .dark {
-    --color-background: oklch(0.14 0 0);
-    --color-surface: oklch(0.19 0 0);
-    --color-text: oklch(0.95 0 0);
-    --color-text-muted: oklch(0.65 0 0);
-    --color-border: oklch(0.28 0 0);
-    --landing-bg: oklch(0.2 0.06 278);
-    --landing-glow-a: oklch(0.78 0.15 278);
-    --landing-glow-b: oklch(0.65 0.2 250);
-    --landing-glow-c: oklch(0.55 0.22 240);
+    /* Stunning Dark Mode Colors */
+    --color-background: oklch(0.18 0.03 270); /* Deep indigo tint background */
+    --color-surface: oklch(0.22 0.04 270); /* Lifted surface */
+    --color-text: oklch(0.95 0.01 270); /* Crisp legible white */
+    --color-text-muted: oklch(0.7 0.02 270);
+    --color-border: oklch(0.3 0.04 270);
+    --color-danger: oklch(0.65 0.25 25);
+    --color-success: oklch(0.65 0.2 145);
+    --color-warning: oklch(0.8 0.2 75);
+    --landing-bg: oklch(0.16 0.04 270);
+    --landing-glow-a: oklch(0.45 0.2 278);
+    --landing-glow-b: oklch(0.4 0.2 250);
+    --landing-glow-c: oklch(0.35 0.2 240);
   }
 
   *,
@@ -207,8 +224,43 @@
       'Inter',
       system-ui,
       -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      'Open Sans',
+      'Helvetica Neue',
       sans-serif;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.4s ease, color 0.4s ease;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  /* Custom Scrollbar for better UX */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(156, 163, 175, 0.5);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(107, 114, 128, 0.8);
   }
 }
