@@ -1,5 +1,5 @@
-﻿import { Badge, Button, SectionTitle, SurfaceCard } from '@components/ui';
-import { Brain, Building2, HeartHandshake, PlayCircle } from 'lucide-react';
+import { Badge, Button, SectionTitle, SurfaceCard } from '@components/ui';
+import { Brain, Building2, HeartHandshake, PlayCircle, Clock, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const testCards = [
@@ -44,17 +44,30 @@ export default function CultureTestLibraryPage() {
           return (
             <SurfaceCard key={test.id} className="flex h-full flex-col justify-between gap-4">
               <div>
-                <div className="mb-4 inline-flex rounded-xl bg-blue-50 p-3 text-blue-600">
+                <div
+                  className="mb-4 inline-flex rounded-xl p-3"
+                  style={{ background: 'var(--color-primary-muted)', color: 'var(--color-primary)' }}
+                >
                   <Icon size={20} />
                 </div>
-                <h3 className="text-lg font-semibold text-slate-900">{test.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-600">{test.summary}</p>
+                <h3 className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>
+                  {test.title}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>
+                  {test.summary}
+                </p>
               </div>
 
               <div className="space-y-4">
                 <div className="flex flex-wrap gap-2">
-                  <Badge variant="info">{test.duration}</Badge>
-                  <Badge variant="default">{test.participants} đã tham gia</Badge>
+                  <Badge variant="default">
+                    <Clock size={11} />
+                    {test.duration}
+                  </Badge>
+                  <Badge variant="default">
+                    <Users size={11} />
+                    {test.participants} đã tham gia
+                  </Badge>
                 </div>
 
                 <Link to={`/culture/tests/${test.id}`}>

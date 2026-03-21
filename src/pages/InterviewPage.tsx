@@ -425,23 +425,30 @@ export default function InterviewPage() {
   return (
     <div className="space-y-6">
       {/* Gradient banner */}
-      <div className="rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-900 px-6 py-5 text-white">
-        <div className="flex flex-wrap items-center justify-between gap-3">
+      <div
+        className="relative overflow-hidden rounded-2xl px-6 py-5 text-white"
+        style={{ background: 'var(--hero-bg)' }}
+      >
+        <div
+          className="pointer-events-none absolute -top-8 -right-8 h-32 w-32 rounded-full blur-2xl"
+          style={{ background: 'var(--hero-orb-a)' }}
+        />
+        <div className="relative z-10 flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h1 className="text-2xl font-bold">Luyện phỏng vấn AI</h1>
-            <p className="mt-1 text-sm text-slate-300">
+            <h1 className="text-2xl font-bold text-white">Luyện phỏng vấn AI</h1>
+            <p className="mt-1 text-sm" style={{ color: 'rgba(255,255,255,0.65)' }}>
               Phỏng vấn bằng giọng nói + camera, nhận gợi ý theo biểu cảm và tông giọng để cải thiện
               từng câu trả lời.
             </p>
           </div>
           <div className="flex items-center gap-3">
-            <div className="rounded-xl bg-white/10 px-4 py-2 text-center">
-              <p className="text-xl font-bold">{answeredCount}</p>
-              <p className="text-xs text-slate-300">Câu đã trả lời</p>
+            <div className="rounded-xl px-4 py-2 text-center" style={{ background: 'rgba(255,255,255,0.12)' }}>
+              <p className="text-xl font-bold text-white">{answeredCount}</p>
+              <p className="text-xs" style={{ color: 'rgba(255,255,255,0.65)' }}>Câu đã trả lời</p>
             </div>
-            <div className="rounded-xl bg-white/10 px-4 py-2 text-center">
-              <p className="text-xl font-bold">{questionSet.length}</p>
-              <p className="text-xs text-slate-300">Tổng câu hỏi</p>
+            <div className="rounded-xl px-4 py-2 text-center" style={{ background: 'rgba(255,255,255,0.12)' }}>
+              <p className="text-xl font-bold text-white">{questionSet.length}</p>
+              <p className="text-xs" style={{ color: 'rgba(255,255,255,0.65)' }}>Tổng câu hỏi</p>
             </div>
           </div>
         </div>
@@ -482,10 +489,24 @@ export default function InterviewPage() {
         </div>
 
         <div className="grid gap-2 md:grid-cols-2">
-          <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
+          <div
+            className="rounded-xl p-3 text-sm"
+            style={{
+              background: 'var(--color-surface-raised)',
+              border: '1px solid var(--color-border)',
+              color: 'var(--color-text-muted)',
+            }}
+          >
             {getPermissionText(micPermission, 'mic')}
           </div>
-          <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
+          <div
+            className="rounded-xl p-3 text-sm"
+            style={{
+              background: 'var(--color-surface-raised)',
+              border: '1px solid var(--color-border)',
+              color: 'var(--color-text-muted)',
+            }}
+          >
             {getPermissionText(cameraPermission, 'camera')}
           </div>
         </div>
@@ -501,53 +522,102 @@ export default function InterviewPage() {
       <div className="grid gap-5 xl:grid-cols-[1fr_22rem]">
         <SurfaceCard className="flex min-h-[38rem] flex-col gap-4">
           <div className="grid gap-4 lg:grid-cols-2">
-            <div className="rounded-xl border border-indigo-900/40 bg-gradient-to-br from-slate-800 to-indigo-900/60 p-4">
-              <p className="text-xs font-semibold tracking-wide text-slate-400 uppercase">Camera</p>
-              <div className="mt-3 flex h-40 items-center justify-center rounded-lg border border-slate-700 bg-slate-900 text-slate-400">
+            {/* Camera Panel */}
+            <div
+              className="rounded-xl p-4"
+              style={{
+                background: 'var(--color-surface-raised)',
+                border: '1px solid var(--color-border)',
+              }}
+            >
+              <p
+                className="text-xs font-bold tracking-widest uppercase"
+                style={{ color: 'var(--color-text-muted)' }}
+              >
+                Camera
+              </p>
+              <div
+                className="mt-3 flex h-40 items-center justify-center rounded-xl gap-2"
+                style={{
+                  background: 'var(--color-background)',
+                  border: '1px solid var(--color-border)',
+                  color: 'var(--color-text-subtle)',
+                }}
+              >
                 <Camera size={18} />
-                <span className="ml-2 text-sm">
+                <span className="text-sm">
                   {cameraEnabled && cameraPermission === 'granted'
-                    ? 'Đang theo dõi biểu cảm gương mặt theo thời gian thực'
+                    ? 'Đang theo dõi biểu cảm gương mặt'
                     : 'Camera tắt hoặc chưa được cấp quyền'}
                 </span>
               </div>
             </div>
 
-            <div className="rounded-xl border border-indigo-900/40 bg-gradient-to-br from-slate-800 to-blue-900/60 p-4">
-              <p className="text-xs font-semibold tracking-wide text-slate-400 uppercase">
+            {/* Audio Panel */}
+            <div
+              className="rounded-xl p-4"
+              style={{
+                background: 'var(--color-surface-raised)',
+                border: '1px solid var(--color-border)',
+              }}
+            >
+              <p
+                className="text-xs font-bold tracking-widest uppercase"
+                style={{ color: 'var(--color-text-muted)' }}
+              >
                 Âm thanh
               </p>
-              <div className="mt-3 flex h-40 flex-col items-center justify-center rounded-lg border border-slate-700 bg-slate-900 text-slate-400">
-                <Waves size={20} />
-                <p className="mt-2 text-center text-sm">
+              <div
+                className="mt-3 flex h-40 flex-col items-center justify-center rounded-xl gap-2"
+                style={{
+                  background: 'var(--color-background)',
+                  border: '1px solid var(--color-border)',
+                  color: 'var(--color-text-subtle)',
+                }}
+              >
+                <Waves size={22} />
+                <p className="text-center text-sm">
                   {micEnabled && micPermission === 'granted'
-                    ? 'Đang phân tích tông giọng, độ rõ và nhịp nói'
+                    ? 'Đang phân tích tông giọng và nhịp nói'
                     : 'Mic tắt hoặc chưa được cấp quyền'}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="rounded-xl border border-slate-200 bg-gradient-to-r from-indigo-50 to-slate-50 p-3">
+          <div
+            className="rounded-xl p-3"
+            style={{
+              background: 'var(--color-primary-muted)',
+              border: '1px solid var(--color-border)',
+            }}
+          >
             <div className="mb-2 flex items-center justify-between text-sm">
-              <span className="font-medium text-slate-700">
+              <span className="font-semibold" style={{ color: 'var(--color-text-secondary)' }}>
                 Câu hỏi hiện tại: {currentQuestionNumber}/{questionSet.length}
               </span>
-              <span className="font-bold text-indigo-700">{progressPercent}%</span>
+              <span className="font-bold" style={{ color: 'var(--color-primary)' }}>
+                {progressPercent}%
+              </span>
             </div>
-            <div className="h-2 rounded-full bg-slate-200">
+            <div className="h-2 rounded-full" style={{ background: 'var(--color-border-strong)' }}>
               <div
-                className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-blue-500 transition-all duration-300"
-                style={{ width: `${progressPercent}%` }}
+                className="h-full rounded-full transition-all duration-300"
+                style={{ width: `${progressPercent}%`, background: 'var(--color-primary)' }}
               />
             </div>
           </div>
 
-          <div className="flex-1 space-y-3 overflow-y-auto rounded-xl border border-slate-200 bg-slate-50 p-4">
+          <div
+            className="flex-1 space-y-3 overflow-y-auto rounded-xl p-4"
+            style={{
+              background: 'var(--color-surface-raised)',
+              border: '1px solid var(--color-border)',
+            }}
+          >
             {messages.length === 0 ? (
-              <p className="text-sm text-slate-600">
-                Nhấn <span className="font-semibold">Bắt đầu phiên phỏng vấn</span> để nhận câu hỏi
-                đầu tiên.
+              <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+                Nhấn <span className="font-semibold" style={{ color: 'var(--color-text)' }}>Bắt đầu phiên phỏng vấn</span> để nhận câu hỏi đầu tiên.
               </p>
             ) : (
               messages.map(message => (
@@ -561,12 +631,19 @@ export default function InterviewPage() {
             )}
           </div>
 
-          <div className="rounded-xl border border-slate-200 bg-white p-3">
+          <div
+            className="rounded-xl p-3"
+            style={{
+              background: 'var(--color-surface)',
+              border: '1px solid var(--color-border)',
+            }}
+          >
             <textarea
               rows={3}
               value={draftAnswer}
               onChange={event => setDraftAnswer(event.target.value)}
-              className="w-full resize-none bg-transparent text-sm text-slate-800 outline-none placeholder:text-slate-400"
+              className="w-full resize-none bg-transparent text-sm outline-none"
+              style={{ color: 'var(--color-text)' } as React.CSSProperties}
               placeholder={
                 sessionState === 'running'
                   ? 'Nhập câu trả lời của bạn hoặc nói trực tiếp qua mic...'
@@ -590,20 +667,20 @@ export default function InterviewPage() {
 
         <div className="space-y-5">
           <SurfaceCard className="space-y-3">
-            <h3 className="font-semibold text-slate-900">Đánh giá biểu cảm</h3>
+            <h3 className="font-semibold" style={{ color: 'var(--color-text)' }}>Đánh giá biểu cảm</h3>
             <div>
               <div className="mb-2 flex items-center justify-between text-sm">
-                <span className="text-slate-700">Mức tự tin qua biểu cảm</span>
-                <span className="font-semibold text-slate-900">{expressionScore}%</span>
+                <span style={{ color: 'var(--color-text-muted)' }}>Mức tự tin qua biểu cảm</span>
+                <span className="font-bold" style={{ color: 'var(--color-primary)' }}>{expressionScore}%</span>
               </div>
-              <div className="h-2 rounded-full bg-slate-200">
+              <div className="h-2 rounded-full" style={{ background: 'var(--color-border-strong)' }}>
                 <div
-                  className="h-full rounded-full bg-blue-600 transition-all duration-500"
-                  style={{ width: `${expressionScore}%` }}
+                  className="h-full rounded-full transition-all duration-500"
+                  style={{ width: `${expressionScore}%`, background: 'var(--color-primary)' }}
                 />
               </div>
             </div>
-            <p className="text-sm text-slate-600">
+            <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
               {cameraEnabled && cameraPermission === 'granted'
                 ? 'Ánh mắt và nét mặt đang ổn định. Hãy giữ giao tiếp mắt khi trả lời các câu hỏi khó.'
                 : 'Bật camera để AI theo dõi biểu cảm chính xác hơn trong từng câu trả lời.'}
@@ -611,27 +688,33 @@ export default function InterviewPage() {
           </SurfaceCard>
 
           <SurfaceCard className="space-y-3">
-            <h3 className="font-semibold text-slate-900">Đánh giá tông giọng</h3>
+            <h3 className="font-semibold" style={{ color: 'var(--color-text)' }}>Đánh giá tông giọng</h3>
             {voiceScore === null ? (
-              <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-600">
-                Chưa có dữ liệu giọng nói để đánh giá. Hệ thống chỉ chấm tông giọng khi có câu trả
-                lời bằng voice.
+              <div
+                className="rounded-xl p-3 text-sm"
+                style={{
+                  background: 'var(--color-surface-raised)',
+                  border: '1px solid var(--color-border)',
+                  color: 'var(--color-text-muted)',
+                }}
+              >
+                Chưa có dữ liệu giọng nói để đánh giá. Hệ thống chỉ chấm tông giọng khi có câu trả lời bằng voice.
               </div>
             ) : (
               <div>
                 <div className="mb-2 flex items-center justify-between text-sm">
-                  <span className="text-slate-700">Độ rõ và nhấn giọng</span>
-                  <span className="font-semibold text-slate-900">{voiceScore}%</span>
+                  <span style={{ color: 'var(--color-text-muted)' }}>Độ rõ và nhấn giọng</span>
+                  <span className="font-bold" style={{ color: 'var(--color-primary)' }}>{voiceScore}%</span>
                 </div>
-                <div className="h-2 rounded-full bg-slate-200">
+                <div className="h-2 rounded-full" style={{ background: 'var(--color-border-strong)' }}>
                   <div
-                    className="h-full rounded-full bg-indigo-500 transition-all duration-500"
-                    style={{ width: `${voiceScore}%` }}
+                    className="h-full rounded-full transition-all duration-500"
+                    style={{ width: `${voiceScore}%`, background: 'var(--color-accent-2)' }}
                   />
                 </div>
               </div>
             )}
-            <ul className="space-y-2 text-sm text-slate-700">
+            <ul className="space-y-2 text-sm" style={{ color: 'var(--color-text-muted)' }}>
               <li>• Tốc độ nói gợi ý: 120 - 150 từ/phút để interviewer dễ theo dõi.</li>
               <li>• Nhấn vào phần hành động và kết quả để tăng độ thuyết phục.</li>
               <li>• Kết thúc câu trả lời bằng tác động định lượng (nếu có).</li>

@@ -1,6 +1,6 @@
 import { cn } from '@lib/utils';
 
-type BadgeVariant = 'default' | 'success' | 'warning' | 'danger' | 'info';
+type BadgeVariant = 'default' | 'success' | 'warning' | 'danger' | 'info' | 'primary';
 
 interface BadgeProps {
   variant?: BadgeVariant;
@@ -9,24 +9,26 @@ interface BadgeProps {
 }
 
 const variantStyles: Record<BadgeVariant, string> = {
-  default: 'bg-gray-100 text-gray-700',
-  success: 'bg-green-50 text-green-700',
-  warning: 'bg-yellow-50 text-yellow-700',
-  danger: 'bg-red-50 text-red-600',
-  info: 'bg-blue-50 text-blue-700',
+  default:
+    'bg-[var(--color-surface-raised)] text-[var(--color-text-muted)] border border-[var(--color-border)]',
+  primary:
+    'bg-[var(--color-primary-muted)] text-[var(--color-primary)] border border-[var(--color-primary)]/20 font-bold',
+  success:
+    'bg-[var(--color-success-light)] text-[var(--color-success)] border border-[var(--color-success)]/20',
+  warning:
+    'bg-[var(--color-warning-light)] text-[var(--color-warning)] border border-[var(--color-warning)]/20',
+  danger:
+    'bg-[var(--color-danger-light)] text-[var(--color-danger)] border border-[var(--color-danger)]/20',
+  info:
+    'bg-[var(--color-info-light)] text-[var(--color-info)] border border-[var(--color-info)]/20',
 };
 
-/**
- * Badge / chip for status labels.
- *
- * @example
- * <Badge variant="success">Active</Badge>
- */
 export function Badge({ variant = 'default', children, className }: BadgeProps) {
   return (
     <span
       className={cn(
-        'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium',
+        'inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold',
+        'transition-colors duration-200',
         variantStyles[variant],
         className,
       )}

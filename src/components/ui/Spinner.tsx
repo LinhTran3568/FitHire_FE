@@ -10,22 +10,17 @@ interface SpinnerProps {
 
 const sizeStyles: Record<Size, string> = {
   sm: 'h-4 w-4 border-2',
-  md: 'h-8 w-8 border-2',
+  md: 'h-8 w-8 border-[3px]',
   lg: 'h-12 w-12 border-[3px]',
 };
 
-/**
- * Loading spinner.
- *
- * @example
- * <Spinner size="md" label="Loading data..." />
- */
-export function Spinner({ size = 'md', label = 'Loading…', className }: SpinnerProps) {
+export function Spinner({ size = 'md', label = 'Đang tải…', className }: SpinnerProps) {
   return (
     <div role="status" className="inline-flex flex-col items-center gap-2">
       <span
         className={cn(
-          'animate-spin rounded-full border-gray-200 border-t-blue-600',
+          'animate-spin rounded-full',
+          'border-[var(--color-border)] border-t-[var(--color-primary)]',
           sizeStyles[size],
           className,
         )}
