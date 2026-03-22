@@ -76,7 +76,7 @@ function RadarChart({ scores, color = 'var(--color-primary)' }: { scores: number
       ))}
       <path d={toD(scorePts)} fill={color} fillOpacity={0.15} stroke={color} strokeWidth={2} />
       {scorePts.map((p, i) => <circle key={i} cx={p.x} cy={p.y} r={4.5} fill="var(--color-surface)" stroke={color} strokeWidth={2} className="drop-shadow-sm" />)}
-      {outerPts.map((p, i) => {
+      {outerPts.map((_, i) => {
         const a = i * step - Math.PI / 2;
         const lx = cx + (r + 25) * Math.cos(a);
         const ly = cy + (r + 25) * Math.sin(a);
@@ -106,8 +106,10 @@ function HookScreen({ onStart }: { onStart: () => void }) {
             Môi trường kỹ thuật xuất sắc không bằng một môi trường "thuộc về". 
             Giải mã hệ sinh thái lý tưởng nhất thông qua 6 câu hỏi phân tích tâm lý ứng viên. Áp dụng cho 14 doanh nghiệp Tech Tier-1 Việt Nam.
           </p>
-          <Button variant="primary" className="mt-8 h-12 px-10 text-sm font-bold shadow-md" onClick={onStart}>
-            Vào bài test (2 phút) <ArrowRight size={16} className="ml-2" />
+          <Button variant="primary" className="mt-8 h-12 px-10 text-sm font-bold shadow-md text-white" onClick={onStart}>
+            <span className="flex items-center gap-2">
+               Vào bài test (2 phút) <ArrowRight size={16} />
+            </span>
           </Button>
         </div>
       </SurfaceCard>
@@ -236,10 +238,20 @@ function SurveyScreen({ onComplete }: { onComplete: (answers: number[]) => void 
 
         <div className="flex items-center justify-between pt-6 mt-6 border-t" style={{ borderColor: 'var(--color-border)' }}>
           <Button variant="outline" onClick={handlePrev} disabled={qIdx === 0} className="h-12 px-6 font-bold shadow-sm">
-            <ChevronLeft size={16} className="mr-1" /> Quay lại
+            <span className="flex items-center gap-1.5">
+              <ChevronLeft size={16} /> Quay lại
+            </span>
           </Button>
-          <Button variant="primary" onClick={handleNext} className="h-12 px-8 font-bold shadow-md">
-            {qIdx === SURVEY_QUESTIONS.length - 1 ? <><CheckCircle size={16} className="mr-2" /> Hoàn tất</> : <>Tiếp theo <ChevronRight size={16} className="ml-2" /></>}
+          <Button variant="primary" onClick={handleNext} className="h-12 px-8 font-bold shadow-md text-white">
+            {qIdx === SURVEY_QUESTIONS.length - 1 ? (
+              <span className="flex items-center gap-2">
+                <CheckCircle size={18} /> Hoàn tất
+              </span>
+            ) : (
+              <span className="flex items-center gap-2">
+                Tiếp theo <ChevronRight size={18} />
+              </span>
+            )}
           </Button>
         </div>
       </SurfaceCard>
@@ -408,8 +420,10 @@ function ResultScreen({ answers }: { answers: number[] }) {
                 <p className="font-black text-lg leading-tight" style={{ color: 'var(--color-primary)' }}>Luyện phỏng vấn theo <br />phong cách {topCompany.name}</p>
                 <p className="text-sm font-medium mt-1" style={{ color: 'var(--color-text)' }}>Hệ thống AI sẽ mô phỏng lại format phỏng vấn cực "khoai" của doanh nghiệp này.</p>
               </div>
-              <Button onClick={() => navigate('/interview')} variant="primary" className="h-12 px-6 font-bold shadow-sm shrink-0 whitespace-nowrap">
-                Sang Luyện Mock <ArrowRight size={16} className="ml-2" />
+              <Button onClick={() => navigate('/interview')} variant="primary" className="h-12 px-6 font-bold shadow-sm shrink-0 whitespace-nowrap text-white">
+                <span className="flex items-center gap-2">
+                  Sang Luyện Mock <ArrowRight size={16} />
+                </span>
               </Button>
             </div>
           </SurfaceCard>
