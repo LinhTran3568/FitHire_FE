@@ -1,42 +1,116 @@
 import logoImg from '@assets/images/logo.png';
 import { Button } from '@components/ui';
-import { Bell, Search } from 'lucide-react';
+import { Bell, Search, Sun, Moon, User } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-/**
- * Top application header.
- */
 export function Header() {
+  const [isDark, setIsDark] = useState(() => {
+    const theme = localStorage.getItem('theme');
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    return theme === 'dark' || (!theme && systemDark);
+  });
+
+  useEffect(() => {
+    const theme = localStorage.getItem('theme');
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    if (theme === 'dark' || (!theme && systemDark)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const html = document.documentElement;
+    if (html.classList.contains('dark')) {
+      html.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+      setIsDark(false);
+    } else {
+      html.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+      setIsDark(true);
+    }
+  };
+
   return (
-    <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur">
-      <div className="mx-auto flex h-24 w-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-10">
+    <header
+      className="sticky top-0 z-40 transition-colors duration-300"
+      style={{
+        background: 'var(--color-surface-overlay)',
+        borderBottom: '1px solid var(--color-border)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+      }}
+    >
+      <div className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-10">
         <Link to="/" className="flex items-center">
           <img
             src={logoImg}
             alt="FitHire AI"
-            className="h-20 w-auto object-contain drop-shadow-md transition-transform hover:scale-105"
+            className="h-16 w-auto object-contain drop-shadow-md transition-transform hover:scale-105"
           />
         </Link>
 
         <div className="hidden max-w-sm flex-1 md:flex">
-          <div className="flex w-full items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-500">
-            <Search size={16} />
+          <div
+            className="flex w-full items-center gap-2 rounded-xl px-3 py-2.5 text-sm transition-all"
+            style={{
+              background: 'var(--color-surface-raised)',
+              border: '1px solid var(--color-border)',
+              color: 'var(--color-text-subtle)',
+            }}
+          >
+            <Search size={15} />
             <span>Tìm việc theo vị trí, kỹ năng, mức lương...</span>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
-          <button className="relative rounded-full p-2 text-slate-600 hover:bg-slate-100 hover:text-slate-900">
-            <Bell size={18} />
-            <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-blue-600" />
+          {/* Theme Toggle */}
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="flex h-9 w-9 items-center justify-center rounded-xl transition-all hover:scale-105"
+            style={{
+              background: 'var(--color-primary-muted)',
+              color: 'var(--color-primary)',
+              border: '1px solid var(--color-border)',
+            }}
+            aria-label="Toggle Theme"
+          >
+            {isDark ? <Sun size={17} /> : <Moon size={17} />}
           </button>
+
+          {/* Notification Bell */}
+          <button
+            className="relative flex h-9 w-9 items-center justify-center rounded-xl transition-all hover:scale-105"
+            style={{
+              background: 'var(--color-surface-raised)',
+              color: 'var(--color-text-muted)',
+              border: '1px solid var(--color-border)',
+            }}
+          >
+            <Bell size={17} />
+            <span
+              className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full"
+              style={{ background: 'var(--color-primary)' }}
+            />
+          </button>
+
           <Link to="/login">
             <Button variant="outline" size="sm">
               Đăng xuất
             </Button>
           </Link>
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-sm font-semibold text-white">
-            U
+
+          <div
+            className="flex h-9 w-9 items-center justify-center rounded-xl text-sm font-bold text-white shadow-sm"
+            style={{ background: 'var(--color-primary)' }}
+          >
+            <User size={16} />
           </div>
         </div>
       </div>

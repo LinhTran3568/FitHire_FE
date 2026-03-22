@@ -1,11 +1,12 @@
 import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 /**
  * Utility to conditionally merge Tailwind CSS class names.
  * Usage: cn('base-class', condition && 'conditional-class', { 'class': boolean })
  */
 export function cn(...inputs: ClassValue[]): string {
-  return clsx(inputs);
+  return twMerge(clsx(inputs));
 }
 
 /**

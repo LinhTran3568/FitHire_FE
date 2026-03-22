@@ -1,0 +1,166 @@
+
+> fithire@0.0.0 lint
+> eslint .
+
+
+D:\Ky_4\EXE_project\FitHire_FE\src\components\layout\Header.tsx
+  23:7  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+D:\Ky_4\EXE_project\FitHire_FE\src\components\layout\Header.tsx:23:7
+  21 |     if (theme === 'dark' || (!theme && systemDark)) {
+  22 |       document.documentElement.classList.add('dark');
+> 23 |       setIsDark(true);
+     |       ^^^^^^^^^ Avoid calling setState() directly within an effect
+  24 |     } else {
+  25 |       document.documentElement.classList.remove('dark');
+  26 |       setIsDark(false);  react-hooks/set-state-in-effect
+
+D:\Ky_4\EXE_project\FitHire_FE\src\components\layout\MarketingHeader.tsx
+  66:7  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+D:\Ky_4\EXE_project\FitHire_FE\src\components\layout\MarketingHeader.tsx:66:7
+  64 |     if (theme === 'dark' || (!theme && systemDark)) {
+  65 |       document.documentElement.classList.add('dark');
+> 66 |       setIsDark(true);
+     |       ^^^^^^^^^ Avoid calling setState() directly within an effect
+  67 |     } else {
+  68 |       document.documentElement.classList.remove('dark');
+  69 |       setIsDark(false);  react-hooks/set-state-in-effect
+
+D:\Ky_4\EXE_project\FitHire_FE\src\pages\CvOptimizerPage.tsx
+   22:1   warning  There should be at least one empty line between import groups                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                import/order
+  440:10  error    Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+D:\Ky_4\EXE_project\FitHire_FE\src\pages\CvOptimizerPage.tsx:440:10
+  438 |       <div className="space-y-2">
+  439 |         <h3 className="font-semibold text-slate-800">Hard Skills (Kß╗╣ n─âng kß╗╣ thuß║¡t)</h3>
+> 440 |         <Row val={hi} onChange={setHi} onAdd={addH} ph="Java, Spring Boot, Docker..." />
+      |          ^^^ This component is created during render
+  441 |         <div className="flex flex-wrap gap-2">
+  442 |           {draft.hardSkills.map(s => (
+  443 |             <Chip
+
+D:\Ky_4\EXE_project\FitHire_FE\src\pages\CvOptimizerPage.tsx:410:15
+  408 |     </span>
+  409 |   );
+> 410 |   const Row = ({
+      |               ^^
+> 411 |     val,
+      | ^^^^^^^^
+> 412 |     onChange,
+      ΓÇª
+      | ^^^^^^^^
+> 433 |     </div>
+      | ^^^^^^^^
+> 434 |   );
+      | ^^^^ The component is created during render here
+  435 |   return (
+  436 |     <div className="space-y-6">
+  437 |       <h2 className="text-lg font-bold text-slate-900">Kß╗╣ n─âng, Ngoß║íi ngß╗» &amp; Th├ánh tß╗▒u</h2>  react-hooks/static-components
+  454:10  error    Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+D:\Ky_4\EXE_project\FitHire_FE\src\pages\CvOptimizerPage.tsx:454:10
+  452 |       <div className="space-y-2">
+  453 |         <h3 className="font-semibold text-slate-800">Soft Skills (Kß╗╣ n─âng mß╗üm)</h3>
+> 454 |         <Row val={si} onChange={setSi} onAdd={addS} ph="Giao tiß║┐p, L├ám viß╗çc nh├│m..." />
+      |          ^^^ This component is created during render
+  455 |         <div className="flex flex-wrap gap-2">
+  456 |           {draft.softSkills.map(s => (
+  457 |             <Chip
+
+D:\Ky_4\EXE_project\FitHire_FE\src\pages\CvOptimizerPage.tsx:410:15
+  408 |     </span>
+  409 |   );
+> 410 |   const Row = ({
+      |               ^^
+> 411 |     val,
+      | ^^^^^^^^
+> 412 |     onChange,
+      ΓÇª
+      | ^^^^^^^^
+> 433 |     </div>
+      | ^^^^^^^^
+> 434 |   );
+      | ^^^^ The component is created during render here
+  435 |   return (
+  436 |     <div className="space-y-6">
+  437 |       <h2 className="text-lg font-bold text-slate-900">Kß╗╣ n─âng, Ngoß║íi ngß╗» &amp; Th├ánh tß╗▒u</h2>        react-hooks/static-components
+  508:10  error    Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+D:\Ky_4\EXE_project\FitHire_FE\src\pages\CvOptimizerPage.tsx:508:10
+  506 |       <div className="space-y-2">
+  507 |         <h3 className="font-semibold text-slate-800">Th├ánh tß╗▒u</h3>
+> 508 |         <Row val={ai} onChange={setAi} onAdd={addA} ph="Giß║úm thß╗¥i gian phß║ún hß╗ôi API 30%..." />
+      |          ^^^ This component is created during render
+  509 |         <div className="space-y-2">
+  510 |           {draft.achievements.map(a => (
+  511 |             <div
+
+D:\Ky_4\EXE_project\FitHire_FE\src\pages\CvOptimizerPage.tsx:410:15
+  408 |     </span>
+  409 |   );
+> 410 |   const Row = ({
+      |               ^^
+> 411 |     val,
+      | ^^^^^^^^
+> 412 |     onChange,
+      ΓÇª
+      | ^^^^^^^^
+> 433 |     </div>
+      | ^^^^^^^^
+> 434 |   );
+      | ^^^^ The component is created during render here
+  435 |   return (
+  436 |     <div className="space-y-6">
+  437 |       <h2 className="text-lg font-bold text-slate-900">Kß╗╣ n─âng, Ngoß║íi ngß╗» &amp; Th├ánh tß╗▒u</h2>                           react-hooks/static-components
+
+D:\Ky_4\EXE_project\FitHire_FE\src\pages\InterviewPage.tsx
+  308:14  warning  'e' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @typescript-eslint/no-unused-vars
+  546:5   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+D:\Ky_4\EXE_project\FitHire_FE\src\pages\InterviewPage.tsx:546:5
+  544 |   // Giß║ú lß║¡p luß╗ông: AI hß╗Åi -> User trß║ú lß╗¥i
+  545 |   useEffect(() => {
+> 546 |     setIsAiSpeaking(true);
+      |     ^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  547 |     setIsRecording(false);
+  548 |
+  549 |     const speakTimer = setTimeout(() => {  react-hooks/set-state-in-effect
+  589:6   warning  React Hook useEffect has a missing dependency: 'handleNext'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      react-hooks/exhaustive-deps
+
+D:\Ky_4\EXE_project\FitHire_FE\src\pages\JobsPage.tsx
+  119:9  error  'jobs' is never reassigned. Use 'const' instead  prefer-const
+
+D:\Ky_4\EXE_project\FitHire_FE\src\pages\MyCvPage.tsx
+  4:1  warning  `@lib/utils` import should occur before import of `lucide-react`  import/order
+
+D:\Ky_4\EXE_project\FitHire_FE\src\pages\hr\HrCandidatesPage.tsx
+  4:1  warning  `lucide-react` import should occur before import of `react`  import/order
+
+Γ£û 12 problems (7 errors, 5 warnings)
+  1 error and 3 warnings potentially fixable with the `--fix` option.
+

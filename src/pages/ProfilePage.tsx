@@ -20,7 +20,7 @@ const ROLE_LABEL: Record<string, string> = {
 };
 
 const ROLE_COLOR: Record<string, string> = {
-  admin: 'bg-purple-100 text-purple-700',
+  admin: 'bg-indigo-100 text-indigo-700',
   user: 'bg-blue-100 text-blue-700',
   guest: 'bg-slate-100 text-slate-600',
 };

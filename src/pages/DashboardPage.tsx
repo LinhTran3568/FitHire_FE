@@ -1,14 +1,16 @@
 import { Badge, Button, SectionTitle, SurfaceCard } from '@components/ui';
 import {
   ArrowRight,
-  BookOpen,
   BriefcaseBusiness,
   Clock3,
   FileText,
   MicVocal,
-  Sparkles,
   Target,
   TrendingUp,
+  CheckCircle2,
+  Circle,
+  Flame,
+  ScanSearch,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -37,39 +39,41 @@ const QUICK_LINKS = [
     to: '/cv-builder',
     label: 'Tạo CV',
     icon: FileText,
-    color: 'from-violet-500 to-purple-600',
-    bg: 'bg-violet-50',
-    border: 'border-violet-200',
+    color: '#0d9488',
+    bg: 'rgba(13,148,136,0.1)',
   },
   {
-    to: '/jobs',
-    label: 'Tìm việc',
-    icon: BriefcaseBusiness,
-    color: 'from-blue-500 to-cyan-500',
-    bg: 'bg-blue-50',
-    border: 'border-blue-200',
+    to: '/cv-scoring',
+    label: 'Chấm điểm CV',
+    icon: ScanSearch,
+    color: '#3b82f6',
+    bg: 'rgba(59,130,246,0.1)',
   },
   {
     to: '/interview',
     label: 'Phỏng vấn AI',
     icon: MicVocal,
-    color: 'from-emerald-500 to-teal-500',
-    bg: 'bg-emerald-50',
-    border: 'border-emerald-200',
+    color: '#8b5cf6',
+    bg: 'rgba(139,92,246,0.1)',
   },
   {
-    to: '/culture/tests',
-    label: 'Test tính cách',
-    icon: BookOpen,
-    color: 'from-amber-500 to-orange-500',
-    bg: 'bg-amber-50',
-    border: 'border-amber-200',
+    to: '/jobs',
+    label: 'Tìm việc',
+    icon: BriefcaseBusiness,
+    color: '#10b981',
+    bg: 'rgba(16,185,129,0.1)',
   },
 ];
 
+function getScoreColor(score: number) {
+  if (score >= 85) return { main: 'var(--color-success)', light: 'var(--color-success-light)' };
+  if (score >= 75) return { main: 'var(--color-info)', light: 'var(--color-info-light)' };
+  return { main: 'var(--color-warning)', light: 'var(--color-warning-light)' };
+}
+
 export default function DashboardPage() {
   return (
-    <div className="space-y-7">
+    <div className="space-y-6" style={{ color: 'var(--color-text)' }}>
       <SectionTitle
         title="Tổng quan hành trình"
         subtitle="Theo dõi tiến độ hồ sơ, việc làm phù hợp và chất lượng luyện phỏng vấn."
@@ -80,14 +84,21 @@ export default function DashboardPage() {
         {QUICK_LINKS.map(link => (
           <Link key={link.to} to={link.to}>
             <div
-              className={`card-hover rounded-2xl border ${link.border} ${link.bg} p-5 text-center`}
+              className="card-hover group rounded-2xl p-5 text-center transition-all"
+              style={{
+                background: 'var(--color-surface)',
+                border: '1px solid var(--color-border)',
+              }}
             >
               <div
-                className={`mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${link.color}`}
+                className="mx-auto mb-3.5 flex h-13 w-13 items-center justify-center rounded-2xl transition-all duration-300 group-hover:scale-110"
+                style={{ background: link.bg, color: link.color }}
               >
-                <link.icon size={22} className="text-white" />
+                <link.icon size={22} />
               </div>
-              <p className="text-sm font-semibold text-slate-800">{link.label}</p>
+              <p className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>
+                {link.label}
+              </p>
             </div>
           </Link>
         ))}
@@ -95,63 +106,115 @@ export default function DashboardPage() {
 
       {/* Stats row */}
       <div className="grid gap-4 md:grid-cols-3">
-        <SurfaceCard className="flex items-center gap-4">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600">
-            <Target size={20} className="text-white" />
-          </div>
-          <div>
-            <p className="text-2xl font-bold text-slate-900">68%</p>
-            <p className="text-sm text-slate-500">Hoàn thành hồ sơ</p>
-          </div>
-        </SurfaceCard>
-
-        <SurfaceCard className="flex items-center gap-4">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500">
-            <BriefcaseBusiness size={20} className="text-white" />
-          </div>
-          <div>
-            <p className="text-2xl font-bold text-slate-900">24</p>
-            <p className="text-sm text-slate-500">Việc phù hợp</p>
-          </div>
-        </SurfaceCard>
-
-        <SurfaceCard className="flex items-center gap-4">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500">
-            <TrendingUp size={20} className="text-white" />
-          </div>
-          <div>
-            <p className="text-2xl font-bold text-slate-900">82/100</p>
-            <p className="text-sm text-slate-500">Trung bình phỏng vấn</p>
-          </div>
-        </SurfaceCard>
+        {[
+          {
+            icon: Target,
+            label: 'Hoàn thành hồ sơ',
+            value: '68%',
+            color: '#0d9488',
+            bg: 'rgba(13,148,136,0.1)',
+          },
+          {
+            icon: BriefcaseBusiness,
+            label: 'Việc phù hợp',
+            value: '24',
+            color: '#3b82f6',
+            bg: 'rgba(59,130,246,0.1)',
+          },
+          {
+            icon: TrendingUp,
+            label: 'Trung bình phỏng vấn',
+            value: '82/100',
+            color: '#10b981',
+            bg: 'rgba(16,185,129,0.1)',
+          },
+        ].map(stat => (
+          <SurfaceCard key={stat.label} className="flex items-center gap-4">
+            <div
+              className="flex h-13 w-13 shrink-0 items-center justify-center rounded-2xl"
+              style={{ background: stat.bg, color: stat.color }}
+            >
+              <stat.icon size={22} />
+            </div>
+            <div>
+              <p
+                className="text-3xl font-black"
+                style={{
+                  color: stat.color,
+                  fontFamily: 'Outfit, sans-serif',
+                  letterSpacing: '-0.03em',
+                }}
+              >
+                {stat.value}
+              </p>
+              <p className="mt-0.5 text-sm" style={{ color: 'var(--color-text-muted)' }}>
+                {stat.label}
+              </p>
+            </div>
+          </SurfaceCard>
+        ))}
       </div>
 
       {/* CV Progress + Goals */}
       <div className="grid gap-4 lg:grid-cols-2">
         <SurfaceCard>
-          <div className="mb-4 flex items-center gap-2">
-            <Target size={17} className="text-indigo-600" />
-            <h3 className="font-semibold text-slate-800">Tiến độ hồ sơ</h3>
-            <span className="ml-auto text-sm font-bold text-indigo-600">68%</span>
+          <div className="mb-5 flex items-center gap-2">
+            <Target size={16} style={{ color: 'var(--color-primary)' }} />
+            <h3 className="font-bold" style={{ color: 'var(--color-text)' }}>
+              Tiến độ hồ sơ
+            </h3>
+            <span
+              className="ml-auto rounded-full px-3 py-0.5 text-sm font-black"
+              style={{ background: 'var(--color-primary-muted)', color: 'var(--color-primary)' }}
+            >
+              68%
+            </span>
           </div>
-          <div className="mb-5 h-2.5 w-full overflow-hidden rounded-full bg-slate-100">
-            <div className="h-full w-[68%] rounded-full bg-gradient-to-r from-indigo-500 to-blue-500 transition-all" />
+
+          {/* Progress bar */}
+          <div
+            className="mb-6 h-2.5 w-full overflow-hidden rounded-full"
+            style={{ background: 'var(--color-border)' }}
+          >
+            <div
+              className="h-full rounded-full transition-all duration-700"
+              style={{
+                width: '68%',
+                background: 'linear-gradient(90deg, var(--color-primary), var(--color-accent-2))',
+              }}
+            />
           </div>
-          <ul className="space-y-2.5">
+
+          <ul className="space-y-3">
             {PROGRESS_ITEMS.map(item => (
-              <li key={item.label} className="flex items-center gap-2.5 text-sm">
+              <li key={item.label} className="flex items-center gap-3">
+                {item.done ? (
+                  <CheckCircle2
+                    size={18}
+                    className="shrink-0"
+                    style={{ color: 'var(--color-success)' }}
+                  />
+                ) : (
+                  <Circle
+                    size={18}
+                    className="shrink-0"
+                    style={{ color: 'var(--color-border-strong)' }}
+                  />
+                )}
                 <span
-                  className={`flex h-5 w-5 items-center justify-center rounded-full text-xs ${
-                    item.done ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-400'
-                  }`}
+                  className="flex-1 text-sm font-medium"
+                  style={{ color: item.done ? 'var(--color-text)' : 'var(--color-text-subtle)' }}
                 >
-                  {item.done ? '✓' : '—'}
-                </span>
-                <span className={item.done ? 'text-slate-700' : 'text-slate-400'}>
                   {item.label}
                 </span>
                 {!item.done && (
-                  <span className="ml-auto rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700">
+                  <span
+                    className="rounded-full px-2.5 py-0.5 text-xs font-bold"
+                    style={{
+                      background: 'var(--color-warning-light)',
+                      color: 'var(--color-warning)',
+                    }}
+                  >
                     Chưa xong
                   </span>
                 )}
@@ -161,9 +224,11 @@ export default function DashboardPage() {
         </SurfaceCard>
 
         <SurfaceCard>
-          <div className="mb-4 flex items-center gap-2">
-            <Sparkles size={17} className="text-amber-500" />
-            <h3 className="font-semibold text-slate-800">Mục tiêu tuần này</h3>
+          <div className="mb-5 flex items-center gap-2">
+            <Flame size={16} style={{ color: 'var(--color-warning)' }} />
+            <h3 className="font-bold" style={{ color: 'var(--color-text)' }}>
+              Mục tiêu tuần này
+            </h3>
           </div>
           <ul className="space-y-3">
             {[
@@ -173,12 +238,21 @@ export default function DashboardPage() {
             ].map((goal, i) => (
               <li
                 key={i}
-                className="flex items-start gap-3 rounded-xl border border-slate-100 bg-slate-50 p-3 text-sm text-slate-700"
+                className="flex items-start gap-3 rounded-xl p-3.5 text-sm"
+                style={{
+                  background: 'var(--color-surface-raised)',
+                  border: '1px solid var(--color-border)',
+                }}
               >
-                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-xs font-bold text-indigo-600">
+                <span
+                  className="mt-px flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-black"
+                  style={{ background: 'var(--color-primary)', color: 'var(--color-background)' }}
+                >
                   {i + 1}
                 </span>
-                {goal}
+                <span className="font-medium" style={{ color: 'var(--color-text-secondary)' }}>
+                  {goal}
+                </span>
               </li>
             ))}
           </ul>
@@ -189,84 +263,100 @@ export default function DashboardPage() {
       <SurfaceCard>
         <div className="mb-5 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <BriefcaseBusiness size={17} className="text-blue-600" />
-            <h3 className="font-semibold text-slate-800">Việc làm gợi ý</h3>
+            <BriefcaseBusiness size={16} style={{ color: 'var(--color-primary)' }} />
+            <h3 className="font-bold" style={{ color: 'var(--color-text)' }}>
+              Việc làm gợi ý
+            </h3>
           </div>
-          <Badge variant="info">4 vị trí mới</Badge>
+          <Badge variant="primary">4 vị trí mới</Badge>
         </div>
         <div className="grid gap-3 sm:grid-cols-2">
-          {recommendedJobs.map(job => (
-            <div
-              key={job.id}
-              className="card-hover flex items-center justify-between gap-3 rounded-xl border border-slate-100 bg-slate-50 p-4"
-            >
-              <div>
-                <p className="font-semibold text-slate-900">{job.title}</p>
-                <p className="mt-0.5 text-sm text-slate-500">{job.company}</p>
+          {recommendedJobs.map(job => {
+            const { main, light } = getScoreColor(job.match);
+            return (
+              <div
+                key={job.id}
+                className="card-hover flex items-center justify-between gap-3 rounded-xl p-4 transition-all"
+                style={{
+                  background: 'var(--color-surface-raised)',
+                  border: '1px solid var(--color-border)',
+                }}
+              >
+                <div className="min-w-0">
+                  <p
+                    className="truncate text-sm font-semibold"
+                    style={{ color: 'var(--color-text)' }}
+                  >
+                    {job.title}
+                  </p>
+                  <p className="mt-0.5 text-xs" style={{ color: 'var(--color-text-muted)' }}>
+                    {job.company}
+                  </p>
+                </div>
+                <div className="flex shrink-0 flex-col items-end gap-1.5">
+                  <span
+                    className="rounded-full px-2.5 py-0.5 text-xs font-black"
+                    style={{ background: light, color: main }}
+                  >
+                    {job.match}%
+                  </span>
+                  <Link to={`/jobs/${job.id}`}>
+                    <button
+                      className="flex items-center gap-1 text-xs font-semibold"
+                      style={{ color: 'var(--color-primary)' }}
+                    >
+                      Xem <ArrowRight size={10} />
+                    </button>
+                  </Link>
+                </div>
               </div>
-              <div className="flex flex-col items-end gap-2">
-                <span
-                  className={`rounded-full px-2.5 py-1 text-xs font-bold ${
-                    job.match >= 85
-                      ? 'bg-emerald-100 text-emerald-700'
-                      : 'bg-blue-100 text-blue-700'
-                  }`}
-                >
-                  {job.match}%
-                </span>
-                <Link to={`/jobs/${job.id}`}>
-                  <button className="flex items-center gap-1 text-xs font-medium text-indigo-600 hover:text-indigo-700">
-                    Xem <ArrowRight size={12} />
-                  </button>
-                </Link>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </SurfaceCard>
 
       {/* Interview history */}
       <SurfaceCard>
         <div className="mb-5 flex items-center gap-2">
-          <Clock3 size={17} className="text-slate-600" />
-          <h3 className="font-semibold text-slate-800">Lịch sử luyện tập gần đây</h3>
+          <Clock3 size={16} style={{ color: 'var(--color-text-muted)' }} />
+          <h3 className="font-bold" style={{ color: 'var(--color-text)' }}>
+            Lịch sử luyện tập gần đây
+          </h3>
         </div>
         <div className="space-y-3">
-          {interviewHistory.map(session => (
-            <div
-              key={session.id}
-              className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-100 bg-slate-50 p-4"
-            >
-              <div>
-                <p className="font-medium text-slate-900">{session.role}</p>
-                <p className="mt-0.5 text-sm text-slate-500">{session.time}</p>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-1.5">
-                  <div className={`h-2 w-16 overflow-hidden rounded-full bg-slate-200`}>
-                    <div
-                      className={`h-full rounded-full ${
-                        session.score >= 80
-                          ? 'bg-gradient-to-r from-emerald-500 to-teal-400'
-                          : 'bg-gradient-to-r from-amber-400 to-orange-400'
-                      }`}
-                      style={{ width: `${session.score}%` }}
-                    />
-                  </div>
+          {interviewHistory.map(session => {
+            const { main, light } = getScoreColor(session.score);
+            return (
+              <div
+                key={session.id}
+                className="flex flex-wrap items-center justify-between gap-3 rounded-xl p-4"
+                style={{
+                  background: 'var(--color-surface-raised)',
+                  border: '1px solid var(--color-border)',
+                }}
+              >
+                <div>
+                  <p className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
+                    {session.role}
+                  </p>
+                  <p className="mt-0.5 text-xs" style={{ color: 'var(--color-text-muted)' }}>
+                    {session.time}
+                  </p>
+                </div>
+                <div className="flex items-center gap-3">
                   <span
-                    className={`text-sm font-bold ${
-                      session.score >= 80 ? 'text-emerald-600' : 'text-amber-600'
-                    }`}
+                    className="rounded-full px-3 py-1 text-sm font-black"
+                    style={{ background: light, color: main }}
                   >
                     {session.score}/100
                   </span>
+                  <Button variant="ghost" size="sm">
+                    Xem chi tiết
+                  </Button>
                 </div>
-                <Button variant="ghost" size="sm">
-                  Xem chi tiết
-                </Button>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </SurfaceCard>
     </div>

@@ -39,7 +39,7 @@ export function CompanyModal({ company, onClose }: CompanyModalProps) {
         onClick={e => e.stopPropagation()}
       >
         {/* Header gradient */}
-        <div className="rounded-t-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-violet-900 p-5">
+        <div className="rounded-t-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-900 p-5">
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-4">
               {/* Company avatar */}

@@ -1,0 +1,11 @@
+
+> fithire@0.0.0 typecheck
+> tsc -p tsconfig.app.json --noEmit
+
+src/pages/culture/CultureProfilePage.tsx(125,19): error TS2322: Type '"default"' is not assignable to type 'Variant | undefined'.
+src/pages/HomePage.tsx(20,3): error TS6133: 'ShieldCheck' is declared but its value is never read.
+src/pages/HomePage.tsx(21,3): error TS6133: 'Globe' is declared but its value is never read.
+src/pages/JobDetailPage.tsx(130,13): error TS2353: Object literal may only specify known properties, and 'borderOpacity' does not exist in type 'Properties<string | number, string & {}>'.
+src/pages/RegisterPage.tsx(2,70): error TS6133: 'CheckCircle2' is declared but its value is never read.
+src/pages/SavedJobsPage.tsx(131,21): error TS2353: Object literal may only specify known properties, and 'borderOpacity' does not exist in type 'Properties<string | number, string & {}>'.
+src/pages/SubscriptionPage.tsx(1,1): error TS6133: 'Button' is declared but its value is never read.

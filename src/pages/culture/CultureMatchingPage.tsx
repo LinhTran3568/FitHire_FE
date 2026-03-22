@@ -1,435 +1,1001 @@
-import { Badge, Button, SectionTitle, SurfaceCard } from '@components/ui';
-import { cn } from '@lib/utils';
-import { Building2, Flame, Medal, RefreshCw, Sparkles, Target } from 'lucide-react';
-import { useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Button, SurfaceCard, Badge } from '@components/ui';
+import {
+  ArrowRight,
+  CheckCircle,
+  ChevronLeft,
+  ChevronRight,
+  Sparkles,
+  Building2,
+  Compass,
+  Target,
+  CreditCard,
+  ShoppingCart,
+  CloudCog,
+  Gamepad2,
+} from 'lucide-react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-type CultureId = 'startup' | 'corporate' | 'product' | 'remote';
+// ─── Types ──────────────────────────────────────────────────────────────────
+type Step = 'hook' | 'survey' | 'matching' | 'result';
 
-interface CultureProfile {
-  id: CultureId;
+interface SliderQuestion {
+  id: string;
+  leftLabel: string;
+  rightLabel: string;
+  leftKeyword: string;
+  rightKeyword: string;
+  leftCompanies: string[];
+  rightCompanies: string[];
+}
+
+interface CompanyMatch {
   name: string;
-  description: string;
-  badgeVariant: 'success' | 'info' | 'warning' | 'default';
-  barClass: string;
+  icon: React.ElementType;
+  match: number;
+  tagline: string;
+  color: string;
+  radarScores: number[];
+  whyFit: string;
+  logoUrl?: string;
 }
 
-interface ScenarioOption {
-  id: string;
-  title: string;
-  detail: string;
-  scores: Record<CultureId, number>;
-}
-
-interface ScenarioQuestion {
-  id: string;
-  title: string;
-  situation: string;
-  options: ScenarioOption[];
-}
-
-const cultureProfiles: CultureProfile[] = [
+// ─── Data ────────────────────────────────────────────────────────────────────
+const ECOSYSTEMS = [
   {
-    id: 'startup',
-    name: 'Startup năng động',
-    description: 'Nhịp làm việc nhanh, ưu tiên thử nghiệm và chủ động chốt hành động.',
-    badgeVariant: 'success',
-    barClass: 'bg-emerald-500',
+    label: 'Fintech',
+    icon: CreditCard,
+    color: 'var(--color-info)',
+    bg: 'var(--color-info-light)',
+    desc: 'MoMo, VNPay, ZaloPay',
   },
   {
-    id: 'corporate',
-    name: 'Tập đoàn quy củ',
-    description: 'Quy trình rõ ràng, phân cấp trách nhiệm và tiêu chuẩn vận hành ổn định.',
-    badgeVariant: 'info',
-    barClass: 'bg-blue-500',
+    label: 'E-commerce',
+    icon: ShoppingCart,
+    color: 'var(--color-warning)',
+    bg: 'var(--color-warning-light)',
+    desc: 'Tiki, Shopee, Lazada',
   },
   {
-    id: 'product',
-    name: 'Product tập trung kết quả',
-    description: 'Ra quyết định dựa trên dữ liệu, cân bằng tốc độ và chất lượng trải nghiệm.',
-    badgeVariant: 'warning',
-    barClass: 'bg-amber-500',
+    label: 'SaaS / B2B',
+    icon: CloudCog,
+    color: 'var(--color-primary)',
+    bg: 'var(--color-primary-muted)',
+    desc: 'Base.vn, KiotViet, Misa',
   },
   {
-    id: 'remote',
-    name: 'Đội ngũ remote linh hoạt',
-    description: 'Tự chủ cao, phối hợp async rõ ràng, giao tiếp có cấu trúc.',
-    badgeVariant: 'default',
-    barClass: 'bg-slate-500',
+    label: 'Big Tech',
+    icon: Gamepad2,
+    color: 'var(--color-success)',
+    bg: 'var(--color-success-light)',
+    desc: 'VNG, FPT, CMC',
   },
 ];
 
-const scenarioQuestions: ScenarioQuestion[] = [
+const SURVEY_QUESTIONS: SliderQuestion[] = [
   {
-    id: 'deadline',
-    title: 'Tình huống 1: Deadline đột ngột',
-    situation:
-      'Team nhận yêu cầu từ khách hàng: rút ngắn thời gian giao tính năng còn 1/2 so với kế hoạch.',
-    options: [
-      {
-        id: 'deadline-startup',
-        title: 'Chia nhỏ, thử nhanh MVP rồi tối ưu dần',
-        detail: 'Ưu tiên triển khai nhanh phần cốt lõi để lấy phản hồi thực tế sớm.',
-        scores: { startup: 5, corporate: 2, product: 4, remote: 3 },
-      },
-      {
-        id: 'deadline-corporate',
-        title: 'Lập lại kế hoạch và xin phê duyệt mốc mới',
-        detail: 'Giữ quy trình rõ ràng, quản trị rủi ro trước khi thay đổi phạm vi.',
-        scores: { startup: 2, corporate: 5, product: 3, remote: 2 },
-      },
-      {
-        id: 'deadline-remote',
-        title: 'Phân task ownership, đồng bộ async theo block',
-        detail: 'Mỗi người chịu trách nhiệm một phần rõ ràng, cập nhật tiến độ theo nhịp ngắn.',
-        scores: { startup: 3, corporate: 2, product: 4, remote: 5 },
-      },
-    ],
+    id: 'q1',
+    leftLabel: 'Ưu tiên quy trình chuẩn mực, hệ thống và bài bản',
+    rightLabel: 'Đề cao sự linh hoạt, tự chủ và quyền tự quyết định',
+    leftKeyword: 'Quy trình chuẩn',
+    rightKeyword: 'Linh hoạt & Tự chủ',
+    leftCompanies: ['VNPT', 'Viettel', 'Techcombank'],
+    rightCompanies: ['Base.vn', 'MoMo', 'Startups'],
   },
   {
-    id: 'feedback',
-    title: 'Tình huống 2: Nhận feedback trái chiều',
-    situation: 'Bạn nhận hai luồng góp ý ngược nhau từ PM và Tech Lead về giải pháp kỹ thuật.',
-    options: [
-      {
-        id: 'feedback-product',
-        title: 'Đưa dữ liệu đo lường để chọn phương án',
-        detail: 'So sánh impact theo business + effort để chốt quyết định minh bạch.',
-        scores: { startup: 4, corporate: 3, product: 5, remote: 3 },
-      },
-      {
-        id: 'feedback-corporate',
-        title: 'Ưu tiên theo cấp phê duyệt và quy trình hiện hành',
-        detail: 'Giảm xung đột bằng cách bám vai trò và cơ chế ra quyết định chuẩn.',
-        scores: { startup: 2, corporate: 5, product: 3, remote: 2 },
-      },
-      {
-        id: 'feedback-startup',
-        title: 'Đề xuất thử A/B nhỏ để học nhanh',
-        detail: 'Chấp nhận thử nghiệm trong phạm vi an toàn để tìm đáp án thực tế nhanh.',
-        scores: { startup: 5, corporate: 2, product: 4, remote: 3 },
-      },
-    ],
+    id: 'q2',
+    leftLabel: 'Sự ổn định và phúc lợi dài hạn là ưu tiên hàng đầu',
+    rightLabel: 'Cơ hội phát triển và thử thách mới là động lực chính',
+    leftKeyword: 'Ổn định & Bền vững',
+    rightKeyword: 'Thử thách & Tốc độ',
+    leftCompanies: ['FPT', 'Vietcombank'],
+    rightCompanies: ['VNG', 'Shopee'],
   },
   {
-    id: 'collaboration',
-    title: 'Tình huống 3: Hợp tác liên phòng ban',
-    situation: 'Bạn cần phối hợp với Design, QA và DevOps để release tính năng trong tuần này.',
-    options: [
-      {
-        id: 'collab-remote',
-        title: 'Thiết lập workspace chung + checklist async',
-        detail: 'Chuẩn hóa giao tiếp, ghi rõ owner và deadline từng hạng mục.',
-        scores: { startup: 3, corporate: 3, product: 4, remote: 5 },
-      },
-      {
-        id: 'collab-product',
-        title: 'Ưu tiên flow tác động lớn đến user trước',
-        detail: 'Đồng thuận theo mục tiêu sản phẩm thay vì làm đồng loạt tất cả hạng mục.',
-        scores: { startup: 4, corporate: 2, product: 5, remote: 4 },
-      },
-      {
-        id: 'collab-corporate',
-        title: 'Đi theo quy trình bàn giao chuẩn của tổ chức',
-        detail: 'Giữ sự ổn định và khả năng kiểm soát khi có nhiều bên liên quan.',
-        scores: { startup: 2, corporate: 5, product: 3, remote: 2 },
-      },
-    ],
+    id: 'q3',
+    leftLabel: 'Cống hiến tốt nhất trong tập thể lớn, phân công rõ ràng',
+    rightLabel: 'Tỏa sáng khi làm việc nhóm nhỏ, linh hoạt và tốc độ',
+    leftKeyword: 'Tập đoàn lớn',
+    rightKeyword: 'Mô hình Agile',
+    leftCompanies: ['Viettel', 'VinGroup'],
+    rightCompanies: ['KiotViet', 'Base.vn'],
+  },
+  {
+    id: 'q4',
+    leftLabel: 'Sản phẩm cần đạt sự hoàn thiện tuyệt đối trước khi ra mắt',
+    rightLabel: 'Ưu tiên ra mắt nhanh (MVP) và cải thiện dựa trên dữ liệu',
+    leftKeyword: 'Chất lượng tuyệt đối',
+    rightKeyword: 'Tối ưu hóa tốc độ',
+    leftCompanies: ['Ngân hàng', 'Outsource'],
+    rightCompanies: ['Tiki', 'VNG'],
+  },
+  {
+    id: 'q5',
+    leftLabel: 'Mong muốn được đào tạo bài bản và có lộ trình rõ ràng',
+    rightLabel: 'Ưu tiên tự nghiên cứu, đề xuất và đột phá hướng đi mới',
+    leftKeyword: 'Đào tạo & Hướng dẫn',
+    rightKeyword: 'Tự chủ nghiên cứu',
+    leftCompanies: ['Logistics', 'Enterprise'],
+    rightCompanies: ['Startups', 'Got It'],
+  },
+  {
+    id: 'q6',
+    leftLabel: 'Đánh giá dựa trên sự tuân thủ quy trình và kỷ luật chung',
+    rightLabel: 'Đánh giá dựa trên kết quả thực tế và tác động (Impact)',
+    leftKeyword: 'Kỷ luật & Quy trình',
+    rightKeyword: 'Tập trung kết quả',
+    leftCompanies: ['Công ty Nhà nước'],
+    rightCompanies: ['VNG', 'MoMo', 'Base.vn'],
   },
 ];
 
-const cultureIds: CultureId[] = ['startup', 'corporate', 'product', 'remote'];
+const RADAR_LABELS = ['Innovation', 'Discipline', 'Collaboration', 'Result-led', 'Agility'];
 
-export default function CultureMatchingPage() {
-  const [searchParams] = useSearchParams();
-  const [answers, setAnswers] = useState<Record<string, string>>({});
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [submittedAt, setSubmittedAt] = useState<string | null>(null);
-  const targetJob = searchParams.get('jobId');
+const COMPANY_DATABASE: CompanyMatch[] = [
+  {
+    name: 'VNG',
+    icon: Gamepad2,
+    match: 92,
+    tagline: 'Tập đoàn Công nghệ & Giải trí hàng đầu Việt Nam',
+    color: 'var(--color-success)',
+    radarScores: [95, 60, 75, 90, 85],
+    whyFit:
+      'Bạn có phong cách làm việc quyết đoán, tốc độ và sẵn sàng đối mặt với thử thách, tương tự như văn hóa "Move fast, break things" của VNG.',
+    logoUrl: 'https://logo.clearbit.com/vng.com.vn',
+  },
+  {
+    name: 'MoMo',
+    icon: CreditCard,
+    match: 85,
+    tagline: 'Siêu ứng dụng Fintech hàng đầu Việt Nam',
+    color: 'var(--color-primary)',
+    radarScores: [92, 70, 85, 95, 90],
+    whyFit:
+      'Tư duy "Khách hàng là trọng tâm" kết hợp cùng khả năng ra quyết định dựa trên dữ liệu giúp bạn hoàn toàn hòa nhập với môi trường MoMo.',
+    logoUrl: 'https://logo.clearbit.com/momo.vn',
+  },
+  {
+    name: 'Tiki',
+    icon: ShoppingCart,
+    match: 78,
+    tagline: 'Nền tảng Thương mại điện tử chất lượng cao',
+    color: 'var(--color-info)',
+    radarScores: [85, 65, 88, 85, 90],
+    whyFit:
+      'Sự tỉ mỉ, tinh thần trách nhiệm và lòng nhiệt huyết trong công việc của bạn rất phù hợp với nhịp độ vận hành chuyên nghiệp của Tiki.',
+    logoUrl: 'https://logo.clearbit.com/tiki.vn',
+  },
+  {
+    name: 'Base.vn',
+    icon: CloudCog,
+    match: 72,
+    tagline: 'Nền tảng quản trị vận hành doanh nghiệp (SaaS)',
+    color: 'var(--color-warning)',
+    radarScores: [88, 65, 75, 98, 80],
+    whyFit:
+      'Khát khao tự chủ và tư duy hướng đến kết quả cuối cùng (Result, No Reasons) là những giá trị cốt lõi mà Base.vn luôn tìm kiếm.',
+    logoUrl: 'https://logo.clearbit.com/base.vn',
+  },
+];
 
-  const companyName = useMemo(() => {
-    if (!targetJob) return 'Công ty mục tiêu';
+function CompanyLogo({
+  logoUrl,
+  icon: Icon,
+  name,
+  size = 20,
+  className = '',
+}: {
+  logoUrl?: string;
+  icon: React.ElementType;
+  name: string;
+  size?: number;
+  className?: string;
+}) {
+  const [error, setError] = useState(false);
 
-    if (targetJob.includes('techify')) return 'Techify Vietnam';
-    if (targetJob.includes('nextgen')) return 'NextGen Solutions';
-    if (targetJob.includes('finstack')) return 'FinStack';
-    if (targetJob.includes('growthlab')) return 'GrowthLab';
-
-    return 'Công ty mục tiêu';
-  }, [targetJob]);
-
-  const selectedQuestions = useMemo(
-    () => scenarioQuestions.filter(question => Boolean(answers[question.id])),
-    [answers],
-  );
-
-  const scoreBoard = useMemo(() => {
-    const base: Record<CultureId, number> = {
-      startup: 0,
-      corporate: 0,
-      product: 0,
-      remote: 0,
-    };
-
-    selectedQuestions.forEach(question => {
-      const selectedOptionId = answers[question.id];
-      const selectedOption = question.options.find(option => option.id === selectedOptionId);
-      if (!selectedOption) return;
-
-      cultureIds.forEach(cultureId => {
-        base[cultureId] += selectedOption.scores[cultureId];
-      });
-    });
-
-    return base;
-  }, [answers, selectedQuestions]);
-
-  const ranking = useMemo(() => {
-    const maxByCulture: Record<CultureId, number> = {
-      startup: 0,
-      corporate: 0,
-      product: 0,
-      remote: 0,
-    };
-
-    selectedQuestions.forEach(question => {
-      cultureIds.forEach(cultureId => {
-        const questionMax = Math.max(...question.options.map(option => option.scores[cultureId]));
-        maxByCulture[cultureId] += questionMax;
-      });
-    });
-
-    return cultureProfiles
-      .map(profile => {
-        const maxScore = maxByCulture[profile.id];
-        const rawScore = scoreBoard[profile.id];
-        const percentage = maxScore === 0 ? 0 : Math.round((rawScore / maxScore) * 100);
-
-        return {
-          ...profile,
-          rawScore,
-          percentage,
-        };
-      })
-      .sort((a, b) => b.percentage - a.percentage);
-  }, [scoreBoard, selectedQuestions]);
-
-  const completion = Math.round((selectedQuestions.length / scenarioQuestions.length) * 100);
-  const canSubmit = selectedQuestions.length === scenarioQuestions.length;
-  const topMatch = ranking[0];
-
-  const handleSelectOption = (questionId: string, optionId: string) => {
-    setAnswers(prev => ({ ...prev, [questionId]: optionId }));
-
-    // Nếu đã submit mà người dùng đổi đáp án, yêu cầu submit lại để chốt kết quả mới.
-    if (isSubmitted) {
-      setIsSubmitted(false);
-      setSubmittedAt(null);
-    }
-  };
-
-  const handleReset = () => {
-    setAnswers({});
-    setIsSubmitted(false);
-    setSubmittedAt(null);
-  };
-
-  const handleSubmit = () => {
-    if (!canSubmit) return;
-
-    setIsSubmitted(true);
-    setSubmittedAt(new Date().toLocaleString('vi-VN'));
-  };
+  if (!logoUrl || error) {
+    return <Icon size={size} className={className} />;
+  }
 
   return (
-    <div className="space-y-6">
-      <SectionTitle
-        title="Khảo sát & Đánh giá Văn hóa"
-        subtitle="Chọn cách xử lý theo thói quen làm việc của bạn. Hệ thống sẽ xếp hạng kiểu văn hóa doanh nghiệp tương thích cao nhất."
-        action={<Badge variant="info">Mục tiêu: {companyName}</Badge>}
-      />
+    <img
+      src={logoUrl}
+      alt={name}
+      className={`h-full w-full object-contain ${className}`}
+      onError={() => setError(true)}
+    />
+  );
+}
 
-      <SurfaceCard className="overflow-hidden p-0">
-        <div className="grid gap-0 lg:grid-cols-[1.4fr_1fr]">
-          <div className="space-y-4 bg-gradient-to-r from-blue-600 to-indigo-600 p-5 text-white">
-            <div className="flex items-center gap-2">
-              <Flame size={18} />
-              <p className="text-sm font-semibold tracking-wide uppercase">Culture Quest</p>
-            </div>
-            <p className="text-sm text-blue-100">
-              Hoàn thành các thẻ tình huống để mở khóa kết quả phù hợp văn hóa của bạn.
-            </p>
-            <div>
-              <div className="mb-2 flex items-center justify-between text-sm">
-                <span>Tiến độ khảo sát</span>
-                <span className="font-semibold">{completion}%</span>
-              </div>
-              <div className="h-2 rounded-full bg-white/25">
-                <div className="h-full rounded-full bg-white" style={{ width: `${completion}%` }} />
-              </div>
+// ─── Radar Chart SVG ─────────────────────────────────────────────────────────
+function RadarChart({
+  scores,
+  color = 'var(--color-primary)',
+}: {
+  scores: number[];
+  color?: string;
+}) {
+  const cx = 120,
+    cy = 120,
+    r = 80;
+  const n = RADAR_LABELS.length;
+  const step = (2 * Math.PI) / n;
+  const pt = (val: number, i: number) => {
+    const a = i * step - Math.PI / 2;
+    const d = (val / 100) * r;
+    return { x: cx + d * Math.cos(a), y: cy + d * Math.sin(a) };
+  };
+  const outerPts = RADAR_LABELS.map((_, i) => pt(100, i));
+  const scorePts = scores.map((s, i) => pt(s, i));
+  const toD = (arr: { x: number; y: number }[]) =>
+    arr.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ') + 'Z';
+
+  return (
+    <svg viewBox="0 0 240 240" className="mx-auto w-full max-w-[220px] drop-shadow-sm filter">
+      {([25, 50, 75, 100] as const).map(pct => (
+        <path
+          key={pct}
+          d={toD(RADAR_LABELS.map((_, i) => pt(pct, i)))}
+          fill="none"
+          stroke="var(--color-border)"
+          strokeWidth={1}
+        />
+      ))}
+      {outerPts.map((p, i) => (
+        <line
+          key={i}
+          x1={cx}
+          y1={cy}
+          x2={p.x}
+          y2={p.y}
+          stroke="var(--color-border)"
+          strokeWidth={1}
+          strokeDasharray="2 2"
+        />
+      ))}
+      <path d={toD(scorePts)} fill={color} fillOpacity={0.15} stroke={color} strokeWidth={2} />
+      {scorePts.map((p, i) => (
+        <circle
+          key={i}
+          cx={p.x}
+          cy={p.y}
+          r={4.5}
+          fill="var(--color-surface)"
+          stroke={color}
+          strokeWidth={2}
+          className="drop-shadow-sm"
+        />
+      ))}
+      {outerPts.map((_, i) => {
+        const a = i * step - Math.PI / 2;
+        const lx = cx + (r + 25) * Math.cos(a);
+        const ly = cy + (r + 25) * Math.sin(a);
+        return (
+          <text
+            key={i}
+            x={lx}
+            y={ly}
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fontSize={9}
+            fontWeight={600}
+            fill="var(--color-text-muted)"
+          >
+            {RADAR_LABELS[i]}
+          </text>
+        );
+      })}
+    </svg>
+  );
+}
+
+// ─── Hook Screen ─────────────────────────────────────────────────────────────
+function HookScreen({ onStart }: { onStart: () => void }) {
+  return (
+    <div className="animate-in fade-in mx-auto max-w-4xl space-y-8 py-6 duration-500">
+      <SurfaceCard
+        className="relative overflow-hidden border-0 !p-10 text-center shadow-lg"
+        style={{ background: 'var(--color-primary-muted)' }}
+      >
+        <div className="relative z-10 flex flex-col items-center">
+          <Badge variant="primary" className="mb-4">
+            <Compass size={14} className="mr-1.5" /> AI Matching Engine
+          </Badge>
+          <h1
+            className="mb-3 text-3xl font-black md:text-5xl"
+            style={{ color: 'var(--color-primary)' }}
+          >
+            Culture Fit Check
+          </h1>
+          <p
+            className="mx-auto mt-2 max-w-xl text-sm leading-relaxed font-medium md:text-base"
+            style={{ color: 'var(--color-text)' }}
+          >
+            Năng lực chuyên môn giúp bạn có việc làm, nhưng văn hóa phù hợp mới giúp bạn thăng tiến.
+            Xác định hệ sinh thái doanh nghiệp lý tưởng với 6 câu hỏi phân tích phong cách làm việc.
+          </p>
+          <Button
+            variant="primary"
+            className="mt-8 h-12 px-10 text-sm font-bold text-white shadow-md"
+            onClick={onStart}
+          >
+            <span className="flex items-center gap-2">
+              Bắt đầu đánh giá (2 phút) <ArrowRight size={16} />
+            </span>
+          </Button>
+        </div>
+      </SurfaceCard>
+
+      <div className="pt-4 text-center">
+        <p
+          className="mb-6 text-xs font-bold tracking-widest uppercase"
+          style={{ color: 'var(--color-text-subtle)' }}
+        >
+          Đối chiếu với 4 Ecosystem hàng đầu Việt Nam
+        </p>
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+          {ECOSYSTEMS.map(eco => {
+            const Icon = eco.icon;
+            return (
+              <SurfaceCard
+                key={eco.label}
+                className="!p-5 text-center transition-all hover:-translate-y-1"
+              >
+                <div
+                  className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl"
+                  style={{ background: eco.bg, color: eco.color }}
+                >
+                  <Icon size={24} className="drop-shadow-sm" />
+                </div>
+                <p className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>
+                  {eco.label}
+                </p>
+                <p
+                  className="mt-1.5 text-xs font-medium"
+                  style={{ color: 'var(--color-text-muted)' }}
+                >
+                  {eco.desc}
+                </p>
+              </SurfaceCard>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Survey Screen ────────────────────────────────────────────────────────────
+function SurveyScreen({ onComplete }: { onComplete: (answers: number[]) => void }) {
+  const [qIdx, setQIdx] = useState(0);
+  const [values, setValues] = useState<number[]>(Array(SURVEY_QUESTIONS.length).fill(50));
+  const [isDragging, setIsDragging] = useState(false);
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  const current = SURVEY_QUESTIONS[qIdx];
+  const val = values[qIdx];
+  const progress = ((qIdx + 1) / SURVEY_QUESTIONS.length) * 100;
+
+  const updateValue = useCallback(
+    (clientX: number) => {
+      if (!trackRef.current) return;
+      const rect = trackRef.current.getBoundingClientRect();
+      const pct = Math.min(100, Math.max(0, ((clientX - rect.left) / rect.width) * 100));
+      setValues(prev => {
+        const next = [...prev];
+        next[qIdx] = Math.round(pct);
+        return next;
+      });
+    },
+    [qIdx],
+  );
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    updateValue(e.clientX);
+  };
+  const handleMouseMove = useCallback(
+    (e: MouseEvent) => {
+      if (isDragging) updateValue(e.clientX);
+    },
+    [isDragging, updateValue],
+  );
+  const handleMouseUp = useCallback(() => setIsDragging(false), []);
+
+  useEffect(() => {
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [handleMouseMove, handleMouseUp]);
+
+  const handleTouch = (e: React.TouchEvent) => updateValue(e.touches[0].clientX);
+
+  const handleNext = () => {
+    if (qIdx < SURVEY_QUESTIONS.length - 1) setQIdx(i => i + 1);
+    else onComplete(values);
+  };
+  const handlePrev = () => {
+    if (qIdx > 0) setQIdx(i => i - 1);
+  };
+
+  const leftOpacity = val < 40 ? 1 : val < 50 ? 0.3 : 0.05;
+  const rightOpacity = val > 60 ? 1 : val > 50 ? 0.3 : 0.05;
+
+  return (
+    <div className="animate-in fade-in mx-auto max-w-2xl space-y-6 py-6 duration-500">
+      <SurfaceCard className="!p-5">
+        <div className="mb-3 flex items-center justify-between text-sm">
+          <span
+            className="flex items-center gap-2 font-bold"
+            style={{ color: 'var(--color-text)' }}
+          >
+            <span
+              className="flex h-6 w-6 items-center justify-center rounded-md border"
+              style={{
+                background: 'var(--color-primary-muted)',
+                color: 'var(--color-primary)',
+                borderColor: 'var(--color-border)',
+              }}
+            >
+              <Target size={14} />
+            </span>
+            <span>Phân tích Tương thích Văn hóa</span>
+            <span className="mx-1" style={{ color: 'var(--color-text-subtle)' }}>
+              /
+            </span>
+            <span style={{ color: 'var(--color-text-muted)' }}>Bước {qIdx + 1}</span>
+          </span>
+          <span
+            className="rounded-md border px-2 py-0.5 font-bold"
+            style={{ color: 'var(--color-primary)', borderColor: 'var(--color-border)' }}
+          >
+            {Math.round(progress)}%
+          </span>
+        </div>
+        <div
+          className="h-2 overflow-hidden rounded-full border"
+          style={{ background: 'var(--color-surface-raised)', borderColor: 'var(--color-border)' }}
+        >
+          <div
+            className="h-full rounded-full transition-all duration-500"
+            style={{ width: `${progress}%`, background: 'var(--color-primary)' }}
+          />
+        </div>
+      </SurfaceCard>
+
+      <SurfaceCard className="!p-8">
+        <p
+          className="mb-10 text-center text-[11px] font-black tracking-widest uppercase"
+          style={{ color: 'var(--color-primary)' }}
+        >
+          Di chuyển thanh trượt theo mức độ ưu tiên của bạn
+        </p>
+
+        <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-6">
+          <div className="space-y-3 text-right">
+            <h3
+              className="text-base leading-relaxed font-bold md:text-lg"
+              style={{ color: 'var(--color-text)' }}
+            >
+              {current.leftLabel}
+            </h3>
+            <div className="flex flex-wrap justify-end gap-1.5">
+              {current.leftCompanies.map(c => (
+                <Badge
+                  key={c}
+                  variant="default"
+                  className="font-semibold"
+                  style={{ opacity: leftOpacity, transition: 'opacity 0.3s ease' }}
+                >
+                  {c}
+                </Badge>
+              ))}
             </div>
           </div>
-
-          <div className="space-y-4 p-5">
-            <div className="flex flex-wrap gap-2">
-              <Badge variant="success">
-                Đã trả lời: {selectedQuestions.length}/{scenarioQuestions.length}
-              </Badge>
-              <Badge variant="warning">Chuỗi hiện tại: {selectedQuestions.length} thẻ</Badge>
-              {isSubmitted ? <Badge variant="info">Đã submit</Badge> : <Badge>Chưa submit</Badge>}
+          <div
+            className="flex h-10 w-10 items-center justify-center rounded-xl border text-sm font-black"
+            style={{
+              background: 'var(--color-surface-raised)',
+              color: 'var(--color-text-muted)',
+              borderColor: 'var(--color-border)',
+            }}
+          >
+            VS
+          </div>
+          <div className="space-y-3 text-left">
+            <h3
+              className="text-base leading-relaxed font-bold md:text-lg"
+              style={{ color: 'var(--color-text)' }}
+            >
+              {current.rightLabel}
+            </h3>
+            <div className="flex flex-wrap justify-start gap-1.5">
+              {current.rightCompanies.map(c => (
+                <Badge
+                  key={c}
+                  variant="default"
+                  className="font-semibold"
+                  style={{ opacity: rightOpacity, transition: 'opacity 0.3s ease' }}
+                >
+                  {c}
+                </Badge>
+              ))}
             </div>
+          </div>
+        </div>
 
-            <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
-              <p className="font-medium text-slate-900">Ngữ cảnh đánh giá</p>
-              <p className="mt-1">Vị trí mục tiêu: {targetJob ?? 'Chưa chọn từ trang việc làm'}</p>
-              <div className="mt-2 flex items-center gap-2 text-slate-500">
-                <Building2 size={15} />
-                <span>{companyName}</span>
+        <div className="mt-12 mb-8">
+          <div className="mb-4 flex justify-between px-2 text-[11px] font-black tracking-widest uppercase">
+            <span
+              style={{
+                color: 'var(--color-success)',
+                opacity: leftOpacity,
+                transition: 'opacity 0.3s',
+              }}
+            >
+              ← {current.leftKeyword}
+            </span>
+            <span
+              style={{
+                color: 'var(--color-primary)',
+                opacity: rightOpacity,
+                transition: 'opacity 0.3s',
+              }}
+            >
+              {current.rightKeyword} →
+            </span>
+          </div>
+
+          <div
+            ref={trackRef}
+            className="relative h-6 cursor-pointer rounded-full select-none"
+            style={{ background: 'var(--color-border-strong)' }}
+            onMouseDown={handleMouseDown}
+            onTouchMove={e => handleTouch(e)}
+          >
+            <div
+              className="absolute inset-y-0 left-0 rounded-full transition-all duration-75"
+              style={{ width: `${val}%`, background: 'var(--color-primary)' }}
+            />
+            <div
+              className={`absolute top-1/2 h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] shadow-sm transition-transform ${isDragging ? 'scale-110' : 'hover:scale-105'} flex cursor-grab items-center justify-center active:cursor-grabbing`}
+              style={{
+                left: `${val}%`,
+                background: 'var(--color-surface)',
+                borderColor: 'var(--color-primary)',
+              }}
+            >
+              <div
+                className="h-2.5 w-2.5 rounded-full"
+                style={{ background: 'var(--color-primary)' }}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div
+          className="mt-6 flex items-center justify-between border-t pt-6"
+          style={{ borderColor: 'var(--color-border)' }}
+        >
+          <Button
+            variant="outline"
+            onClick={handlePrev}
+            disabled={qIdx === 0}
+            className="h-12 px-6 font-bold shadow-sm"
+          >
+            <span className="flex items-center gap-1.5">
+              <ChevronLeft size={16} /> Quay lại
+            </span>
+          </Button>
+          <Button
+            variant="primary"
+            onClick={handleNext}
+            className="h-12 px-8 font-bold text-white shadow-md"
+          >
+            {qIdx === SURVEY_QUESTIONS.length - 1 ? (
+              <span className="flex items-center gap-2">
+                <CheckCircle size={18} /> Hoàn tất
+              </span>
+            ) : (
+              <span className="flex items-center gap-2">
+                Tiếp theo <ChevronRight size={18} />
+              </span>
+            )}
+          </Button>
+        </div>
+      </SurfaceCard>
+    </div>
+  );
+}
+
+// ─── Matching Screen ──────────────────────────────────────────────────────────
+function MatchingScreen({ onDone }: { onDone: () => void }) {
+  const [progress, setProgress] = useState(0);
+  const [currentCompany, setCurrentCompany] = useState(0);
+  const companies = [
+    'VNG',
+    'MoMo',
+    'Tiki',
+    'Base.vn',
+    'Shopee',
+    'VNPT',
+    'Viettel',
+    'FPT',
+    'KiotViet',
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setProgress(p => {
+        if (p >= 100) {
+          clearInterval(interval);
+          setTimeout(onDone, 600);
+          return 100;
+        }
+        return p + 1.5;
+      });
+    }, 40);
+    const compInterval = setInterval(() => {
+      setCurrentCompany(c => (c + 1) % companies.length);
+    }, 150);
+    return () => {
+      clearInterval(interval);
+      clearInterval(compInterval);
+    };
+  }, [onDone, companies.length]);
+
+  return (
+    <div className="animate-in zoom-in-95 flex min-h-[60vh] flex-col items-center justify-center gap-8 py-16 text-center duration-500">
+      <div className="relative h-48 w-48">
+        <svg viewBox="0 0 100 100" className="h-full w-full -rotate-90">
+          <circle cx="50" cy="50" r="44" fill="none" stroke="var(--color-border)" strokeWidth="6" />
+          <circle
+            cx="50"
+            cy="50"
+            r="44"
+            fill="none"
+            stroke="var(--color-primary)"
+            strokeWidth="6"
+            strokeLinecap="round"
+            strokeDasharray={`${2 * Math.PI * 44}`}
+            strokeDashoffset={`${2 * Math.PI * 44 * (1 - progress / 100)}`}
+            style={{ transition: 'stroke-dashoffset 0.1s linear' }}
+          />
+        </svg>
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <span className="text-4xl font-black" style={{ color: 'var(--color-primary)' }}>
+            {Math.round(progress)}%
+          </span>
+        </div>
+      </div>
+      <div>
+        <Badge variant="primary" className="mb-3 animate-pulse">
+          AI Đang Đồng Bộ Dữ Liệu
+        </Badge>
+        <h2 className="mb-1 text-2xl font-black" style={{ color: 'var(--color-text)' }}>
+          Scanning Culture Engine...
+        </h2>
+        <p
+          className="flex items-center justify-center gap-2 text-sm font-medium"
+          style={{ color: 'var(--color-text-muted)' }}
+        >
+          <Building2 size={16} /> Đối chiếu với:{' '}
+          <span className="border-b border-dashed font-bold" style={{ color: 'var(--color-text)' }}>
+            {companies[currentCompany]}
+          </span>
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// ─── Result Screen ────────────────────────────────────────────────────────────
+function ResultScreen({ answers }: { answers: number[] }) {
+  const navigate = useNavigate();
+  const [selectedCompany, setSelectedCompany] = useState(0);
+
+  const scoredCompanies = COMPANY_DATABASE.map(company => {
+    const avgAnswer = answers.reduce((s, v) => s + v, 0) / answers.length;
+    const autonomyBonus =
+      company.name === 'VNG' || company.name === 'Base.vn'
+        ? avgAnswer * 0.1
+        : (100 - avgAnswer) * 0.1;
+    return { ...company, match: Math.min(98, Math.round(company.match + autonomyBonus - 5)) };
+  }).sort((a, b) => b.match - a.match);
+
+  const topCompany = scoredCompanies[selectedCompany] ?? scoredCompanies[0];
+
+  return (
+    <div className="animate-in slide-in-from-bottom-8 space-y-6 duration-700">
+      {/* Hero Result */}
+      <SurfaceCard
+        className="relative overflow-hidden border-0 !p-10 shadow-lg"
+        style={{ background: 'var(--color-primary-muted)' }}
+      >
+        <div className="relative z-10 flex flex-col items-center gap-8 md:flex-row">
+          <div className="flex-1 text-center md:text-left">
+            <Badge variant="primary" className="mb-4">
+              <Sparkles size={14} className="mr-1.5" /> MỨC ĐỘ PHÙ HỢP CAO NHẤT
+            </Badge>
+            <h1
+              className="mb-3 text-4xl leading-tight font-black tracking-tight md:text-5xl"
+              style={{ color: 'var(--color-text)' }}
+            >
+              Điểm đến văn hóa lý tưởng của bạn là <br />
+              <span style={{ color: 'var(--color-primary)' }}>{topCompany.name}!</span>
+            </h1>
+            <p
+              className="max-w-lg text-sm leading-relaxed font-medium md:text-base"
+              style={{ color: 'var(--color-text-secondary)' }}
+            >
+              {topCompany.tagline}
+            </p>
+          </div>
+
+          <div
+            className="flex min-w-[160px] shrink-0 flex-col items-center justify-center rounded-[2rem] border bg-white p-6 shadow-sm"
+            style={{ borderColor: 'var(--color-border)' }}
+          >
+            <p
+              className="mb-2 text-[11px] font-bold tracking-widest uppercase"
+              style={{ color: 'var(--color-text-muted)' }}
+            >
+              Chỉ số Tương thích
+            </p>
+            <div className="flex items-center gap-3">
+              <p
+                className="text-5xl font-black"
+                style={{ color: 'var(--color-primary)', fontFamily: 'Outfit, sans-serif' }}
+              >
+                {topCompany.match}%
+              </p>
+              <div
+                className="flex h-12 w-12 items-center justify-center rounded-xl border bg-white p-1 shadow-sm"
+                style={{ borderColor: 'var(--color-border)' }}
+              >
+                <CompanyLogo
+                  logoUrl={topCompany.logoUrl}
+                  icon={topCompany.icon}
+                  name={topCompany.name}
+                  size={28}
+                  className="text-[var(--color-primary)]"
+                />
               </div>
             </div>
           </div>
         </div>
       </SurfaceCard>
 
-      <div className="grid gap-5 xl:grid-cols-[1.2fr_1fr]">
-        <div className="space-y-4">
-          {scenarioQuestions.map((question, questionIndex) => {
-            const selectedOptionId = answers[question.id];
-
-            return (
-              <SurfaceCard key={question.id} className="space-y-4">
-                <div className="flex flex-wrap items-start justify-between gap-2">
-                  <div>
-                    <p className="text-xs font-semibold tracking-wide text-blue-600 uppercase">
-                      Thẻ tình huống #{questionIndex + 1}
-                    </p>
-                    <h3 className="mt-1 text-lg font-semibold text-slate-900">{question.title}</h3>
-                  </div>
-                  {selectedOptionId ? (
-                    <Badge variant="success">Đã chọn</Badge>
-                  ) : (
-                    <Badge>Chưa chọn</Badge>
-                  )}
-                </div>
-
-                <p className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
-                  {question.situation}
-                </p>
-
-                <div className="space-y-3">
-                  {question.options.map(option => {
-                    const isSelected = option.id === selectedOptionId;
-
-                    return (
-                      <button
-                        key={option.id}
-                        type="button"
-                        onClick={() => handleSelectOption(question.id, option.id)}
-                        className={cn(
-                          'w-full rounded-xl border p-3 text-left transition',
-                          isSelected
-                            ? 'border-blue-600 bg-blue-50 shadow-sm shadow-blue-100'
-                            : 'border-slate-200 bg-white hover:border-blue-200 hover:bg-blue-50/40',
-                        )}
-                      >
-                        <p className="text-sm font-semibold text-slate-900">{option.title}</p>
-                        <p className="mt-1 text-sm text-slate-600">{option.detail}</p>
-                      </button>
-                    );
-                  })}
-                </div>
-              </SurfaceCard>
-            );
-          })}
-
-          <SurfaceCard className="space-y-3">
-            <div className="flex flex-wrap items-center justify-end gap-2">
-              <Button size="sm" onClick={handleSubmit} disabled={!canSubmit}>
-                <Sparkles size={15} />
-                <span>Submit để xem kết quả</span>
-              </Button>
-              <Button variant="outline" size="sm" onClick={handleReset}>
-                <RefreshCw size={15} />
-                <span>Làm lại khảo sát</span>
-              </Button>
-            </div>
-
-            {isSubmitted && submittedAt && (
-              <p className="text-right text-xs text-slate-500">Thời điểm submit: {submittedAt}</p>
-            )}
-          </SurfaceCard>
-        </div>
-
-        <div className="space-y-4">
-          <SurfaceCard className="space-y-4">
-            <div className="flex items-center gap-2 text-slate-900">
-              <Medal size={18} />
-              <h3 className="text-lg font-semibold">Kết quả phù hợp văn hóa</h3>
-            </div>
-
-            {!isSubmitted ? (
-              <p className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-600">
-                Kết quả cuối sẽ xuất hiện sau khi bạn hoàn thành toàn bộ thẻ tình huống và bấm{' '}
-                <span className="font-semibold">Submit để xem kết quả</span>.
-              </p>
-            ) : (
-              <div className="space-y-3">
-                {topMatch && (
-                  <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
-                    <div className="flex items-center gap-2">
-                      <Sparkles size={17} className="text-emerald-600" />
-                      <p className="text-sm font-semibold text-emerald-700">
-                        Mức tương thích cao nhất
-                      </p>
-                    </div>
-                    <p className="mt-1 text-base font-semibold text-slate-900">{topMatch.name}</p>
-                    <p className="mt-1 text-sm text-slate-700">{topMatch.description}</p>
-                    <p className="mt-2 text-sm font-medium text-emerald-700">
-                      Độ tương thích: {topMatch.percentage}%
-                    </p>
-                  </div>
-                )}
-
-                <div className="space-y-3">
-                  {ranking.map(profile => (
-                    <div key={profile.id} className="rounded-xl border border-slate-200 p-3">
-                      <div className="mb-2 flex items-center justify-between gap-2">
-                        <div className="flex items-center gap-2">
-                          <Target size={15} className="text-slate-400" />
-                          <p className="text-sm font-semibold text-slate-900">{profile.name}</p>
-                        </div>
-                        <Badge variant={profile.badgeVariant}>{profile.percentage}%</Badge>
-                      </div>
-
-                      <div className="h-2 rounded-full bg-slate-200">
-                        <div
-                          className={cn(
-                            'h-full rounded-full transition-all duration-500',
-                            profile.barClass,
-                          )}
-                          style={{ width: `${profile.percentage}%` }}
-                        />
-                      </div>
-
-                      <p className="mt-2 text-xs leading-relaxed text-slate-600">
-                        {profile.description}
-                      </p>
-                    </div>
-                  ))}
-                </div>
+      {/* Ranks Cards */}
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        {scoredCompanies.map((company, i) => (
+          <SurfaceCard
+            key={company.name}
+            onClick={() => setSelectedCompany(i)}
+            className={`flex cursor-pointer flex-col gap-3 transition-all duration-300 ${selectedCompany === i ? 'scale-[1.02] shadow-md' : ''}`}
+            style={{
+              background:
+                selectedCompany === i ? 'var(--color-primary-muted)' : 'var(--color-surface)',
+              borderColor: selectedCompany === i ? 'var(--color-primary)' : 'var(--color-border)',
+            }}
+          >
+            <div className="flex items-center justify-between">
+              <div
+                className="flex h-11 w-11 items-center justify-center rounded-xl border bg-white p-2 shadow-sm"
+                style={{
+                  borderColor:
+                    selectedCompany === i ? 'var(--color-primary)' : 'var(--color-border)',
+                }}
+              >
+                <CompanyLogo
+                  logoUrl={company.logoUrl}
+                  icon={company.icon}
+                  name={company.name}
+                  size={20}
+                  className="text-[var(--color-primary)]"
+                />
               </div>
-            )}
+              {selectedCompany === i && (
+                <CheckCircle
+                  size={20}
+                  style={{ color: 'var(--color-primary)' }}
+                  className="drop-shadow-sm"
+                />
+              )}
+            </div>
+            <div>
+              <p className="text-base font-bold" style={{ color: 'var(--color-text)' }}>
+                {company.name}
+              </p>
+              <div className="mt-1.5 flex items-center gap-2">
+                <div
+                  className="h-1.5 flex-1 rounded-full"
+                  style={{ background: 'var(--color-border-strong)' }}
+                >
+                  <div
+                    className="h-full rounded-full transition-all"
+                    style={{ width: `${company.match}%`, background: 'var(--color-primary)' }}
+                  />
+                </div>
+                <p className="text-xs font-black" style={{ color: 'var(--color-primary)' }}>
+                  {company.match}%
+                </p>
+              </div>
+            </div>
+          </SurfaceCard>
+        ))}
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-[380px_1fr]">
+        <SurfaceCard className="flex flex-col items-center !p-6">
+          <p
+            className="mb-6 flex w-full items-center gap-2 text-left text-sm font-bold tracking-widest uppercase"
+            style={{ color: 'var(--color-text)' }}
+          >
+            <Compass size={16} style={{ color: 'var(--color-primary)' }} /> Đặc điểm lõi
+          </p>
+          <div className="relative w-full py-4">
+            <RadarChart scores={topCompany.radarScores} color={topCompany.color} />
+          </div>
+          <div
+            className="mt-auto w-full space-y-2.5 border-t pt-6"
+            style={{ borderColor: 'var(--color-border)' }}
+          >
+            {RADAR_LABELS.map((label, i) => (
+              <div key={label} className="flex items-center justify-between">
+                <span
+                  className="text-xs font-semibold"
+                  style={{ color: 'var(--color-text-secondary)' }}
+                >
+                  {label}
+                </span>
+                <span
+                  className="rounded border px-2.5 py-0.5 text-[11px] font-black"
+                  style={{
+                    color: 'var(--color-primary)',
+                    borderColor: 'var(--color-border)',
+                    background: 'var(--color-surface)',
+                  }}
+                >
+                  {topCompany.radarScores[i]}%
+                </span>
+              </div>
+            ))}
+          </div>
+        </SurfaceCard>
+
+        {/* Why it fits */}
+        <div className="flex flex-col space-y-6">
+          <SurfaceCard className="flex-1 !p-6">
+            <div className="mb-4 flex items-center gap-2">
+              <Sparkles size={18} style={{ color: 'var(--color-primary)' }} />
+              <p className="text-base font-bold" style={{ color: 'var(--color-text)' }}>
+                Tại sao {topCompany.name} phù hợp với bạn?
+              </p>
+            </div>
+
+            <div
+              className="mb-6 rounded-2xl border p-5"
+              style={{
+                background: 'var(--color-surface-raised)',
+                borderColor: 'var(--color-border)',
+              }}
+            >
+              <p
+                className="text-sm leading-relaxed font-medium"
+                style={{ color: 'var(--color-text-secondary)' }}
+              >
+                "{topCompany.whyFit}"
+              </p>
+            </div>
+
+            <p
+              className="mb-3 text-[11px] font-bold tracking-widest uppercase"
+              style={{ color: 'var(--color-text-subtle)' }}
+            >
+              Các giá trị văn hoá tương đồng
+            </p>
+            <div className="flex flex-wrap gap-2.5">
+              {['Tự chủ', 'Quyết liệt', 'Minh bạch', 'Dựa trên dữ liệu'].map(k => (
+                <div
+                  key={k}
+                  className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold"
+                  style={{
+                    background: 'var(--color-surface-raised)',
+                    borderColor: 'var(--color-border)',
+                    color: 'var(--color-text)',
+                  }}
+                >
+                  <CheckCircle size={12} style={{ color: 'var(--color-success)' }} /> {k}
+                </div>
+              ))}
+            </div>
           </SurfaceCard>
 
-          <SurfaceCard className="space-y-2">
-            <h4 className="font-semibold text-slate-900">Gợi ý hành động</h4>
-            <p className="text-sm text-slate-700">
-              Dùng kết quả top 1 + top 2 để ưu tiên công ty phù hợp phong cách làm việc, rồi quay
-              lại trang việc làm để lọc JD theo mức độ tương thích.
-            </p>
+          <SurfaceCard
+            className="border-0 !p-6 shadow-md"
+            style={{ background: 'var(--color-primary-muted)' }}
+          >
+            <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
+              <div>
+                <span
+                  className="mb-3 inline-block rounded-md border bg-white px-2.5 py-1 text-[10px] font-black tracking-widest uppercase"
+                  style={{ color: 'var(--color-danger)', borderColor: 'var(--color-border)' }}
+                >
+                  ACTION REQUIRED
+                </span>
+                <p
+                  className="text-lg leading-tight font-black"
+                  style={{ color: 'var(--color-primary)' }}
+                >
+                  Luyện tập phỏng vấn theo <br />
+                  phong cách {topCompany.name}
+                </p>
+                <p className="mt-1 text-sm font-medium" style={{ color: 'var(--color-text)' }}>
+                  Hệ thống AI sẽ mô phỏng lại format phỏng vấn đặc thù của doanh nghiệp này.
+                </p>
+              </div>
+              <Button
+                onClick={() => navigate('/interview')}
+                variant="primary"
+                className="h-12 shrink-0 px-6 font-bold whitespace-nowrap text-white shadow-sm"
+              >
+                <span className="flex items-center gap-2">
+                  Bắt đầu Luyện tập <ArrowRight size={16} />
+                </span>
+              </Button>
+            </div>
           </SurfaceCard>
         </div>
       </div>
+    </div>
+  );
+}
+
+// ─── Main ─────────────────────────────────────────────────────────────────────
+export default function CultureMatchingPage() {
+  const [step, setStep] = useState<Step>('hook');
+  const [answers, setAnswers] = useState<number[]>([]);
+
+  const handleSurveyComplete = (vals: number[]) => {
+    setAnswers(vals);
+    setStep('matching');
+  };
+  const handleMatchingDone = useCallback(() => setStep('result'), []);
+  const handleRestart = () => {
+    setAnswers([]);
+    setStep('hook');
+  };
+
+  return (
+    <div className="pb-10">
+      {step !== 'hook' && step !== 'result' && (
+        <div
+          className="mb-6 flex items-center gap-3 text-sm font-semibold"
+          style={{ color: 'var(--color-text-muted)' }}
+        >
+          <button
+            onClick={handleRestart}
+            className="flex items-center gap-1.5 transition-all hover:underline focus:outline-none"
+            style={{ color: 'var(--color-primary)' }}
+          >
+            <ChevronLeft size={16} /> Bắt đầu lại
+          </button>
+          <span
+            className="h-1.5 w-1.5 rounded-full"
+            style={{ background: 'var(--color-border-strong)' }}
+          />
+          <span>{step === 'survey' ? 'Khảo sát nhanh' : 'Đang phân tích AI...'}</span>
+        </div>
+      )}
+
+      {step === 'hook' && <HookScreen onStart={() => setStep('survey')} />}
+      {step === 'survey' && <SurveyScreen onComplete={handleSurveyComplete} />}
+      {step === 'matching' && <MatchingScreen onDone={handleMatchingDone} />}
+      {step === 'result' && <ResultScreen answers={answers} />}
     </div>
   );
 }
