@@ -1,7 +1,7 @@
 import { Badge, Button, SurfaceCard } from '@components/ui';
+import { cn } from '@lib/utils';
 import { FilePenLine, FileText, Plus, Sparkles, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { cn } from '@lib/utils';
 
 const cvVersions = [
   {

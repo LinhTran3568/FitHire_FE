@@ -1,23 +1,22 @@
-import { Button, SurfaceCard, Badge } from '@components/ui';
+import { Badge, Button, SurfaceCard } from '@components/ui';
 import {
   ArrowRight,
   Brain,
   CheckCircle,
+  Clock,
   Lightbulb,
   Mic,
   RefreshCw,
   SkipForward,
+  Sparkles,
   Speaker,
   Star,
   TrendingUp,
   User,
   Volume2,
   Zap,
-  Sparkles,
-  Clock,
 } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
-
+import { useCallback, useEffect, useRef, useState } from 'react';
 // ─── Types ─────────────────────────────────────────────────────────────────
 type Phase = 'setup' | 'interview' | 'analytics';
 type InterviewMode = 'warmup' | 'standard' | 'stress';
@@ -305,7 +304,7 @@ function SetupPhase({
         setDeviceReady(true);
         setIsChecking(false);
       }, 800);
-    } catch (e) {
+    } catch {
       alert('Vui lòng cấp quyền truy cập Mic và Camera để tiếp tục.');
       setIsChecking(false);
     }
@@ -543,8 +542,7 @@ function InterviewPhase({
 
   // Giả lập luồng: AI hỏi -> User trả lời
   useEffect(() => {
-    setIsAiSpeaking(true);
-    setIsRecording(false);
+    if (!isAiSpeaking) return;
 
     const speakTimer = setTimeout(() => {
       setIsAiSpeaking(false);
@@ -554,7 +552,32 @@ function InterviewPhase({
     }, 3000); // 3 giây AI "nói"
 
     return () => clearTimeout(speakTimer);
-  }, [qIndex]);
+  }, [isAiSpeaking]);
+
+  const handleNext = useCallback(() => {
+    // Lưu kết quả câu vừa rồi
+    const finalScore = Math.floor(Math.random() * 30 + 70);
+    const duration = 120 - timeRemaining;
+    setResults(prev => [
+      ...prev,
+      {
+        question,
+        answer: '...',
+        score: finalScore,
+        duration: duration === 0 ? 120 : duration,
+        wpm: metrics.wpm,
+        isStarMoment: finalScore > 90,
+      },
+    ]);
+
+    if (qIndex < currentQuestions.length - 1) {
+      setIsAiSpeaking(true);
+      setIsRecording(false);
+      setQIndex(i => i + 1);
+    } else {
+      onFinish(results);
+    }
+  }, [timeRemaining, question, metrics.wpm, qIndex, currentQuestions.length, onFinish, results]);
 
   // Đếm ngược & sinh metrics ngẫu nhiên
   useEffect(() => {
@@ -586,30 +609,7 @@ function InterviewPhase({
       });
     }, 1000);
     return () => clearInterval(timer);
-  }, [isRecording]);
-
-  const handleNext = () => {
-    // Lưu kết quả câu vừa rồi
-    const finalScore = Math.floor(Math.random() * 30 + 70);
-    const duration = 120 - timeRemaining;
-    setResults(prev => [
-      ...prev,
-      {
-        question,
-        answer: '...',
-        score: finalScore,
-        duration: duration === 0 ? 120 : duration,
-        wpm: metrics.wpm,
-        isStarMoment: finalScore > 90,
-      },
-    ]);
-
-    if (qIndex < currentQuestions.length - 1) {
-      setQIndex(i => i + 1);
-    } else {
-      onFinish(results);
-    }
-  };
+  }, [isRecording, handleNext]);
 
   const handleEndEarly = () => {
     onFinish(results);

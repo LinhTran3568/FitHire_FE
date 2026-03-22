@@ -6,24 +6,19 @@ import { Link } from 'react-router-dom';
 
 export function Header() {
   const [isDark, setIsDark] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return (
-        document.documentElement.classList.contains('dark') ||
-        localStorage.getItem('theme') === 'dark'
-      );
-    }
-    return false;
+    const theme = localStorage.getItem('theme');
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    return theme === 'dark' || (!theme && systemDark);
   });
 
   useEffect(() => {
     const theme = localStorage.getItem('theme');
     const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
     if (theme === 'dark' || (!theme && systemDark)) {
       document.documentElement.classList.add('dark');
-      setIsDark(true);
     } else {
       document.documentElement.classList.remove('dark');
-      setIsDark(false);
     }
   }, []);
 

@@ -20,6 +20,7 @@ import {
   BriefcaseBusiness,
 } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
+
 import type { CvDraft, ExperienceEntry, LanguageEntry, Template, Step } from './cvBuilder.types';
 import { getKeywords, healthScore, initialDraft, uid } from './cvBuilder.types';
 
@@ -347,6 +348,42 @@ function StepExperience({
   );
 }
 
+
+const Chip = ({ label, onRm, cls }: { label: string; onRm: () => void; cls: string }) => (
+  <span className={`flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium ${cls}`}>
+    {label}
+    <button onClick={onRm} className="ml-0.5 transition hover:text-red-500">
+      <X size={11} />
+    </button>
+  </span>
+);
+
+const Row = ({
+  val,
+  onChange,
+  onAdd,
+  ph,
+}: {
+  val: string;
+  onChange: (v: string) => void;
+  onAdd: () => void;
+  ph: string;
+}) => (
+  <div className="flex gap-2">
+    <input
+      className="flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm transition outline-none focus:border-indigo-400"
+      placeholder={ph}
+      value={val}
+      onChange={e => onChange(e.target.value)}
+      onKeyDown={e => e.key === 'Enter' && onAdd()}
+    />
+    <Button size="sm" onClick={onAdd}>
+      <Plus size={14} />
+      Thêm
+    </Button>
+  </div>
+);
+
 // ─── STEP 3: Skills, Languages, Achievements ──────────────────────────────────
 function StepSkills({
   draft,
@@ -399,39 +436,6 @@ function StepSkills({
       ...d,
       achievements: d.achievements.map(a => (a.id === id ? { ...a, highlight: !a.highlight } : a)),
     }));
-  const Chip = ({ label, onRm, cls }: { label: string; onRm: () => void; cls: string }) => (
-    <span className={`flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium ${cls}`}>
-      {label}
-      <button onClick={onRm} className="ml-0.5 transition hover:text-red-500">
-        <X size={11} />
-      </button>
-    </span>
-  );
-  const Row = ({
-    val,
-    onChange,
-    onAdd,
-    ph,
-  }: {
-    val: string;
-    onChange: (v: string) => void;
-    onAdd: () => void;
-    ph: string;
-  }) => (
-    <div className="flex gap-2">
-      <input
-        className="flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm transition outline-none focus:border-indigo-400"
-        placeholder={ph}
-        value={val}
-        onChange={e => onChange(e.target.value)}
-        onKeyDown={e => e.key === 'Enter' && onAdd()}
-      />
-      <Button size="sm" onClick={onAdd}>
-        <Plus size={14} />
-        Thêm
-      </Button>
-    </div>
-  );
   return (
     <div className="space-y-6">
       <h2 className="text-lg font-bold text-slate-900">Kỹ năng, Ngoại ngữ &amp; Thành tựu</h2>

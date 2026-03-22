@@ -49,24 +49,19 @@ export function MarketingHeader() {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const [isDark, setIsDark] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return (
-        document.documentElement.classList.contains('dark') ||
-        localStorage.getItem('theme') === 'dark'
-      );
-    }
-    return false;
+    if (typeof window === 'undefined') return false;
+    const theme = localStorage.getItem('theme');
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    return theme === 'dark' || (!theme && systemDark);
   });
 
   useEffect(() => {
     const theme = localStorage.getItem('theme');
-    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    if (theme === 'dark' || (!theme && systemDark)) {
+    if (!theme) return;
+    if (theme === 'dark') {
       document.documentElement.classList.add('dark');
-      setIsDark(true);
     } else {
       document.documentElement.classList.remove('dark');
-      setIsDark(false);
     }
   }, []);
 

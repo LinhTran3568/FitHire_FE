@@ -1,7 +1,7 @@
 import { Badge, Button, SectionTitle, SurfaceCard } from '@components/ui';
+import { Users, Filter, TrendingUp, ArrowRight } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Users, Filter, TrendingUp, ArrowRight } from 'lucide-react';
 
 const candidates = [
   { id: 'minh-nguyen', name: 'Minh Nguyen', cvScore: 81, interviewScore: 84, cultureFit: 88 },

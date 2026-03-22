@@ -116,7 +116,7 @@ export default function JobsPage() {
   ]);
 
   const filteredJobs = useMemo(() => {
-    let jobs = mockJobs.filter(job => {
+    const jobs = mockJobs.filter(job => {
       if (debouncedKeyword) {
         const haystack = [job.title, job.company, job.summary, ...job.skills]
           .join(' ')
