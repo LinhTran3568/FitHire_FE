@@ -2,10 +2,8 @@ import { cn } from '@lib/utils';
 
 type BadgeVariant = 'default' | 'success' | 'warning' | 'danger' | 'info' | 'primary';
 
-interface BadgeProps {
+interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   variant?: BadgeVariant;
-  children: React.ReactNode;
-  className?: string;
 }
 
 const variantStyles: Record<BadgeVariant, string> = {
@@ -23,7 +21,7 @@ const variantStyles: Record<BadgeVariant, string> = {
     'bg-[var(--color-info-light)] text-[var(--color-info)] border border-[var(--color-info)]/20',
 };
 
-export function Badge({ variant = 'default', children, className }: BadgeProps) {
+export function Badge({ variant = 'default', children, className, ...props }: BadgeProps) {
   return (
     <span
       className={cn(
@@ -32,6 +30,7 @@ export function Badge({ variant = 'default', children, className }: BadgeProps) 
         variantStyles[variant],
         className,
       )}
+      {...props}
     >
       {children}
     </span>

@@ -7,6 +7,7 @@ import { ProtectedRoute, PublicOnlyRoute } from './AuthGuards';
 
 const HomePage = lazy(() => import('@pages/HomePage'));
 const CvOptimizerPage = lazy(() => import('@pages/CvOptimizerPage'));
+const CvScoringPage = lazy(() => import('@pages/CvScoringPage'));
 const InterviewPage = lazy(() => import('@pages/InterviewPage'));
 const CultureTestLibraryPage = lazy(() => import('@pages/culture/CultureTestLibraryPage'));
 const CultureQuizPage = lazy(() => import('@pages/culture/CultureQuizPage'));
@@ -56,6 +57,7 @@ const router = createBrowserRouter(
             { path: 'dashboard', element: <DashboardPage /> },
             { path: 'profile', element: <ProfilePage /> },
             { path: 'cv-builder', element: <CvOptimizerPage /> },
+            { path: 'cv-scoring', element: <CvScoringPage /> },
             { path: 'my-cv', element: <MyCvPage /> },
             { path: 'jobs', element: <JobsPage /> },
             { path: 'jobs/:jobId', element: <JobDetailPage /> },

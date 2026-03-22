@@ -1,25 +1,10 @@
-import { Button } from '@components/ui';
+import { Button, SurfaceCard, Badge } from '@components/ui';
 import {
-  AlertCircle,
-  ArrowRight,
-  Brain,
-  CheckCircle,
-  ChevronRight,
-  Lightbulb,
-  Mic,
-  MicOff,
-  Play,
-  RefreshCw,
-  SkipForward,
-  Speaker,
-  Star,
-  TrendingUp,
-  User,
-  Volume2,
-  X,
-  Zap,
+  ArrowRight, Brain, CheckCircle, Lightbulb,
+  Mic, RefreshCw, SkipForward, Speaker, Star, TrendingUp,
+  User, Volume2, Zap, Sparkles, Clock
 } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 type Phase = 'setup' | 'interview' | 'analytics';
@@ -69,7 +54,6 @@ const QUESTIONS: Record<InterviewMode, string[]> = {
 };
 
 const STAR_REMINDER = 'Cấu trúc STAR: Situation → Task → Action → Result';
-
 const RADAR_AXES = ['Giọng & Tự tin', 'Chuyên môn', 'Ứng biến', 'Cấu trúc', 'Fit văn hoá'];
 
 // ─── Sub-components ─────────────────────────────────────────────────────────
@@ -116,27 +100,23 @@ function RadarChart({ scores }: { scores: number[] }) {
     pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ') + ' Z';
 
   return (
-    <svg viewBox="0 0 240 240" className="w-full max-w-[220px] mx-auto">
+    <svg viewBox="0 0 240 240" className="w-full max-w-[220px] mx-auto filter drop-shadow-sm">
       {/* Grid rings */}
       {[25, 50, 75, 100].map(pct => {
         const pts = axes.map((_, i) => getPoint(pct, i));
         return <path key={pct} d={toPath(pts)} fill="none" stroke="var(--color-border)" strokeWidth={1} />;
       })}
-      {/* Axis lines */}
       {outerPoints.map((p, i) => (
         <line key={i} x1={cx} y1={cy} x2={p.x} y2={p.y} stroke="var(--color-border)" strokeWidth={1} />
       ))}
-      {/* Score fill */}
-      <path d={toPath(scorePoints)} fill="var(--color-primary)" fillOpacity={0.2} stroke="var(--color-primary)" strokeWidth={2} />
-      {/* Score dots */}
+      <path d={toPath(scorePoints)} fill="var(--color-primary-muted)" fillOpacity={0.6} stroke="var(--color-primary)" strokeWidth={2} />
       {scorePoints.map((p, i) => (
-        <circle key={i} cx={p.x} cy={p.y} r={4} fill="var(--color-primary)" />
+        <circle key={i} cx={p.x} cy={p.y} r={4.5} fill="var(--color-surface)" stroke="var(--color-primary)" strokeWidth={2} className="drop-shadow-sm" />
       ))}
-      {/* Axis labels */}
-      {outerPoints.map((p, i) => {
+      {outerPoints.map((_, i) => {
         const angle = i * angleStep - Math.PI / 2;
-        const lx = cx + (r + 22) * Math.cos(angle);
-        const ly = cy + (r + 22) * Math.sin(angle);
+        const lx = cx + (r + 25) * Math.cos(angle);
+        const ly = cy + (r + 25) * Math.sin(angle);
         return (
           <text
             key={i}
@@ -144,7 +124,8 @@ function RadarChart({ scores }: { scores: number[] }) {
             y={ly}
             textAnchor="middle"
             dominantBaseline="middle"
-            fontSize={8}
+            fontSize={9}
+            fontWeight={600}
             fill="var(--color-text-muted)"
           >
             {axes[i]}
@@ -159,29 +140,28 @@ function PacingMeter({ wpm }: { wpm: number }) {
   const pct = Math.min((wpm / 200) * 100, 100);
   const isFast = wpm > 180;
   const isGood = wpm >= 115 && wpm <= 180;
-  const color = isFast ? '#ef4444' : isGood ? '#10b981' : '#f59e0b';
+  
+  const color = isFast ? 'var(--color-danger)' : isGood ? 'var(--color-success)' : 'var(--color-warning)';
   const label = isFast ? 'QUÁ NHANH' : isGood ? 'TỐT' : wpm === 0 ? '—' : 'THỬ NÓI';
 
   return (
-    <div className="space-y-1.5">
+    <div className="space-y-2">
       <div className="flex items-center justify-between text-xs">
-        <span style={{ color: 'var(--color-text-muted)' }}>Nhịp nói (WPM)</span>
-        <span className="font-bold" style={{ color }}>{wpm > 0 ? wpm : '—'}</span>
+        <span style={{ color: 'var(--color-text-muted)' }} className="font-medium">Nhịp độ (WPM)</span>
+        <span className="font-bold rounded-full px-2 py-0.5 border" style={{ color: 'var(--color-text)', borderColor: 'var(--color-border)' }}>
+          {wpm > 0 ? wpm : '—'}
+        </span>
       </div>
-      <div className="h-3 rounded-full overflow-hidden" style={{ background: 'var(--color-border-strong)' }}>
+      <div className="h-2 rounded-full overflow-hidden" style={{ background: 'var(--color-border)' }}>
         <div
-          className="h-full rounded-full transition-all duration-500"
-          style={{
-            width: `${pct}%`,
-            background: `linear-gradient(90deg, #10b981 60%, #f59e0b 80%, #ef4444 100%)`,
-            filter: isFast ? 'brightness(1.2)' : 'none',
-          }}
+          className="h-full rounded-full transition-all duration-300 relative"
+          style={{ width: `${pct}%`, background: color }}
         />
       </div>
-      <div className="flex justify-between text-[10px]" style={{ color: 'var(--color-text-subtle)' }}>
+      <div className="flex justify-between text-[10px] font-medium" style={{ color: 'var(--color-text-subtle)' }}>
         <span>Chậm</span>
-        <span className="font-semibold" style={{ color }}>{label}</span>
-        <span>Quá nhanh</span>
+        <span className="font-bold uppercase tracking-wider" style={{ color }}>{label}</span>
+        <span>Nhanh</span>
       </div>
     </div>
   );
@@ -189,25 +169,29 @@ function PacingMeter({ wpm }: { wpm: number }) {
 
 function FillerTracker({ counts }: { counts: LiveMetrics['fillerCount'] }) {
   const items = [
-    { label: '"À..."', count: counts.a, color: '#f59e0b' },
-    { label: '"Ừm..."', count: counts.um, color: '#8b5cf6' },
-    { label: '"Ờ..."', count: counts.er, color: '#ef4444' },
+    { label: '"À..."', count: counts.a, bg: 'var(--color-warning-light)', color: 'var(--color-warning)' },
+    { label: '"Ừm..."', count: counts.um, bg: 'var(--color-info-light)', color: 'var(--color-info)' },
+    { label: '"Ờ..."', count: counts.er, bg: 'var(--color-danger-light)', color: 'var(--color-danger)' },
   ];
   return (
-    <div className="space-y-1.5">
-      <p className="text-xs font-semibold" style={{ color: 'var(--color-text-muted)' }}>
+    <div className="space-y-2">
+      <p className="text-xs font-medium" style={{ color: 'var(--color-text-muted)' }}>
         Từ thừa (Filler)
       </p>
-      <div className="flex gap-3">
-        {items.map(item => (
-          <div key={item.label} className="flex flex-col items-center gap-0.5">
-            <div
-              className="flex h-8 w-8 items-center justify-center rounded-xl text-xs font-black text-white"
-              style={{ background: item.count > 0 ? item.color : 'var(--color-border-strong)' }}
-            >
-              {item.count}
-            </div>
-            <span className="text-[10px]" style={{ color: 'var(--color-text-subtle)' }}>{item.label}</span>
+      <div className="flex items-center gap-2">
+        {items.map(it => (
+          <div
+            key={it.label}
+            className="flex-1 flex flex-col items-center justify-center py-2 rounded-lg border transition-all"
+            style={{ 
+              borderColor: it.count > 0 ? it.color : 'var(--color-border)', 
+              background: it.count > 0 ? it.bg : 'var(--color-surface)',
+            }}
+          >
+            <span className="text-xs font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>{it.label}</span>
+            <span className="font-bold text-sm" style={{ color: it.count > 0 ? it.color : 'var(--color-text-muted)' }}>
+              {it.count}
+            </span>
           </div>
         ))}
       </div>
@@ -215,679 +199,517 @@ function FillerTracker({ counts }: { counts: LiveMetrics['fillerCount'] }) {
   );
 }
 
-// ─── Device Check Modal ──────────────────────────────────────────────────────
-function DeviceCheckModal({ onClose }: { onClose: () => void }) {
-  const [micOk, setMicOk] = useState(false);
-  const [speakerOk, setSpeakerOk] = useState(false);
+// ─── Setup Phase ─────────────────────────────────────────────────────────────
+function SetupPhase({ onStart }: { onStart: (cvFile: File | null, mode: InterviewMode, deviceReady: boolean) => void }) {
+  const [file, setFile] = useState<File | null>(null);
+  const [mode, setMode] = useState<InterviewMode>('standard');
+  const [deviceReady, setDeviceReady] = useState(false);
+  const [isChecking, setIsChecking] = useState(false);
 
+  const requestPermissions = async () => {
+    setIsChecking(true);
+    try {
+      await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+      setTimeout(() => {
+        setDeviceReady(true);
+        setIsChecking(false);
+      }, 800);
+    } catch (e) {
+      alert('Vui lòng cấp quyền truy cập Mic và Camera để tiếp tục.');
+      setIsChecking(false);
+    }
+  };
+
+  return (
+    <div className="mx-auto max-w-3xl space-y-8 animate-in fade-in duration-500 pb-10">
+      
+      {/* Premium Minimal Hero */}
+      <SurfaceCard className="relative overflow-hidden !p-10 border-0 text-center shadow-lg" style={{ background: 'var(--color-primary-muted)' }}>
+        <div className="relative z-10 flex flex-col items-center">
+          <div className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-bold border mb-5" style={{ background: 'var(--color-surface)', color: 'var(--color-primary)', borderColor: 'var(--color-primary)' }}>
+            <Sparkles size={14} /> AI Interviewer
+          </div>
+          <h1 className="text-3xl md:text-5xl font-black tracking-tight leading-tight mb-4" style={{ color: 'var(--color-primary)' }}>
+             Phỏng vấn giả lập
+          </h1>
+          <p className="text-sm md:text-base font-medium max-w-lg leading-relaxed" style={{ color: 'var(--color-text)' }}>
+             Huấn luyện kỹ năng trả lời phỏng vấn chuyên nghiệp cùng AI.
+             Đánh giá thời gian thực từ ngữ điệu đến cấu trúc câu.
+          </p>
+        </div>
+      </SurfaceCard>
+
+      <div className="grid gap-6 md:grid-cols-2">
+        {/* Upload CV */}
+        <SurfaceCard className="flex flex-col">
+          <div className="mb-4 flex items-center gap-2">
+            <div className="p-2 rounded-lg" style={{ background: 'var(--color-primary-muted)', color: 'var(--color-primary)' }}>
+               <User size={18} />
+            </div>
+            <h3 className="font-bold text-lg" style={{ color: 'var(--color-text)' }}>Hồ sơ tham khảo</h3>
+          </div>
+          <p className="text-sm leading-relaxed mb-6 flex-1" style={{ color: 'var(--color-text-muted)' }}>
+            Tải lên CV của bạn (PDF) để AI có thể đặt câu hỏi xoáy sâu trúng đích vào dự án thực tế bạn đã làm.
+          </p>
+          <div className="relative border-2 border-dashed rounded-xl p-6 text-center transition-all hover:border-primary cursor-pointer group" style={{ borderColor: 'var(--color-border-strong)', background: 'var(--color-surface)' }}>
+            <input
+              type="file"
+              accept=".pdf"
+              onChange={e => e.target.files && setFile(e.target.files[0])}
+              className="absolute inset-0 z-10 w-full h-full opacity-0 cursor-pointer"
+              title="Upload CV"
+            />
+            {file ? (
+              <div className="flex items-center justify-center gap-2" style={{ color: 'var(--color-success)' }}>
+                <CheckCircle size={18} />
+                <span className="font-semibold text-sm truncate max-w-[200px]">{file.name}</span>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <Brain size={24} style={{ color: 'var(--color-text-subtle)' }} className="mx-auto group-hover:scale-110 transition-transform" />
+                <p className="text-sm font-semibold" style={{ color: 'var(--color-primary)' }}>Nhấp để tải CV (PDF)</p>
+                <p className="text-xs font-medium" style={{ color: 'var(--color-text-subtle)' }}>Hoặc kéo thả vào đây</p>
+              </div>
+            )}
+          </div>
+        </SurfaceCard>
+
+        {/* Cấu hình Phase */}
+        <SurfaceCard className="flex flex-col">
+          <div className="mb-4 flex items-center gap-2">
+            <div className="p-2 rounded-lg" style={{ background: 'var(--color-primary-muted)', color: 'var(--color-primary)' }}>
+               <Zap size={18} />
+            </div>
+            <h3 className="font-bold text-lg" style={{ color: 'var(--color-text)' }}>Cường độ phỏng vấn</h3>
+          </div>
+          <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--color-text-muted)' }}>
+            Chọn độ khó của các câu hỏi. Recommended mode: Standard.
+          </p>
+
+          <div className="space-y-3 flex-1 mb-6">
+            {[
+              { id: 'warmup', label: 'Warm-up', desc: 'Hỏi cơ bản, quen nhịp độ' },
+              { id: 'standard', label: 'Standard', desc: 'Có tính chuyên môn + tình huống' },
+              { id: 'stress', label: 'Stress Test', desc: 'Câu hỏi xoáy, áp lực cao' },
+            ].map(m => (
+              <label
+                key={m.id}
+                className="flex items-start gap-4 p-4 rounded-xl border cursor-pointer transition-all"
+                style={{
+                  borderColor: mode === m.id ? 'var(--color-primary)' : 'var(--color-border)',
+                  background: mode === m.id ? 'var(--color-primary-muted)' : 'var(--color-surface)',
+                  boxShadow: mode === m.id ? '0 4px 12px rgba(0,0,0,0.05)' : 'none',
+                }}
+              >
+                <input
+                  type="radio"
+                  name="ivMode"
+                  value={m.id}
+                  checked={mode === m.id}
+                  onChange={() => setMode(m.id as InterviewMode)}
+                  className="mt-1 flex-shrink-0"
+                />
+                <div className="-mt-0.5">
+                  <p className="font-bold text-sm" style={{ color: 'var(--color-text)' }}>{m.label}</p>
+                  <p className="text-xs font-medium mt-1" style={{ color: 'var(--color-text-secondary)' }}>{m.desc}</p>
+                </div>
+              </label>
+            ))}
+          </div>
+        </SurfaceCard>
+      </div>
+
+      <SurfaceCard className="mt-8 flex flex-col md:flex-row items-center justify-between gap-6" style={{ background: 'var(--color-surface-raised)' }}>
+        <div className="flex items-center gap-4 w-full md:w-auto">
+          {!deviceReady ? (
+            <Button variant="outline" onClick={requestPermissions} disabled={isChecking} className="flex-1 md:flex-none h-12">
+              <Mic size={18} className="mr-2" />
+              {isChecking ? 'Đang kiểm tra...' : 'Kiểm tra Mic & Camera'}
+            </Button>
+          ) : (
+            <div className="flex items-center gap-2 px-4 py-2.5 rounded-lg border" style={{ borderColor: 'var(--color-success)', background: 'var(--color-success-light)', color: 'var(--color-success)' }}>
+              <CheckCircle size={18} />
+              <span className="font-semibold text-sm">Thiết bị sẵn sàng</span>
+            </div>
+          )}
+        </div>
+        
+        <Button
+          variant="primary"
+          disabled={!deviceReady}
+          onClick={() => onStart(file, mode, deviceReady)}
+          className="w-full md:w-auto h-12 px-8 font-bold text-sm"
+        >
+          Bắt đầu phỏng vấn
+          <ArrowRight size={18} className="ml-2" />
+        </Button>
+      </SurfaceCard>
+    </div>
+  );
+}
+
+// ─── Interview Phase ────────────────────────────────────────────────────────
+function InterviewPhase({ mode, onFinish }: { mode: InterviewMode; onFinish: (results: QuestionResult[]) => void }) {
+  const [qIndex, setQIndex] = useState(0);
+  const [isAiSpeaking, setIsAiSpeaking] = useState(true);
+  const [isRecording, setIsRecording] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState(120);
+
+  const [metrics, setMetrics] = useState<LiveMetrics>({ wpm: 0, fillerCount: { a: 0, um: 0, er: 0 }, starMoments: [] });
+  const [results, setResults] = useState<QuestionResult[]>([]);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const currentQuestions = QUESTIONS[mode];
+  const question = currentQuestions[qIndex];
+
+  // Khởi động Camera AI (chỉ hiển thị mờ, giả lập)
   useEffect(() => {
-    const t1 = setTimeout(() => setMicOk(true), 1200);
-    const t2 = setTimeout(() => setSpeakerOk(true), 2000);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
+    navigator.mediaDevices.getUserMedia({ video: true }).then(s => {
+      if (videoRef.current) videoRef.current.srcObject = s;
+    }).catch(() => {});
   }, []);
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(6px)' }}>
-      <div className="relative w-full max-w-sm rounded-3xl p-6 space-y-5" style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', boxShadow: 'var(--shadow-xl)' }}>
-        <button className="absolute right-4 top-4 rounded-lg p-1 transition hover:opacity-70" onClick={onClose} style={{ color: 'var(--color-text-muted)' }}>
-          <X size={18} />
-        </button>
-        <div>
-          <h3 className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>Kiểm tra thiết bị</h3>
-          <p className="text-sm mt-1" style={{ color: 'var(--color-text-muted)' }}>Đảm bảo mic và loa hoạt động trước khi bắt đầu.</p>
-        </div>
-        <div className="space-y-3">
-          {[
-            { icon: Mic, label: 'Microphone', ok: micOk },
-            { icon: Speaker, label: 'Loa / Headphone', ok: speakerOk },
-          ].map(({ icon: Icon, label, ok }) => (
-            <div key={label} className="flex items-center gap-3 rounded-2xl p-3" style={{ background: 'var(--color-surface-raised)', border: '1px solid var(--color-border)' }}>
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl" style={{ background: ok ? 'rgba(16,185,129,0.15)' : 'var(--color-primary-muted)', color: ok ? '#10b981' : 'var(--color-primary)' }}>
-                <Icon size={17} />
-              </div>
-              <span className="flex-1 text-sm font-medium" style={{ color: 'var(--color-text)' }}>{label}</span>
-              {ok ? (
-                <CheckCircle size={18} className="text-emerald-500" />
-              ) : (
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-t-transparent" style={{ borderColor: 'var(--color-primary)', borderTopColor: 'transparent' }} />
-              )}
-            </div>
-          ))}
-        </div>
-        <Button className="w-full font-bold" variant="primary" onClick={onClose} disabled={!micOk || !speakerOk}>
-          {micOk && speakerOk ? 'Xác nhận & Tiếp tục' : 'Đang kiểm tra...'}
-        </Button>
-      </div>
-    </div>
-  );
-}
-
-// ─── Phase 1: Setup ──────────────────────────────────────────────────────────
-const INTERVIEW_MILESTONES = [
-  { step: 1, label: 'Giới thiệu', desc: 'Tự giới thiệu bản thân & mục tiêu nghề nghiệp', color: '#6366f1', emoji: '👋' },
-  { step: 2, label: 'Kinh nghiệm', desc: 'Kể về dự án và công việc đã làm (STAR method)', color: '#0d9488', emoji: '💼' },
-  { step: 3, label: 'Tình huống', desc: 'Xử lý tình huống thực tế trong công việc', color: '#f59e0b', emoji: '⚡' },
-  { step: 4, label: 'Kỹ năng', desc: 'Chứng minh năng lực chuyên môn phù hợp JD', color: '#0891b2', emoji: '🛠️' },
-  { step: 5, label: 'Thách thức', desc: 'Chia sẻ về thất bại và bài học rút ra', color: '#8b5cf6', emoji: '🔥' },
-  { step: 6, label: 'Tổng kết', desc: 'Câu hỏi kết thúc & kỳ vọng về vị trí ứng tuyển', color: '#10b981', emoji: '🎯' },
-];
-
-function SetupPhase({ onStart }: { onStart: () => void }) {
-  const [hasCV, setHasCV] = useState(false);
-  const [jd, setJd] = useState('');
-  const [showDeviceCheck, setShowDeviceCheck] = useState(false);
-  const [deviceChecked, setDeviceChecked] = useState(false);
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    if (file?.type === 'application/pdf') setHasCV(true);
-  };
-
-  return (
-    <>
-      {showDeviceCheck && (
-        <DeviceCheckModal onClose={() => { setShowDeviceCheck(false); setDeviceChecked(true); }} />
-      )}
-
-      <div className="mx-auto max-w-3xl space-y-6 py-4">
-        {/* Hero */}
-        <div
-          className="relative overflow-hidden rounded-3xl p-7 text-white"
-          style={{ background: 'var(--hero-bg)' }}
-        >
-          <div className="pointer-events-none absolute -top-10 -right-10 h-48 w-48 rounded-full blur-3xl" style={{ background: 'var(--hero-orb-a)', opacity: 0.5 }} />
-          <div className="relative z-10">
-            <div className="flex items-center gap-2 text-sm font-semibold opacity-80 mb-3">
-              <Mic size={15} /> Phỏng vấn giả lập — AI Interview Room
-            </div>
-            <h1 className="text-3xl font-black">Bước vào phòng phỏng vấn AI</h1>
-            <p className="mt-2 text-sm opacity-70 max-w-lg">
-              Upload CV, dán JD, chọn chế độ và bắt đầu. AI sẽ hỏi, lắng nghe, đánh giá nhịp nói và cho phản hồi chi tiết.
-            </p>
-          </div>
-        </div>
-
-        {/* CV + JD row */}
-        <div className="grid gap-4 md:grid-cols-2">
-          {/* CV Drop */}
-          <div>
-            <p className="mb-2 text-sm font-semibold" style={{ color: 'var(--color-text)' }}>CV của bạn (PDF)</p>
-            <div
-              onDragOver={e => e.preventDefault()}
-              onDrop={handleDrop}
-              onClick={() => setHasCV(true)}
-              className="flex flex-col cursor-pointer items-center justify-center gap-3 rounded-2xl border-2 border-dashed p-8 transition-all hover:scale-[1.01]"
-              style={{
-                borderColor: hasCV ? '#10b981' : 'var(--color-border-strong)',
-                background: hasCV ? 'rgba(16,185,129,0.07)' : 'var(--color-surface)',
-              }}
-            >
-              {hasCV ? (
-                <>
-                  <CheckCircle size={32} className="text-emerald-500" />
-                  <p className="text-sm font-semibold text-emerald-600">CV đã tải lên!</p>
-                  <p className="text-xs" style={{ color: 'var(--color-text-subtle)' }}>my_cv_2025.pdf</p>
-                </>
-              ) : (
-                <>
-                  <User size={28} style={{ color: 'var(--color-text-subtle)' }} />
-                  <p className="text-sm font-medium text-center" style={{ color: 'var(--color-text-muted)' }}>
-                    Kéo thả CV (PDF)<br />hoặc <span style={{ color: 'var(--color-primary)' }}>click để chọn file</span>
-                  </p>
-                </>
-              )}
-            </div>
-          </div>
-
-          {/* JD textarea */}
-          <div>
-            <p className="mb-2 text-sm font-semibold" style={{ color: 'var(--color-text)' }}>Mô tả công việc (JD)</p>
-            <textarea
-              rows={6}
-              value={jd}
-              onChange={e => setJd(e.target.value)}
-              placeholder="Dán nội dung Job Description vào đây... AI sẽ tạo câu hỏi phù hợp với JD."
-              className="w-full resize-none rounded-2xl p-4 text-sm outline-none transition"
-              style={{
-                background: 'var(--color-surface)',
-                border: '1px solid var(--color-border)',
-                color: 'var(--color-text)',
-              }}
-            />
-          </div>
-        </div>
-
-        {/* Interview milestones */}
-        <div>
-          <p className="mb-3 text-sm font-semibold" style={{ color: 'var(--color-text)' }}>Hành trình phỏng vấn — 6 mốc</p>
-          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-            {INTERVIEW_MILESTONES.map((m, i) => (
-              <div
-                key={m.step}
-                className="flex items-start gap-3 rounded-2xl p-3"
-                style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}
-              >
-                <div
-                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-xs font-black text-white"
-                  style={{ background: m.color }}
-                >
-                  {m.step}
-                </div>
-                <div className="min-w-0">
-                  <p className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>
-                    {m.emoji} {m.label}
-                  </p>
-                  <p className="mt-0.5 text-xs leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>
-                    {m.desc}
-                  </p>
-                </div>
-                {i < INTERVIEW_MILESTONES.length - 1 && (
-                  <div className="absolute" />
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Actions */}
-        <div className="flex items-center gap-3 flex-wrap">
-          <Button
-            variant="outline"
-            onClick={() => setShowDeviceCheck(true)}
-          >
-            {deviceChecked ? <CheckCircle size={15} className="text-emerald-500" /> : <Volume2 size={15} />}
-            {deviceChecked ? 'Thiết bị OK' : 'Kiểm tra thiết bị'}
-          </Button>
-          <Button
-            variant="primary"
-            className="font-bold px-8"
-            onClick={() => onStart()}
-          >
-            <Play size={15} />
-            Bắt đầu phỏng vấn
-            <ArrowRight size={15} />
-          </Button>
-        </div>
-
-        <p className="text-xs" style={{ color: 'var(--color-text-subtle)' }}>
-          * CV và JD chỉ dùng cho demo — không cần upload thật để bắt đầu luyện tập.
-        </p>
-      </div>
-    </>
-  );
-}
-
-// ─── Phase 2: Interview ───────────────────────────────────────────────────────
-function InterviewPhase({
-  mode,
-  onFinish,
-}: {
-  mode: InterviewMode;
-  onFinish: (results: QuestionResult[]) => void;
-}) {
-  const questions = QUESTIONS[mode];
-  const [qIdx, setQIdx] = useState(0);
-  const [answer, setAnswer] = useState('');
-  const [micOn, setMicOn] = useState(true);
-  const [isAIThinking, setIsAIThinking] = useState(false);
-  const [isAISpeaking, setIsAISpeaking] = useState(true);
-  const [results, setResults] = useState<QuestionResult[]>([]);
-  const [metrics, setMetrics] = useState<LiveMetrics>({ wpm: 0, fillerCount: { a: 0, um: 0, er: 0 }, starMoments: [] });
-  const typingTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  // Simulate AI finishing speaking after mount
+  // Giả lập luồng: AI hỏi -> User trả lời
   useEffect(() => {
-    const t = setTimeout(() => setIsAISpeaking(false), 2500);
-    return () => clearTimeout(t);
-  }, [qIdx]);
+    setIsAiSpeaking(true);
+    setIsRecording(false);
+    
+    const speakTimer = setTimeout(() => {
+      setIsAiSpeaking(false);
+      setIsRecording(true);
+      setTimeRemaining(120);
+      setMetrics({ wpm: 0, fillerCount: { a: 0, um: 0, er: 0 }, starMoments: [] });
+    }, 3000); // 3 giây AI "nói"
 
-  // Simulate live WPM as user types
+    return () => clearTimeout(speakTimer);
+  }, [qIndex]);
+
+  // Đếm ngược & sinh metrics ngẫu nhiên
   useEffect(() => {
-    if (typingTimer.current) clearTimeout(typingTimer.current);
-    if (answer.length > 5) {
-      typingTimer.current = setTimeout(() => {
-        const wordCount = answer.trim().split(/\s+/).length;
-        const simWPM = Math.min(80 + wordCount * 8, 195);
-        const newA = (answer.match(/\bà\b|\bạ\b/gi) || []).length;
-        const newUm = (answer.match(/\bừm\b|\bum\b/gi) || []).length;
-        const newEr = (answer.match(/\bờ\b|\beh\b/gi) || []).length;
-        setMetrics(prev => ({
-          ...prev,
-          wpm: simWPM,
-          fillerCount: { a: newA, um: newUm, er: newEr },
-        }));
-      }, 400);
+    if (!isRecording) return;
+    const timer = setInterval(() => {
+      setTimeRemaining(t => {
+        if (t <= 1) { handleNext(); return 0; }
+        return t - 1;
+      });
+      
+      // Randomize metrics
+      setMetrics(prev => {
+        const diff = Math.floor(Math.random() * 20) - 10;
+        const newWpm = Math.max(0, Math.min(200, (prev.wpm === 0 ? 120 : prev.wpm) + diff));
+        
+        const isFiller = Math.random() > 0.95;
+        const filler = { ...prev.fillerCount };
+        if (isFiller) {
+          const r = Math.random();
+          if (r < 0.3) filler.a++;
+          else if (r < 0.6) filler.um++;
+          else filler.er++;
+        }
+
+        return { ...prev, wpm: newWpm, fillerCount: filler };
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [isRecording]);
+
+  const handleNext = () => {
+    // Lưu kết quả câu vừa rồi
+    const finalScore = Math.floor(Math.random() * 30 + 70);
+    const duration = 120 - timeRemaining;
+    setResults(prev => [
+      ...prev,
+      {
+        question,
+        answer: '...',
+        score: finalScore,
+        duration: duration === 0 ? 120 : duration,
+        wpm: metrics.wpm,
+        isStarMoment: finalScore > 90,
+      },
+    ]);
+
+    if (qIndex < currentQuestions.length - 1) {
+      setQIndex(i => i + 1);
     } else {
-      setMetrics(prev => ({ ...prev, wpm: 0 }));
+      onFinish(results);
     }
-    return () => { if (typingTimer.current) clearTimeout(typingTimer.current); };
-  }, [answer]);
-
-  const handleSubmit = useCallback(() => {
-    if (!answer.trim()) return;
-    const wordCount = answer.trim().split(/\s+/).length;
-    const score = Math.min(40 + wordCount * 2 + (answer.includes('kết quả') ? 15 : 0) + (answer.match(/\d/) ? 10 : 0), 98);
-    const isStarMoment = score > 75;
-
-    const result: QuestionResult = {
-      question: questions[qIdx],
-      answer,
-      score,
-      duration: 30 + Math.round(Math.random() * 60),
-      wpm: metrics.wpm || 130,
-      isStarMoment,
-    };
-
-    const newResults = [...results, result];
-    setResults(newResults);
-    setAnswer('');
-    setMetrics({ wpm: 0, fillerCount: { a: 0, um: 0, er: 0 }, starMoments: [] });
-
-    if (qIdx >= questions.length - 1) {
-      onFinish(newResults);
-      return;
-    }
-
-    setIsAIThinking(true);
-    setTimeout(() => {
-      setIsAIThinking(false);
-      setIsAISpeaking(true);
-      setQIdx(prev => prev + 1);
-    }, 1800);
-  }, [answer, qIdx, questions, results, metrics.wpm, onFinish]);
-
-  const handleSkip = () => {
-    const result: QuestionResult = {
-      question: questions[qIdx],
-      answer: '(Bỏ qua)',
-      score: 0,
-      duration: 0,
-      wpm: 0,
-      isStarMoment: false,
-    };
-    const newResults = [...results, result];
-    setResults(newResults);
-
-    if (qIdx >= questions.length - 1) {
-      onFinish(newResults);
-      return;
-    }
-
-    setIsAIThinking(true);
-    setTimeout(() => {
-      setIsAIThinking(false);
-      setIsAISpeaking(true);
-      setQIdx(prev => prev + 1);
-    }, 1200);
-    setAnswer('');
   };
 
-  const progress = ((qIdx) / questions.length) * 100;
+  const handleEndEarly = () => {
+    onFinish(results);
+  };
+
+  const formatTime = (secs: number) => `${Math.floor(secs / 60)}:${(secs % 60).toString().padStart(2, '0')}`;
 
   return (
-    <div className="space-y-4">
-      <style>{`
-        @keyframes wave-bar {
-          0% { height: 8px; }
-          100% { height: var(--bar-h, 36px); }
-        }
-        @keyframes thinking-pulse {
-          0%, 100% { opacity: 0.4; transform: scale(0.95); }
-          50% { opacity: 1; transform: scale(1.05); }
-        }
-      `}</style>
-
-      {/* Progress bar header */}
-      <div className="rounded-2xl p-4 space-y-2" style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
-        <div className="flex items-center justify-between text-sm">
-          <span className="font-semibold" style={{ color: 'var(--color-text)' }}>
-            Câu {qIdx + 1}/{questions.length} — Phỏng vấn chuẩn</span>
-          <span style={{ color: 'var(--color-text-muted)' }}>{Math.round(progress)}% hoàn thành</span>
+    <div className="flex flex-col lg:flex-row gap-6 h-[80vh] min-h-[600px] animate-in slide-in-from-bottom-8 duration-700">
+      
+      {/* Cột trái: AI & Video */}
+      <SurfaceCard className="flex-1 flex flex-col items-center justify-center relative overflow-hidden p-0 border-0">
+        
+        {/* Lớp nền tối cho Video */}
+        <div className="absolute inset-0 bg-black/5 dark:bg-black/40 z-0">
+          <video
+            ref={videoRef}
+            autoPlay
+            muted
+            className="w-full h-full object-cover opacity-20 filter grayscale blur-sm"
+          />
         </div>
-        <div className="flex gap-1">
-          {questions.map((_, i) => (
-            <div
-              key={i}
-              className="h-2 flex-1 rounded-full transition-all duration-500"
-              style={{
-                background: i < qIdx ? 'var(--color-primary)' : i === qIdx ? 'var(--color-primary)' : 'var(--color-border-strong)',
-                opacity: i === qIdx ? 1 : i < qIdx ? 0.7 : 0.3,
-              }}
-            />
-          ))}
-        </div>
-        <p className="text-xs" style={{ color: 'var(--color-text-subtle)' }}>
-          {qIdx === 0 ? 'Giới thiệu' : qIdx === 1 ? 'Kinh nghiệm' : qIdx === 2 ? 'Tình huống' : qIdx === 3 ? 'Kỹ năng' : qIdx === 4 ? 'Thách thức' : 'Tổng kết'}
-        </p>
-      </div>
 
-      {/* Main 70/30 split */}
-      <div className="grid gap-4 lg:grid-cols-[1fr_300px]">
-        {/* LEFT – Focus Area */}
-        <div className="space-y-4">
-          {/* AI Avatar Panel */}
-          <div
-            className="rounded-3xl p-6 space-y-5"
-            style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', boxShadow: 'var(--shadow-sm)' }}
-          >
-            {/* AI Avatar header */}
-            <div className="flex items-center gap-3">
-              <div className="relative flex h-12 w-12 items-center justify-center rounded-2xl" style={{ background: 'linear-gradient(135deg, var(--color-primary), #6366f1)' }}>
-                <Brain size={22} className="text-white" />
-                {isAISpeaking && (
-                  <span className="absolute -right-1 -top-1 h-3 w-3 rounded-full bg-emerald-500 ring-2 ring-white animate-pulse" />
-                )}
-              </div>
-              <div>
-                <p className="font-bold text-sm" style={{ color: 'var(--color-text)' }}>FitHire AI Interviewer</p>
-                <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-                  {isAIThinking ? '🧠 Đang suy nghĩ...' : isAISpeaking ? '🎙 Đang hỏi...' : '👂 Đang lắng nghe'}
-                </p>
-              </div>
-              <div className="ml-auto">
-                {isAIThinking ? (
-                  <div className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold" style={{ background: 'var(--color-primary-muted)', color: 'var(--color-primary)' }}>
-                    <div className="h-2 w-2 rounded-full" style={{ background: 'var(--color-primary)', animation: 'thinking-pulse 1s ease-in-out infinite' }} />
-                    Đang xử lý
-                  </div>
+        {/* Bảng điều khiển đỉnh */}
+        <div className="absolute top-6 left-6 right-6 flex items-center justify-between z-10">
+          <Badge variant="default" className="font-bold border-0 bg-black/40 text-white backdrop-blur-md">
+            Hồi đáp: Câu {qIndex + 1}/{currentQuestions.length}
+          </Badge>
+          <div className="flex items-center gap-2">
+             <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+             <span className="text-xs font-bold text-white uppercase tracking-widest drop-shadow-md">Recording</span>
+          </div>
+        </div>
+
+        {/* AI Avatar Vùng giữa */}
+        <div className="relative z-10 flex flex-col items-center mt-10">
+            <div className="relative">
+              <div className="absolute inset-0 rounded-full animate-ping opacity-20" style={{ background: 'var(--color-primary)' }} />
+              <div className="relative w-32 h-32 rounded-full flex items-center justify-center shadow-2xl border-4" 
+                style={{ background: 'var(--color-primary-muted)', borderColor: 'var(--color-surface)' }}>
+                {isAiSpeaking ? (
+                  <Speaker size={48} style={{ color: 'var(--color-primary)' }} className="animate-pulse" />
                 ) : (
-                  <div className="rounded-xl px-3 py-1.5 text-xs font-semibold" style={{ background: 'rgba(16,185,129,0.12)', color: '#10b981' }}>
-                    LIVE
-                  </div>
+                  <User size={48} style={{ color: 'var(--color-primary)' }} />
                 )}
               </div>
             </div>
+          
+          <div className="mt-8 text-center px-6 max-w-lg">
+            <h2 className="text-lg md:text-xl font-bold leading-relaxed" style={{ color: 'var(--color-text)' }}>
+              "{question}"
+            </h2>
+            <div className="mt-4 flex justify-center">
+              <AISoundWave active={isAiSpeaking} />
+            </div>
+          </div>
+        </div>
 
-            {/* Sound wave */}
-            <AISoundWave active={isAISpeaking || isAIThinking} />
+        {/* Bảng điều khiển đáy */}
+        <div className="absolute bottom-6 left-6 right-6 z-10">
+          <div className="w-full h-2 rounded-full overflow-hidden bg-black/20 backdrop-blur-md">
+            <div
+              className={`h-full transition-all duration-1000 ${timeRemaining < 30 ? 'bg-red-500' : 'bg-green-500'}`}
+              style={{ width: `${(timeRemaining / 120) * 100}%` }}
+            />
+          </div>
+          <div className="flex justify-between items-center mt-3 px-2">
+            <span className="font-bold text-white drop-shadow-md">{formatTime(timeRemaining)}</span>
+            <span className="text-xs font-semibold text-white/80 uppercase tracking-widest">Thời gian còn lại</span>
+          </div>
+        </div>
 
-            {/* Current question subtitle */}
-            <div className="rounded-2xl p-4" style={{ background: 'var(--color-surface-raised)', border: '1px solid var(--color-border)' }}>
-              <p className="text-xs font-semibold mb-2" style={{ color: 'var(--color-primary)' }}>CÂU HỎI HIỆN TẠI</p>
-              <p className="text-sm leading-relaxed font-medium" style={{ color: 'var(--color-text)' }}>
-                {questions[qIdx]}
+      </SurfaceCard>
+
+      {/* Cột phải: Live Coaching & Actions */}
+      <div className="lg:w-80 flex flex-col gap-4 z-10">
+        
+        {/* Live Metrics */}
+        <SurfaceCard className="p-5 flex-1 shadow-md border" style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface)' }}>
+          <div className="mb-4 flex items-center gap-2">
+            <TrendingUp size={16} style={{ color: 'var(--color-primary)' }} />
+            <h3 className="font-bold text-sm" style={{ color: 'var(--color-text)' }}>Live Coaching Panel</h3>
+          </div>
+
+          <div className="space-y-6">
+            <PacingMeter wpm={metrics.wpm} />
+            <div className="border-t pb-2" style={{ borderColor: 'var(--color-border)' }} />
+            <FillerTracker counts={metrics.fillerCount} />
+
+            <div className="mt-6 p-4 rounded-xl border" style={{ background: 'var(--color-info-light)', borderColor: 'var(--color-info)' }}>
+              <p className="text-xs font-bold uppercase tracking-widest flex items-center gap-1.5 mb-2" style={{ color: 'var(--color-info)' }}>
+                <Lightbulb size={12} /> Nhắc bài
+              </p>
+              <p className="text-sm font-medium leading-relaxed" style={{ color: 'var(--color-text)' }}>
+                {STAR_REMINDER}
               </p>
             </div>
-
-            {/* STAR reminder */}
-            <div className="flex items-start gap-2 rounded-xl px-3 py-2" style={{ background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.2)' }}>
-              <Lightbulb size={14} className="mt-0.5 shrink-0" style={{ color: '#f59e0b' }} />
-              <p className="text-xs" style={{ color: '#b45309' }}>{STAR_REMINDER}</p>
-            </div>
           </div>
+        </SurfaceCard>
 
-          {/* Answer box */}
-          <div className="rounded-2xl p-4 space-y-3" style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
-            <div className="flex items-center gap-2">
-              <div className="flex h-6 w-6 items-center justify-center rounded-lg" style={{ background: 'var(--color-primary-muted)', color: 'var(--color-primary)' }}>
-                <User size={13} />
-              </div>
-              <p className="text-xs font-semibold" style={{ color: 'var(--color-text-muted)' }}>CÂU TRẢ LỜI CỦA BẠN</p>
-              <div className="ml-auto flex items-center gap-1.5">
-                <button
-                  onClick={() => setMicOn(o => !o)}
-                  className="flex h-7 w-7 items-center justify-center rounded-lg transition hover:opacity-80"
-                  style={{ background: micOn ? 'rgba(16,185,129,0.15)' : 'var(--color-border-strong)', color: micOn ? '#10b981' : 'var(--color-text-muted)' }}
-                >
-                  {micOn ? <Mic size={13} /> : <MicOff size={13} />}
-                </button>
-                <span className="text-xs" style={{ color: 'var(--color-text-subtle)' }}>
-                  {micOn ? 'Mic bật' : 'Mic tắt'}
-                </span>
-              </div>
-            </div>
-            <textarea
-              rows={4}
-              value={answer}
-              onChange={e => setAnswer(e.target.value)}
-              placeholder="Nhập câu trả lời của bạn, hoặc bật mic để nói trực tiếp..."
-              className="w-full resize-none bg-transparent text-sm outline-none"
-              style={{ color: 'var(--color-text)' }}
-            />
-            <div className="flex items-center justify-between gap-2">
-              <button
-                onClick={handleSkip}
-                className="flex items-center gap-1.5 text-xs font-medium transition hover:opacity-70"
-                style={{ color: 'var(--color-text-muted)' }}
-              >
-                <SkipForward size={13} />
-                Bỏ qua câu này
-              </button>
-              <div className="flex items-center gap-2">
-                <span className="text-xs" style={{ color: 'var(--color-text-subtle)' }}>
-                  {answer.trim().split(/\s+/).filter(Boolean).length} từ
-                </span>
-                <Button size="sm" variant="primary" onClick={handleSubmit} disabled={!answer.trim() || isAIThinking}>
-                  <ChevronRight size={14} />
-                  {qIdx >= questions.length - 1 ? 'Kết thúc' : 'Câu tiếp theo'}
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
+        {/* Action Controls */}
+        <SurfaceCard className="p-4 flex flex-col gap-3 shadow-sm border" style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface)' }}>
+          <Button
+            onClick={handleNext}
+            disabled={isAiSpeaking}
+            variant="primary"
+            className="w-full h-12 font-bold justify-center"
+          >
+            {qIndex < currentQuestions.length - 1 ? 'Chuyển câu tiếp theo' : 'Hoàn tất & Chấm điểm'}
+            <SkipForward size={16} className="ml-2" />
+          </Button>
 
-        {/* RIGHT – Live Coach Panel */}
-        <div className="space-y-4">
-          {/* Pacing */}
-          <div className="rounded-2xl p-4 space-y-4" style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
-            <p className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--color-text-muted)' }}>
-              Live Coach
-            </p>
-            <PacingMeter wpm={metrics.wpm} />
-            <div className="h-px" style={{ background: 'var(--color-border)' }} />
-            <FillerTracker counts={metrics.fillerCount} />
-          </div>
-
-          {/* AI Hint */}
-          <div className="rounded-2xl p-4 space-y-3" style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
-            <p className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--color-text-muted)' }}>Gợi ý AI</p>
-            <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
-              Hãy bắt đầu bằng <strong>bối cảnh</strong> (Situation), sau đó nêu rõ nhiệm vụ của bạn (Task), hành động cụ thể (Action) và kết quả đo lường được (Result).
-            </p>
-            <Button variant="outline" size="sm" className="w-full">
-              <Lightbulb size={13} />
-              Gợi ý thêm
-            </Button>
-          </div>
-
-          {/* Session stats */}
-          <div className="rounded-2xl p-4 space-y-2" style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
-            <p className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--color-text-muted)' }}>Tiến độ</p>
-            {results.map((r, i) => (
-              <div key={i} className="flex items-center gap-2">
-                <div className="h-2 w-2 rounded-full" style={{ background: r.isStarMoment ? '#f59e0b' : r.score > 50 ? '#10b981' : '#94a3b8' }} />
-                <span className="text-xs flex-1" style={{ color: 'var(--color-text-muted)' }}>Câu {i + 1}</span>
-                <span className="text-xs font-bold" style={{ color: r.score > 70 ? '#10b981' : r.score > 50 ? '#f59e0b' : '#ef4444' }}>
-                  {r.score > 0 ? `${r.score}/100` : '—'}
-                </span>
-                {r.isStarMoment && <Star size={11} className="text-amber-400" />}
-              </div>
-            ))}
-          </div>
-        </div>
+          <Button
+            onClick={handleEndEarly}
+            disabled={isAiSpeaking}
+            variant="outline"
+            className="w-full h-10 font-semibold justify-center text-xs border-0"
+            style={{ color: 'var(--color-danger)' }}
+          >
+            Kết thúc sớm
+          </Button>
+        </SurfaceCard>
       </div>
+
     </div>
   );
 }
 
-// ─── Phase 3: Analytics ───────────────────────────────────────────────────────
-function AnalyticsPhase({ results, mode, onRestart }: { results: QuestionResult[]; mode: InterviewMode; onRestart: () => void }) {
-  const avg = Math.round(results.reduce((s, r) => s + r.score, 0) / Math.max(results.length, 1));
-  const radarScores = [
-    Math.min(avg + 5, 98),
-    Math.min(avg - 8, 90),
-    Math.min(avg + 12, 98),
-    Math.min(avg - 3, 95),
-    Math.min(avg + 7, 98),
-  ];
+// ─── Analytics Phase ────────────────────────────────────────────────────────
+function AnalyticsPhase({ results, mode, onRetry }: { results: QuestionResult[]; mode: InterviewMode; onRetry: () => void }) {
+  const avgScore = Math.round(results.reduce((acc, curr) => acc + curr.score, 0) / (results.length || 1));
+  const totalDuration = results.reduce((acc, curr) => acc + curr.duration, 0);
 
-  const totalTime = results.reduce((s, r) => s + r.duration, 0);
+  const displayRadarScores = [avgScore + 5, avgScore - 5, avgScore + 10, avgScore - 2, avgScore + 8];
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div
-        className="relative overflow-hidden rounded-3xl p-6 text-white"
-        style={{ background: 'var(--hero-bg)' }}
-      >
-        <div className="pointer-events-none absolute -top-10 -right-10 h-40 w-40 rounded-full blur-3xl" style={{ background: 'var(--hero-orb-a)', opacity: 0.4 }} />
-        <div className="relative z-10 flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <p className="text-sm opacity-70 mb-1">Phân tích kết quả</p>
-            <h1 className="text-2xl font-black">Phỏng vấn hoàn thành! 🎉</h1>
-            <p className="mt-1 text-sm opacity-60">
-              {results.length} câu · {Math.floor(totalTime / 60)}p {totalTime % 60}s
-            </p>
-          </div>
-          <div className="flex gap-3">
-            <div className="text-center rounded-2xl px-5 py-3" style={{ background: 'rgba(255,255,255,0.12)' }}>
-              <p className="text-3xl font-black">{avg}</p>
-              <p className="text-xs opacity-60 mt-0.5">Điểm TB</p>
+    <div className="space-y-6 lg:space-y-8 animate-in slide-in-from-bottom-8 duration-700 pb-10">
+      
+      {/* Title block */}
+      <SurfaceCard className="!p-8 text-center" style={{ background: 'var(--color-primary-muted)', border: 0 }}>
+        <p className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold mb-4 uppercase tracking-widest border" style={{ background: 'var(--color-surface)', color: 'var(--color-primary)', borderColor: 'var(--color-primary)' }}>
+          <CheckCircle size={14} /> Completed
+        </p>
+        <h1 className="text-3xl md:text-5xl font-black mb-3" style={{ color: 'var(--color-text)' }}>Báo cáo Năng lực Phỏng vấn</h1>
+        <p className="text-sm md:text-base font-medium" style={{ color: 'var(--color-text-muted)' }}>
+          Phân tích chi tiết bởi AI dựa trên phần thể hiện thực tế của bạn.
+        </p>
+      </SurfaceCard>
+
+      {/* Main KPIs Row */}
+      <div className="grid gap-4 md:grid-cols-4">
+        {[
+          { icon: Star, label: 'Điểm tổng quát', val: `${avgScore}/100`, color: 'var(--color-success)', bg: 'var(--color-success-light)' },
+          { icon: Brain, label: 'Chế độ thi', val: mode.toUpperCase(), color: 'var(--color-info)', bg: 'var(--color-info-light)' },
+          { icon: Zap, label: 'Khoảnh khắc Toả sáng', val: results.filter(r => r.isStarMoment).length, color: 'var(--color-warning)', bg: 'var(--color-warning-light)' },
+          { icon: Clock, label: 'Tổng thời gian', val: `${Math.floor(totalDuration/60)}p ${totalDuration%60}s`, color: 'var(--color-primary)', bg: 'var(--color-primary-muted)' },
+        ].map(kpi => (
+          <SurfaceCard key={kpi.label} className="flex flex-col items-center justify-center p-6 text-center shadow-sm">
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-3" style={{ background: kpi.bg, color: kpi.color }}>
+               <kpi.icon size={22} />
             </div>
-            <div className="text-center rounded-2xl px-5 py-3" style={{ background: 'rgba(255,255,255,0.12)' }}>
-              <p className="text-3xl font-black">{results.filter(r => r.isStarMoment).length}</p>
-              <p className="text-xs opacity-60 mt-0.5">⭐ Star</p>
-            </div>
-          </div>
-        </div>
+            <p className="text-2xl font-black mb-1" style={{ color: 'var(--color-text)', fontFamily: 'Outfit, sans-serif' }}>{kpi.val}</p>
+            <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: 'var(--color-text-muted)' }}>{kpi.label}</p>
+          </SurfaceCard>
+        ))}
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-[260px_1fr]">
-        {/* Radar chart */}
-        <div className="space-y-4">
-          <div className="rounded-3xl p-5 space-y-3" style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
-            <p className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>Biểu đồ kỹ năng</p>
-            <RadarChart scores={radarScores} />
-            <div className="space-y-1.5">
-              {RADAR_AXES.map((axis, i) => (
-                <div key={axis} className="flex items-center justify-between text-xs">
-                  <span style={{ color: 'var(--color-text-muted)' }}>{axis}</span>
-                  <span className="font-bold" style={{ color: 'var(--color-primary)' }}>{radarScores[i]}</span>
-                </div>
-              ))}
-            </div>
+      <div className="grid gap-6 lg:grid-cols-[1fr_380px]">
+        {/* Detail List */}
+        <SurfaceCard className="flex flex-col">
+          <div className="flex items-center gap-2 mb-6">
+            <Volume2 size={18} style={{ color: 'var(--color-text-muted)' }} />
+            <h3 className="font-bold text-lg" style={{ color: 'var(--color-text)' }}>Phân tích từng câu hỏi</h3>
           </div>
-
-          <Button variant="outline" className="w-full" onClick={onRestart}>
-            <RefreshCw size={14} />
-            Luyện tập lại
-          </Button>
-        </div>
-
-        {/* Timeline + per-answer */}
-        <div className="space-y-5">
-          {/* Timeline */}
-          <div className="rounded-3xl p-5 space-y-3" style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
-            <div className="flex items-center gap-2">
-              <TrendingUp size={16} style={{ color: 'var(--color-primary)' }} />
-              <p className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>Timeline phỏng vấn</p>
-            </div>
-            <div className="flex h-10 gap-1 items-end">
-              {results.map((r, i) => {
-                const isFast = r.wpm > 180;
-                return (
-                  <div
-                    key={i}
-                    className="flex-1 rounded-t-lg relative group cursor-pointer"
-                    style={{
-                      height: `${30 + r.score * 0.4}px`,
-                      background: isFast ? '#ef4444' : r.isStarMoment ? '#f59e0b' : r.score > 60 ? 'var(--color-primary)' : '#94a3b8',
-                    }}
-                    title={`Câu ${i + 1}: ${r.score} điểm`}
-                  >
-                    {r.isStarMoment && (
-                      <Star size={10} className="absolute -top-4 left-1/2 -translate-x-1/2 text-amber-500" />
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-            <div className="flex gap-3 text-xs flex-wrap" style={{ color: 'var(--color-text-muted)' }}>
-              <span className="flex items-center gap-1"><span className="h-2 w-3 rounded bg-red-400 inline-block" /> Nói nhanh</span>
-              <span className="flex items-center gap-1"><span className="h-2 w-3 rounded bg-amber-400 inline-block" /> ⭐ Xuất sắc</span>
-              <span className="flex items-center gap-1"><span className="h-2 w-3 rounded inline-block" style={{ background: 'var(--color-primary)' }} /> Tốt</span>
-              <span className="flex items-center gap-1"><span className="h-2 w-3 rounded bg-slate-400 inline-block" /> Cần cải thiện</span>
-            </div>
-          </div>
-
-          {/* Per-answer cards */}
-          <div className="space-y-3">
+          
+          <div className="space-y-4">
             {results.map((r, i) => (
-              <div
-                key={i}
-                className="rounded-2xl p-4 space-y-2"
-                style={{ background: 'var(--color-surface)', border: `1px solid ${r.isStarMoment ? 'rgba(245,158,11,0.4)' : 'var(--color-border)'}` }}
-              >
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold rounded-lg px-2 py-0.5" style={{ background: 'var(--color-primary-muted)', color: 'var(--color-primary)' }}>
-                      Câu {i + 1}
-                    </span>
-                    {r.isStarMoment && <span className="text-xs">⭐ Xuất sắc</span>}
-                  </div>
-                  <span className="text-sm font-black" style={{ color: r.score > 75 ? '#10b981' : r.score > 50 ? '#f59e0b' : '#ef4444' }}>
-                    {r.score > 0 ? `${r.score}/100` : 'Bỏ qua'}
-                  </span>
+              <div key={i} className="p-5 rounded-2xl border transition-all hover:border-primary" style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border)' }}>
+                <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center mb-3">
+                  <h4 className="font-bold text-sm leading-relaxed max-w-lg" style={{ color: 'var(--color-text)' }}>
+                    {i + 1}. {r.question}
+                  </h4>
+                  <Badge variant="default" className="font-bold shrink-0" style={{ borderColor: 'var(--color-border-strong)' }}>
+                    Điểm: {r.score}/100
+                  </Badge>
                 </div>
-                <p className="text-xs font-medium" style={{ color: 'var(--color-text-muted)' }}>{r.question}</p>
-                {r.answer !== '(Bỏ qua)' && (
-                  <p className="text-xs leading-relaxed p-2 rounded-xl" style={{ background: 'var(--color-surface-raised)', color: 'var(--color-text-secondary)' }}>
-                    {r.answer.slice(0, 120)}{r.answer.length > 120 ? '...' : ''}
-                  </p>
-                )}
-                <div className="flex items-center gap-2">
-                  <Button size="sm" variant="outline" className="text-xs gap-1">
-                    <Zap size={11} />
-                    AI Shadowing
-                  </Button>
-                  <span className="text-xs" style={{ color: 'var(--color-text-subtle)' }}>
-                    {r.wpm > 0 ? `${r.wpm} WPM` : ''} {r.duration > 0 ? `· ${r.duration}s` : ''}
-                  </span>
+
+                <div className="flex flex-wrap gap-2 text-xs font-medium" style={{ color: 'var(--color-text-muted)' }}>
+                  <span className="px-2 py-1 rounded-md" style={{ background: 'var(--color-surface-raised)' }}>⏱ {r.duration}s phản xạ</span>
+                  <span className="px-2 py-1 rounded-md" style={{ background: 'var(--color-surface-raised)' }}>🎙 {r.wpm} words/min</span>
+                  {r.isStarMoment && (
+                    <span className="px-2 py-1 rounded-md flex items-center gap-1 font-bold" style={{ background: 'var(--color-warning-light)', color: 'var(--color-warning)' }}>
+                      <Star size={12} fill="currentColor" /> Ấn tượng
+                    </span>
+                  )}
                 </div>
               </div>
             ))}
           </div>
+        </SurfaceCard>
 
-          {/* CTA */}
-          <div className="rounded-2xl p-4 flex items-center gap-4" style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
-            <AlertCircle size={18} style={{ color: 'var(--color-primary)', flexShrink: 0 }} />
-            <div className="flex-1">
-              <p className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>Muốn nâng cao hơn?</p>
-              <p className="text-xs mt-0.5" style={{ color: 'var(--color-text-muted)' }}>Nâng cấp lên Plus/Pro để phỏng vấn thực chiến với GPT-4o và voice AI.</p>
-            </div>
-            <Button size="sm" variant="primary">Xem gói</Button>
-          </div>
+        {/* Right side charts */}
+        <div className="space-y-6">
+          <SurfaceCard className="flex flex-col items-center p-6 text-center">
+             <h3 className="font-bold text-[15px] mb-6 uppercase tracking-widest w-full text-left" style={{ color: 'var(--color-text)' }}>Biểu đồ Năng lực</h3>
+             <div className="w-full relative py-2">
+                <RadarChart scores={displayRadarScores} />
+             </div>
+          </SurfaceCard>
+
+          <SurfaceCard className="p-6">
+            <h3 className="font-bold text-[15px] mb-4 uppercase tracking-widest" style={{ color: 'var(--color-text)' }}>Action Plan</h3>
+            <ul className="space-y-3">
+              {[
+                'Nói mạch lạc hơn ở các câu liên quan quy trình xử lý sự cố.',
+                'Giảm thiểu từ thừa (filler) ở đầu câu trả lời.',
+                'Tốc độ (WPM) hiện tại ổn, giữ nguyên nhịp độ này.'
+              ].map((act, i) => (
+                <li key={i} className="flex gap-3 items-start text-sm font-medium" style={{ color: 'var(--color-text-secondary)' }}>
+                  <div className="shrink-0 w-5 h-5 rounded-full flex items-center justify-center font-bold text-[10px]" style={{ background: 'var(--color-primary-muted)', color: 'var(--color-primary)' }}>
+                    {i+1}
+                  </div>
+                  {act}
+                </li>
+              ))}
+            </ul>
+          </SurfaceCard>
+
+          <Button variant="primary" onClick={onRetry} className="w-full h-14 font-black shadow-md rounded-xl justify-center text-sm gap-2">
+            <RefreshCw size={18} /> Luyện tập lại
+          </Button>
         </div>
       </div>
     </div>
   );
 }
 
-// ─── Main Page ────────────────────────────────────────────────────────────────
+// ─── Main Page ──────────────────────────────────────────────────────────────
 export default function InterviewPage() {
   const [phase, setPhase] = useState<Phase>('setup');
+  const [mode, setMode] = useState<InterviewMode>('standard');
   const [results, setResults] = useState<QuestionResult[]>([]);
 
-  const handleStart = () => {
+  const handleStart = (_file: File | null, selectedMode: InterviewMode) => {
+    setMode(selectedMode);
     setPhase('interview');
   };
 
-  const handleFinish = (res: QuestionResult[]) => {
-    setResults(res);
+  const handleFinish = (finalResults: QuestionResult[]) => {
+    setResults(finalResults);
     setPhase('analytics');
   };
 
-  const handleRestart = () => {
+  const handleRetry = () => {
     setResults([]);
     setPhase('setup');
   };
 
   return (
-    <div className="space-y-0">
+    <div className="mx-auto w-full max-w-[1200px]">
+      {phase !== 'setup' && (
+        <div className="mb-6 flex items-center gap-3 text-sm font-medium" style={{ color: 'var(--color-text-muted)' }}>
+          <button onClick={handleRetry} className="hover:underline transition-all" style={{ color: 'var(--color-primary)' }}>
+            Luyện tập
+          </button>
+          <span className="text-xs">&gt;</span>
+          <span style={{ color: 'var(--color-text)' }} className="font-semibold">
+            {phase === 'interview' ? 'Mock Interview đang diễn ra' : 'Báo cáo chi tiết'}
+          </span>
+        </div>
+      )}
+
       {phase === 'setup' && <SetupPhase onStart={handleStart} />}
-      {phase === 'interview' && <InterviewPhase mode="standard" onFinish={handleFinish} />}
-      {phase === 'analytics' && <AnalyticsPhase results={results} mode="standard" onRestart={handleRestart} />}
+      {phase === 'interview' && <InterviewPhase mode={mode} onFinish={handleFinish} />}
+      {phase === 'analytics' && <AnalyticsPhase results={results} mode={mode} onRetry={handleRetry} />}
     </div>
   );
 }

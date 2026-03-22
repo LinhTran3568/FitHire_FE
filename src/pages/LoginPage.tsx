@@ -1,7 +1,7 @@
 import { Input } from '@components/ui';
 import { useAuthStore } from '@features/auth/store/authStore';
 import type { AuthUser } from '@features/auth/types';
-import { ArrowLeft, BriefcaseBusiness, CheckCircle2, FileText, MicVocal, Sparkles } from 'lucide-react';
+import { ArrowLeft, BriefcaseBusiness, CheckCircle2, FileText, MicVocal, Sparkles, ArrowRight } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
@@ -16,9 +16,9 @@ const mockUser: AuthUser = {
 };
 
 const PERKS = [
-  { icon: FileText, text: 'Tạo CV chuẩn ATS chỉ trong 5 phút' },
-  { icon: BriefcaseBusiness, text: 'Khớp hồ sơ với việc làm thực tế' },
-  { icon: MicVocal, text: 'Luyện phỏng vấn AI mọi lúc mọi nơi' },
+  { icon: FileText, text: 'Tạo CV chuẩn ATS chỉ trong 5 phút', color: '#5eead4' },
+  { icon: BriefcaseBusiness, text: 'Khớp hồ sơ với việc làm thực tế', color: '#93c5fd' },
+  { icon: MicVocal, text: 'Luyện phỏng vấn AI mọi lúc mọi nơi', color: '#c4b5fd' },
 ];
 
 export default function LoginPage() {
@@ -29,6 +29,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState(MOCK_EMAIL);
   const [password, setPassword] = useState(MOCK_PASSWORD);
   const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const redirectTo = (() => {
     const state = location.state as { from?: string } | null;
@@ -36,15 +37,19 @@ export default function LoginPage() {
     return state.from;
   })();
 
-  const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setErrorMessage('');
+    setIsLoading(true);
+
+    await new Promise(r => setTimeout(r, 500));
 
     const isValidCredential =
       email.trim().toLowerCase() === MOCK_EMAIL && password.trim() === MOCK_PASSWORD;
 
     if (!isValidCredential) {
       setErrorMessage('Sai email hoặc mật khẩu. Vui lòng dùng tài khoản demo để đăng nhập.');
+      setIsLoading(false);
       return;
     }
 
@@ -62,65 +67,91 @@ export default function LoginPage() {
         style={{ background: 'var(--hero-bg)' }}
       >
         {/* Orbs */}
-        <div
-          className="pointer-events-none absolute -top-28 -left-28 h-80 w-80 rounded-full blur-3xl"
-          style={{ background: 'var(--hero-orb-a)' }}
-        />
-        <div
-          className="pointer-events-none absolute right-0 bottom-0 h-96 w-96 rounded-full blur-3xl"
-          style={{ background: 'var(--hero-orb-b)' }}
-        />
-        {/* Grid */}
+        <div className="pointer-events-none absolute -top-32 -left-32 h-96 w-96 rounded-full"
+          style={{ background: 'radial-gradient(circle, var(--hero-orb-a) 0%, transparent 70%)' }} />
+        <div className="pointer-events-none absolute right-0 bottom-0 h-80 w-80 rounded-full"
+          style={{ background: 'radial-gradient(circle, var(--hero-orb-b) 0%, transparent 70%)' }} />
+        <div className="pointer-events-none absolute top-1/2 -right-16 h-64 w-64 rounded-full"
+          style={{ background: 'radial-gradient(circle, var(--hero-orb-c) 0%, transparent 70%)' }} />
+
+        {/* Dot grid */}
         <div className="absolute inset-0 opacity-[0.04]" style={{
-          backgroundImage: 'linear-gradient(rgba(255,255,255,.4) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.4) 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
+          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.9) 1px, transparent 1px)',
+          backgroundSize: '32px 32px',
         }} />
 
+        {/* Back link */}
         <Link
           to="/"
-          className="relative inline-flex items-center gap-2 text-sm font-semibold transition-colors hover:opacity-80"
-          style={{ color: 'rgba(255,255,255,0.6)' }}
+          className="relative inline-flex items-center gap-2 text-sm font-semibold transition-all hover:opacity-80"
+          style={{ color: 'rgba(255,255,255,0.5)' }}
         >
           <ArrowLeft size={15} />
-          Trang chủ
+          Về trang chủ
         </Link>
 
+        {/* Main content */}
         <div className="relative">
           <div
             className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold"
-            style={{ background: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.8)' }}
+            style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.14)', color: 'rgba(255,255,255,0.8)' }}
           >
-            <Sparkles size={14} style={{ color: 'var(--color-primary)' }} />
+            <Sparkles size={14} style={{ color: '#5eead4' }} />
             Chào mừng trở lại!
           </div>
-          <h2 className="mt-6 text-4xl leading-tight font-bold text-white">
+          <h2
+            className="mt-6 text-4xl font-black leading-tight text-white"
+            style={{ fontFamily: 'Outfit, sans-serif', letterSpacing: '-0.04em' }}
+          >
             Hành trình nhận việc
             <br />
             <span className="text-gradient-hero">đang chờ bạn.</span>
           </h2>
-          <p className="mt-4 text-base" style={{ color: 'rgba(255,255,255,0.6)' }}>
+          <p className="mt-4 text-base font-medium" style={{ color: 'rgba(255,255,255,0.55)' }}>
             Đăng nhập để tiếp tục hành trình tạo CV, tìm việc và luyện phỏng vấn AI.
           </p>
 
-          <ul className="mt-8 space-y-4">
-            {PERKS.map(perk => (
-              <li key={perk.text} className="flex items-center gap-3">
+          <ul className="mt-10 space-y-4">
+            {PERKS.map((perk, i) => (
+              <li
+                key={perk.text}
+                className="flex items-center gap-4"
+                style={{ animationDelay: `${i * 0.1}s` }}
+              >
                 <span
-                  className="flex h-9 w-9 items-center justify-center rounded-xl"
-                  style={{ background: 'var(--color-primary-muted)', color: 'var(--color-primary)' }}
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+                  style={{ background: `${perk.color}18`, border: `1px solid ${perk.color}30`, color: perk.color }}
                 >
-                  <perk.icon size={16} />
+                  <perk.icon size={17} />
                 </span>
-                <span className="text-sm font-medium" style={{ color: 'rgba(255,255,255,0.75)' }}>
+                <span className="text-sm font-medium" style={{ color: 'rgba(255,255,255,0.72)' }}>
                   {perk.text}
                 </span>
               </li>
             ))}
           </ul>
+
+          {/* Stats strip */}
+          <div className="mt-10 grid grid-cols-3 gap-3">
+            {[
+              { value: '10K+', label: 'CV đã tạo' },
+              { value: '85%', label: 'Tỷ lệ pass' },
+              { value: '4.9★', label: 'Đánh giá' },
+            ].map(s => (
+              <div
+                key={s.label}
+                className="rounded-2xl p-3 text-center"
+                style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}
+              >
+                <p className="text-xl font-black text-white" style={{ fontFamily: 'Outfit, sans-serif' }}>{s.value}</p>
+                <p className="text-xs font-medium mt-0.5" style={{ color: 'rgba(255,255,255,0.4)' }}>{s.label}</p>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <p className="relative text-xs" style={{ color: 'rgba(255,255,255,0.35)' }}>
-          © 2026 FitHire AI
+        <p className="relative text-xs" style={{ color: 'rgba(255,255,255,0.3)' }}>
+          © 2026 FitHire AI · Bảo mật & Riêng tư
         </p>
       </div>
 
@@ -141,11 +172,11 @@ export default function LoginPage() {
           </Link>
 
           <div className="mb-8">
-            <h1 className="text-3xl font-extrabold" style={{ color: 'var(--color-text)' }}>
+            <h1 className="text-3xl font-black" style={{ color: 'var(--color-text)', fontFamily: 'Outfit, sans-serif', letterSpacing: '-0.03em' }}>
               Đăng nhập
             </h1>
-            <p className="mt-2 text-sm" style={{ color: 'var(--color-text-muted)' }}>
-              Nhập thông tin tài khoản của bạn
+            <p className="mt-2 text-sm font-medium" style={{ color: 'var(--color-text-muted)' }}>
+              Nhập thông tin tài khoản của bạn để tiếp tục
             </p>
           </div>
 
@@ -154,18 +185,13 @@ export default function LoginPage() {
             className="mb-6 flex items-start gap-3 rounded-2xl p-4"
             style={{
               background: 'var(--color-primary-muted)',
-              border: '1px solid var(--color-primary)',
-              borderOpacity: '0.3',
+              border: `1px solid color-mix(in srgb, var(--color-primary) 30%, transparent)`,
             }}
           >
-            <CheckCircle2
-              size={16}
-              className="mt-0.5 shrink-0"
-              style={{ color: 'var(--color-primary)' }}
-            />
+            <CheckCircle2 size={16} className="mt-0.5 shrink-0" style={{ color: 'var(--color-primary)' }} />
             <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
               <span className="font-bold" style={{ color: 'var(--color-primary)' }}>Tài khoản demo: </span>
-              {MOCK_EMAIL} / {MOCK_PASSWORD}
+              {MOCK_EMAIL} · {MOCK_PASSWORD}
             </p>
           </div>
 
@@ -190,10 +216,21 @@ export default function LoginPage() {
 
             <button
               type="submit"
-              className="group mt-2 flex w-full items-center justify-center gap-2 rounded-xl py-3 text-base font-bold text-white shadow-lg transition-all hover:scale-[1.02] hover:opacity-90"
-              style={{ background: 'var(--color-primary)', boxShadow: 'var(--shadow-primary)' }}
+              disabled={isLoading}
+              className="group mt-2 flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-base font-bold text-white transition-all duration-300 hover:scale-[1.02] disabled:opacity-70 disabled:scale-100"
+              style={{
+                background: 'linear-gradient(135deg, var(--color-primary), var(--color-accent-2))',
+                boxShadow: 'var(--shadow-primary)',
+              }}
             >
-              Đăng nhập
+              {isLoading ? (
+                <span className="h-5 w-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+              ) : (
+                <>
+                  Đăng nhập
+                  <ArrowRight size={17} className="transition-transform duration-300 group-hover:translate-x-1" />
+                </>
+              )}
             </button>
           </form>
 

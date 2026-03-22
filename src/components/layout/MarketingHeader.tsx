@@ -6,10 +6,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Bookmark,
   ChevronDown,
-  Compass,
   FileUser,
   LogOut,
-  Mic,
   User,
   Sun,
   Moon,
@@ -25,14 +23,16 @@ const CV_FLOWS = [
   {
     to: '/cv-builder?flow=build',
     label: 'Tạo CV với AI',
-    description: 'AI hỏi thông tin và tự tạo CV dựa trên dữ liệu bạn cung cấp.',
+    description: 'AI hỏi thông tin và tự tạo CV chuẩn ATS.',
     icon: FileText,
+    color: '#0d9488',
   },
   {
-    to: '/cv-builder?flow=review',
-    label: 'Rà lỗi CV',
-    description: 'Tải CV hiện có lên để chatbot kiểm tra lỗi và gợi ý sửa.',
+    to: '/cv-scoring',
+    label: 'Chấm điểm CV',
+    description: 'AI phân tích chất lượng và chấm điểm hồ sơ theo chuẩn chuyên nghiệp.',
     icon: ScanSearch,
+    color: '#3b82f6',
   },
 ] as const;
 
@@ -45,6 +45,7 @@ export function MarketingHeader() {
   const cvActive = location.pathname.includes('/cv-builder');
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const [isDark, setIsDark] = useState(() => {
@@ -64,6 +65,12 @@ export function MarketingHeader() {
       document.documentElement.classList.remove('dark');
       setIsDark(false);
     }
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 12);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const toggleTheme = () => {
@@ -99,10 +106,8 @@ export function MarketingHeader() {
 
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
     cn(
-      'text-sm font-semibold transition-all duration-200 px-1 py-0.5 rounded relative',
-      isActive
-        ? 'text-[var(--color-primary)]'
-        : 'text-[var(--color-text-secondary)] hover:text-[var(--color-primary)]',
+      'relative text-sm font-semibold transition-all duration-200 px-1 py-0.5 nav-underline',
+      isActive ? 'text-[var(--color-primary)] active' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-primary)]',
     );
 
   return (
@@ -110,52 +115,57 @@ export function MarketingHeader() {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ type: 'spring', stiffness: 100, damping: 20 }}
-      className="sticky top-0 z-50 transition-colors duration-300"
+      className="sticky top-0 z-50 transition-all duration-300"
       style={{
-        background: 'var(--color-surface-overlay)',
+        background: scrolled ? 'var(--color-surface-overlay)' : 'var(--color-surface-overlay)',
         borderBottom: '1px solid var(--color-border)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
-        boxShadow: 'var(--shadow-sm)',
+        backdropFilter: 'blur(24px) saturate(1.5)',
+        WebkitBackdropFilter: 'blur(24px) saturate(1.5)',
+        boxShadow: scrolled ? 'var(--shadow-md)' : 'none',
       }}
     >
-      <div className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-6 lg:px-10">
+      {/* Top brand accent line */}
+      <div
+        className="absolute top-0 inset-x-0 h-px"
+        style={{ background: 'linear-gradient(90deg, transparent 0%, var(--color-primary) 30%, var(--color-accent-2) 70%, transparent 100%)' }}
+      />
+
+      <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-6 lg:px-10">
         {/* Logo */}
         <Link to="/" className="flex items-center group">
           <img
             src={logoImg}
             alt="FitHire AI"
-            className="h-14 w-auto object-contain drop-shadow-md transition-transform duration-300 group-hover:scale-105"
+            className="h-14 w-auto object-contain drop-shadow-sm transition-all duration-300 group-hover:scale-105 group-hover:drop-shadow-md"
           />
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden items-center gap-6 md:flex">
+        <nav className="hidden items-center gap-5 md:flex">
           <NavLink to="/" end className={navLinkClass}>
             Trang chủ
           </NavLink>
 
           {/* CV Dropdown */}
-          <div className="group/dropdown relative py-6">
+          <div className="group/dropdown relative py-5">
             <button
               type="button"
               className={cn(
-                'inline-flex items-center gap-1.5 text-sm font-semibold transition-all duration-200',
+                'inline-flex items-center gap-1.5 text-sm font-semibold transition-all duration-200 nav-underline px-1 py-0.5',
                 cvActive
-                  ? 'text-[var(--color-primary)]'
+                  ? 'text-[var(--color-primary)] active'
                   : 'text-[var(--color-text-secondary)] group-hover/dropdown:text-[var(--color-primary)]',
               )}
             >
-              <FileText size={15} />
               CV
               <ChevronDown
-                size={15}
+                size={13}
                 className="transition-transform duration-300 group-hover/dropdown:rotate-180"
               />
             </button>
 
             <div
-              className="pointer-events-none invisible absolute top-[calc(100%-1.25rem)] left-1/2 z-50 w-80 -translate-x-1/2 translate-y-3 rounded-2xl p-2 opacity-0 shadow-[var(--shadow-lg)] transition-all duration-300 group-hover/dropdown:pointer-events-auto group-hover/dropdown:visible group-hover/dropdown:translate-y-0 group-hover/dropdown:opacity-100"
+              className="pointer-events-none invisible absolute top-[calc(100%-1rem)] left-1/2 z-50 w-72 -translate-x-1/2 translate-y-2 rounded-2xl p-2 opacity-0 shadow-[var(--shadow-lg)] transition-all duration-300 group-hover/dropdown:pointer-events-auto group-hover/dropdown:visible group-hover/dropdown:translate-y-0 group-hover/dropdown:opacity-100"
               style={{
                 background: 'var(--color-surface)',
                 border: '1px solid var(--color-border)',
@@ -165,10 +175,10 @@ export function MarketingHeader() {
                 <Link
                   key={flow.to}
                   to={flow.to}
-                  className="flex items-start gap-3 rounded-xl px-4 py-3 transition-all duration-200"
+                  className="flex items-start gap-3 rounded-xl px-3.5 py-3 transition-all duration-200"
                   style={{ color: 'var(--color-text)' }}
                   onMouseEnter={e => {
-                    (e.currentTarget as HTMLElement).style.background = 'var(--color-primary-muted)';
+                    (e.currentTarget as HTMLElement).style.background = `${flow.color}0e`;
                   }}
                   onMouseLeave={e => {
                     (e.currentTarget as HTMLElement).style.background = 'transparent';
@@ -176,7 +186,7 @@ export function MarketingHeader() {
                 >
                   <div
                     className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
-                    style={{ background: 'var(--color-primary-muted)', color: 'var(--color-primary)' }}
+                    style={{ background: `${flow.color}14`, color: flow.color }}
                   >
                     <flow.icon size={15} />
                   </div>
@@ -194,31 +204,28 @@ export function MarketingHeader() {
           </div>
 
           <NavLink to="/interview" className={navLinkClass}>
-            <span className="flex items-center gap-1.5">
-              <Mic size={15} />
-              Phỏng vấn giả lập
-            </span>
+            Phỏng vấn giả lập
           </NavLink>
 
           <NavLink to="/culture/matching" className={navLinkClass}>
-            <span className="flex items-center gap-1.5">
-              <Compass size={15} />
-              Khảo sát văn hoá
-            </span>
+            Khảo sát văn hoá
           </NavLink>
 
           <NavLink to="/subscription" className={navLinkClass}>
-            Gói Pro
+            <span className="flex items-center gap-1">
+              Gói Pro
+              <span className="text-[10px] opacity-80">✦</span>
+            </span>
           </NavLink>
         </nav>
 
         {/* Right Side */}
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="hidden items-center gap-2 md:flex">
           {/* Theme Toggle */}
           <button
             type="button"
             onClick={toggleTheme}
-            className="flex h-10 w-10 items-center justify-center rounded-xl transition-all hover:scale-105"
+            className="flex h-9 w-9 items-center justify-center rounded-xl transition-all duration-200 hover:scale-105"
             style={{
               background: 'var(--color-primary-muted)',
               color: 'var(--color-primary)',
@@ -232,9 +239,9 @@ export function MarketingHeader() {
                 initial={{ rotate: -90, opacity: 0 }}
                 animate={{ rotate: 0, opacity: 1 }}
                 exit={{ rotate: 90, opacity: 0 }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: 0.18 }}
               >
-                {isDark ? <Sun size={18} /> : <Moon size={18} />}
+                {isDark ? <Sun size={16} /> : <Moon size={16} />}
               </motion.span>
             </AnimatePresence>
           </button>
@@ -251,15 +258,15 @@ export function MarketingHeader() {
                   <img
                     src={user.avatarUrl}
                     alt={user.name}
-                    className="h-9 w-9 rounded-xl object-cover ring-2"
+                    className="h-8 w-8 rounded-xl object-cover ring-2"
                     style={{ ringColor: 'var(--color-primary)' } as React.CSSProperties}
                   />
                 ) : (
                   <div
-                    className="flex h-9 w-9 items-center justify-center rounded-xl font-bold text-white text-sm"
-                    style={{ background: 'var(--color-primary)' }}
+                    className="flex h-8 w-8 items-center justify-center rounded-xl font-bold text-white text-sm"
+                    style={{ background: 'linear-gradient(135deg, var(--color-primary), var(--color-accent-2))' }}
                   >
-                    {user?.name?.charAt(0)?.toUpperCase() ?? <User size={18} />}
+                    {user?.name?.charAt(0)?.toUpperCase() ?? <User size={16} />}
                   </div>
                 )}
               </button>
@@ -267,18 +274,18 @@ export function MarketingHeader() {
               <AnimatePresence>
                 {dropdownOpen && (
                   <motion.div
-                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    initial={{ opacity: 0, y: 8, scale: 0.96 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute top-[calc(100%+0.5rem)] right-0 z-50 w-64 rounded-2xl py-2 shadow-[var(--shadow-lg)]"
+                    exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                    transition={{ duration: 0.18 }}
+                    className="absolute top-[calc(100%+0.5rem)] right-0 z-50 w-60 rounded-2xl py-1.5 shadow-[var(--shadow-lg)]"
                     style={{
                       background: 'var(--color-surface)',
                       border: '1px solid var(--color-border)',
                     }}
                   >
                     <div
-                      className="border-b px-5 py-4"
+                      className="mb-1 border-b px-4 py-3"
                       style={{ borderColor: 'var(--color-border)' }}
                     >
                       <p className="truncate text-sm font-bold" style={{ color: 'var(--color-text)' }}>
@@ -288,7 +295,7 @@ export function MarketingHeader() {
                         {user?.email}
                       </p>
                     </div>
-                    <div className="p-2 flex flex-col gap-0.5">
+                    <div className="px-1.5 flex flex-col gap-0.5">
                       {[
                         { to: '/profile', icon: User, label: 'Hồ sơ của tôi' },
                         { to: '/my-cv', icon: FileUser, label: 'CV của tôi' },
@@ -309,14 +316,15 @@ export function MarketingHeader() {
                             (e.currentTarget as HTMLElement).style.color = 'var(--color-text-secondary)';
                           }}
                         >
-                          <item.icon size={16} />
+                          <item.icon size={15} />
                           {item.label}
                         </Link>
                       ))}
+                      <div className="my-1 h-px" style={{ background: 'var(--color-border)' }} />
                       <button
                         type="button"
                         onClick={handleLogout}
-                        className="mt-1 flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-all"
+                        className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-all"
                         style={{ color: 'var(--color-danger)' }}
                         onMouseEnter={e => {
                           (e.currentTarget as HTMLElement).style.background = 'var(--color-danger-light)';
@@ -325,7 +333,7 @@ export function MarketingHeader() {
                           (e.currentTarget as HTMLElement).style.background = 'transparent';
                         }}
                       >
-                        <LogOut size={16} />
+                        <LogOut size={15} />
                         Đăng xuất
                       </button>
                     </div>
@@ -341,7 +349,7 @@ export function MarketingHeader() {
                 </Button>
               </NavLink>
               <NavLink to="/register">
-                <Button size="sm" className="rounded-xl px-6 font-bold">
+                <Button size="sm" className="rounded-xl px-5 font-bold">
                   Đăng ký
                 </Button>
               </NavLink>
@@ -353,14 +361,14 @@ export function MarketingHeader() {
         <button
           type="button"
           onClick={() => setMobileOpen(o => !o)}
-          className="flex h-9 w-9 items-center justify-center rounded-xl md:hidden"
+          className="flex h-9 w-9 items-center justify-center rounded-xl md:hidden transition-all"
           style={{
             background: 'var(--color-surface-raised)',
             color: 'var(--color-text-secondary)',
             border: '1px solid var(--color-border)',
           }}
         >
-          {mobileOpen ? <X size={18} /> : <MenuIcon size={18} />}
+          {mobileOpen ? <X size={17} /> : <MenuIcon size={17} />}
         </button>
       </div>
 
@@ -371,7 +379,7 @@ export function MarketingHeader() {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25 }}
+            transition={{ duration: 0.22 }}
             className="overflow-hidden md:hidden"
             style={{ borderTop: '1px solid var(--color-border)', background: 'var(--color-surface)' }}
           >
@@ -381,7 +389,7 @@ export function MarketingHeader() {
                 { to: '/cv-builder?flow=build', label: 'Tạo CV' },
                 { to: '/interview', label: 'Phỏng vấn giả lập' },
                 { to: '/culture/matching', label: 'Khảo sát văn hoá' },
-                { to: '/subscription', label: 'Gói Pro' },
+                { to: '/subscription', label: 'Gói Pro ✦' },
               ].map(item => (
                 <NavLink
                   key={item.to}
@@ -402,7 +410,7 @@ export function MarketingHeader() {
                   className="flex h-10 w-10 items-center justify-center rounded-xl"
                   style={{ background: 'var(--color-primary-muted)', color: 'var(--color-primary)' }}
                 >
-                  {isDark ? <Sun size={18} /> : <Moon size={18} />}
+                  {isDark ? <Sun size={17} /> : <Moon size={17} />}
                 </button>
                 {!isAuthenticated && (
                   <>

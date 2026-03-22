@@ -1,6 +1,7 @@
-﻿import { Badge, Button, SurfaceCard } from '@components/ui';
+import { Badge, Button, SurfaceCard } from '@components/ui';
 import { FilePenLine, FileText, Plus, Sparkles, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { cn } from '@lib/utils';
 
 const cvVersions = [
   {
@@ -9,7 +10,7 @@ const cvVersions = [
     updatedAt: '04/03/2026',
     status: 'Đang dùng',
     score: 82,
-    color: 'from-blue-500 to-indigo-600',
+    color: 'from-blue-500 to-[var(--color-primary)]',
   },
   {
     id: 'cv-02',
@@ -25,34 +26,34 @@ export default function MyCvPage() {
   return (
     <div className="space-y-6">
       {/* Gradient banner */}
-      <div className="rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-900 p-6 text-white">
-        <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="rounded-2xl bg-gradient-brand p-6 text-white shadow-xl relative overflow-hidden">
+        <div className="absolute -top-10 -right-10 h-32 w-32 rounded-full bg-white/5 blur-2xl opacity-60" />
+        <div className="absolute -bottom-10 -left-10 h-24 w-24 rounded-full bg-white/5 blur-xl opacity-60" />
+        <div className="relative z-10 flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold">CV của tôi</h1>
-            <p className="mt-1 text-sm text-slate-300">
+            <h1 className="text-2xl font-bold text-white">CV của tôi</h1>
+            <p className="mt-1 text-sm text-slate-300 font-medium">
               Quản lý phiên bản CV, tối ưu bằng AI và dùng để lọc việc phù hợp.
             </p>
           </div>
           <Link to="/cv-builder">
-            <button className="inline-flex items-center gap-2 rounded-xl bg-indigo-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-400">
+            <button className="inline-flex items-center gap-2 rounded-xl bg-[var(--color-primary)] px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90 shadow-lg">
               <Plus size={16} />
               Tạo CV mới
             </button>
           </Link>
         </div>
-        <div className="mt-5 flex flex-wrap gap-4">
-          <div className="rounded-xl bg-white/10 px-4 py-3">
-            <p className="text-xl font-bold">2</p>
-            <p className="text-xs text-slate-300">CV đã tạo</p>
-          </div>
-          <div className="rounded-xl bg-white/10 px-4 py-3">
-            <p className="text-xl font-bold">82%</p>
-            <p className="text-xs text-slate-300">Điểm tốt nhất</p>
-          </div>
-          <div className="rounded-xl bg-white/10 px-4 py-3">
-            <p className="text-xl font-bold">24</p>
-            <p className="text-xs text-slate-300">JD phù hợp</p>
-          </div>
+        <div className="mt-6 flex flex-wrap gap-4">
+          {[
+            { v: '2', l: 'CV đã tạo', c: 'bg-white/10' },
+            { v: '82%', l: 'Điểm tốt nhất', c: 'bg-[var(--color-primary-muted)]' },
+            { v: '24', l: 'JD phù hợp', c: 'bg-[var(--color-info-light)]' },
+          ].map(s => (
+            <div key={s.l} className={cn("rounded-2xl px-5 py-3 border border-white/5 backdrop-blur-sm", s.c)}>
+              <p className="text-xl font-black text-white">{s.v}</p>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{s.l}</p>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -60,14 +61,15 @@ export default function MyCvPage() {
         {/* CV list */}
         <SurfaceCard className="space-y-4">
           <div className="flex items-center gap-2">
-            <FileText size={18} className="text-indigo-600" />
+            <FileText size={18} className="text-[var(--color-primary)]" />
             <h3 className="font-semibold text-slate-900">Danh sách CV</h3>
           </div>
           <div className="space-y-3">
             {cvVersions.map(cv => (
               <article
                 key={cv.id}
-                className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 p-4 transition hover:border-indigo-200 hover:bg-indigo-50/30"
+                className="flex flex-wrap items-center justify-between gap-3 rounded-xl border p-4 transition-all hover:scale-[1.01] hover:shadow-md"
+                style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface-raised)' }}
               >
                 <div className="flex items-center gap-3">
                   <div
@@ -76,14 +78,14 @@ export default function MyCvPage() {
                     <FileText size={18} className="text-white" />
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-900">{cv.title}</p>
-                    <p className="text-xs text-slate-500">Cập nhật: {cv.updatedAt}</p>
+                    <p className="font-bold" style={{ color: 'var(--color-text)' }}>{cv.title}</p>
+                    <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>Cập nhật: {cv.updatedAt}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="text-right">
-                    <p className="text-lg font-bold text-slate-900">{cv.score}%</p>
-                    <p className="text-xs text-slate-500">Điểm CV</p>
+                    <p className="text-lg font-black" style={{ color: 'var(--color-text)' }}>{cv.score}%</p>
+                    <p className="text-[10px] font-bold uppercase tracking-wider transition-colors" style={{ color: 'var(--color-text-subtle)' }}>Điểm CV</p>
                   </div>
                   <Badge variant={cv.status === 'Đang dùng' ? 'success' : 'default'}>
                     {cv.status}
@@ -105,8 +107,8 @@ export default function MyCvPage() {
               <Sparkles size={18} className="text-amber-500" />
               <h3 className="font-semibold text-slate-900">Gợi ý AI</h3>
             </div>
-            <div className="rounded-xl border border-amber-100 bg-amber-50 p-3">
-              <p className="text-sm leading-relaxed text-amber-900">
+            <div className="rounded-xl border p-4" style={{ background: 'var(--color-primary-muted)', borderColor: 'var(--color-primary)/20' }}>
+              <p className="text-sm leading-relaxed font-medium" style={{ color: 'var(--color-text-secondary)' }}>
                 CV thiếu số liệu định lượng trong phần kinh nghiệm. Bổ sung KPI và kết quả cụ thể để
                 tăng điểm lọc hồ sơ.
               </p>

@@ -1,5 +1,5 @@
-import { Badge, Button, SectionTitle, SurfaceCard } from '@components/ui';
-import { Brain, Building2, HeartHandshake, PlayCircle, Clock, Users } from 'lucide-react';
+import { Badge, Button, SurfaceCard } from '@components/ui';
+import { Brain, Building2, HeartHandshake, Clock, Users, ArrowRight, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const testCards = [
@@ -9,15 +9,17 @@ const testCards = [
     duration: '5 phút',
     participants: '2.340',
     icon: Brain,
+    color: 'var(--color-primary)', bg: 'var(--color-primary-muted)',
     summary: 'Hiểu rõ điểm mạnh, cách ra quyết định và phong cách làm việc của bạn.',
   },
   {
     id: 'core-values',
-    title: 'Test giá trị cốt lõi',
+    title: 'Test giá trị cốt lõi (Core Values)',
     duration: '4 phút',
     participants: '1.920',
     icon: HeartHandshake,
-    summary: 'Xác định ưu tiên: lương thưởng, cơ hội phát triển hay cân bằng cuộc sống.',
+    color: 'var(--color-success)', bg: 'var(--color-success-light)',
+    summary: 'Xác định ưu tiên lõi: lương thưởng, lộ trình nghề nghiệp hay sự cân bằng.',
   },
   {
     id: 'target-environment',
@@ -25,55 +27,62 @@ const testCards = [
     duration: '6 phút',
     participants: '1.540',
     icon: Building2,
-    summary: 'Bạn hợp startup năng động hay doanh nghiệp quy trình rõ ràng.',
+    color: 'var(--color-info)', bg: 'var(--color-info-light)',
+    summary: 'Bạn hợp với Startup năng động hay doanh nghiệp có quy trình hệ thống bài bản.',
   },
 ] as const;
 
 export default function CultureTestLibraryPage() {
   return (
-    <div className="space-y-6">
-      <SectionTitle
-        title="Thư viện bài test"
-        subtitle="Chọn bài test phù hợp để hiểu bản thân và tăng độ chính xác khi matching với công ty."
-      />
+    <div className="space-y-6 lg:space-y-8 animate-in fade-in duration-500 pb-12">
+      <SurfaceCard className="relative overflow-hidden !p-10 border-0 shadow-sm text-center" style={{ background: 'var(--color-primary-muted)' }}>
+        <div className="relative z-10 flex flex-col items-center">
+          <Badge variant="primary" className="mb-4">
+            <Sparkles size={14} className="mr-1.5" /> THƯ VIỆN ĐỘC QUYỀN
+          </Badge>
+          <h1 className="text-3xl md:text-5xl font-black tracking-tight leading-tight mb-3" style={{ color: 'var(--color-primary)' }}>
+            Bộ sưu tập <br />Culture Tests
+          </h1>
+          <p className="text-sm md:text-base max-w-xl leading-relaxed font-medium" style={{ color: 'var(--color-text)' }}>
+            Hoàn thành chuỗi bài khảo sát ngắn để định hình hồ sơ văn hóa cá nhân. 
+            Qua đó, AI sẽ tư vấn chính xác nên chọn Ecosystem làm việc nào.
+          </p>
+        </div>
+      </SurfaceCard>
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {testCards.map(test => {
           const Icon = test.icon;
-
           return (
-            <SurfaceCard key={test.id} className="flex h-full flex-col justify-between gap-4">
-              <div>
-                <div
-                  className="mb-4 inline-flex rounded-xl p-3"
-                  style={{ background: 'var(--color-primary-muted)', color: 'var(--color-primary)' }}
-                >
-                  <Icon size={20} />
+            <SurfaceCard key={test.id} className="group relative overflow-hidden flex flex-col justify-between transition-all hover:-translate-y-1 hover:shadow-md !p-6 cursor-pointer">
+              <div className="flex-1 relative z-10">
+                <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl shadow-sm transition-transform group-hover:scale-110" style={{ background: test.bg, color: test.color }}>
+                  <Icon size={26} />
                 </div>
-                <h3 className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>
+                <h3 className="text-xl font-bold leading-tight" style={{ color: 'var(--color-text)' }}>
                   {test.title}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>
+                <p className="mt-3 text-sm leading-relaxed font-medium" style={{ color: 'var(--color-text-muted)' }}>
                   {test.summary}
                 </p>
               </div>
 
-              <div className="space-y-4">
+              <div className="mt-8 space-y-5 relative z-10">
                 <div className="flex flex-wrap gap-2">
-                  <Badge variant="default">
-                    <Clock size={11} />
+                  <Badge variant="default" className="font-semibold" style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border)' }}>
+                    <Clock size={12} className="mr-1.5" style={{ color: 'var(--color-text-subtle)' }} />
                     {test.duration}
                   </Badge>
-                  <Badge variant="default">
-                    <Users size={11} />
-                    {test.participants} đã tham gia
+                  <Badge variant="default" className="font-semibold" style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border)' }}>
+                    <Users size={12} className="mr-1.5" style={{ color: 'var(--color-text-subtle)' }} />
+                    {test.participants} lượt test
                   </Badge>
                 </div>
 
-                <Link to={`/culture/tests/${test.id}`}>
-                  <Button className="w-full">
-                    <PlayCircle size={16} />
-                    <span>Bắt đầu bài test</span>
+                <Link to={`/culture/tests/${test.id}`} className="block">
+                  <Button variant="primary" className="w-full h-11 font-bold text-sm shadow-sm group-hover:shadow-md transition-all">
+                    Bắt đầu bài test
+                    <ArrowRight size={16} className="ml-2" />
                   </Button>
                 </Link>
               </div>

@@ -1,16 +1,16 @@
 import { Badge, Button, SectionTitle, SurfaceCard } from '@components/ui';
 import {
   ArrowRight,
-  BookOpen,
   BriefcaseBusiness,
   Clock3,
   FileText,
   MicVocal,
-  Sparkles,
   Target,
   TrendingUp,
   CheckCircle2,
   Circle,
+  Flame,
+  ScanSearch,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -35,11 +35,17 @@ const interviewHistory = [
 ];
 
 const QUICK_LINKS = [
-  { to: '/cv-builder', label: 'Tạo CV', icon: FileText },
-  { to: '/jobs', label: 'Tìm việc', icon: BriefcaseBusiness },
-  { to: '/interview', label: 'Phỏng vấn AI', icon: MicVocal },
-  { to: '/culture/tests', label: 'Test tính cách', icon: BookOpen },
+  { to: '/cv-builder', label: 'Tạo CV', icon: FileText, color: '#0d9488', bg: 'rgba(13,148,136,0.1)' },
+  { to: '/cv-scoring', label: 'Chấm điểm CV', icon: ScanSearch, color: '#3b82f6', bg: 'rgba(59,130,246,0.1)' },
+  { to: '/interview', label: 'Phỏng vấn AI', icon: MicVocal, color: '#8b5cf6', bg: 'rgba(139,92,246,0.1)' },
+  { to: '/jobs', label: 'Tìm việc', icon: BriefcaseBusiness, color: '#10b981', bg: 'rgba(16,185,129,0.1)' },
 ];
+
+function getScoreColor(score: number) {
+  if (score >= 85) return { main: 'var(--color-success)', light: 'var(--color-success-light)' };
+  if (score >= 75) return { main: 'var(--color-info)', light: 'var(--color-info-light)' };
+  return { main: 'var(--color-warning)', light: 'var(--color-warning-light)' };
+}
 
 export default function DashboardPage() {
   return (
@@ -54,17 +60,17 @@ export default function DashboardPage() {
         {QUICK_LINKS.map(link => (
           <Link key={link.to} to={link.to}>
             <div
-              className="card-hover rounded-2xl p-5 text-center transition-all"
+              className="card-hover group rounded-2xl p-5 text-center transition-all"
               style={{
                 background: 'var(--color-surface)',
                 border: '1px solid var(--color-border)',
               }}
             >
               <div
-                className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl"
-                style={{ background: 'var(--color-primary)', color: '#fff' }}
+                className="mx-auto mb-3.5 flex h-13 w-13 items-center justify-center rounded-2xl transition-all duration-300 group-hover:scale-110"
+                style={{ background: link.bg, color: link.color }}
               >
-                <link.icon size={20} />
+                <link.icon size={22} />
               </div>
               <p className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>
                 {link.label}
@@ -77,22 +83,25 @@ export default function DashboardPage() {
       {/* Stats row */}
       <div className="grid gap-4 md:grid-cols-3">
         {[
-          { icon: Target, label: 'Hoàn thành hồ sơ', value: '68%', accent: '--color-primary' },
-          { icon: BriefcaseBusiness, label: 'Việc phù hợp', value: '24', accent: '--color-accent-2' },
-          { icon: TrendingUp, label: 'Trung bình phỏng vấn', value: '82/100', accent: '--color-success' },
+          { icon: Target, label: 'Hoàn thành hồ sơ', value: '68%', color: '#0d9488', bg: 'rgba(13,148,136,0.1)' },
+          { icon: BriefcaseBusiness, label: 'Việc phù hợp', value: '24', color: '#3b82f6', bg: 'rgba(59,130,246,0.1)' },
+          { icon: TrendingUp, label: 'Trung bình phỏng vấn', value: '82/100', color: '#10b981', bg: 'rgba(16,185,129,0.1)' },
         ].map(stat => (
           <SurfaceCard key={stat.label} className="flex items-center gap-4">
             <div
-              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl"
-              style={{ background: `var(${stat.accent})`, color: '#fff' }}
+              className="flex h-13 w-13 shrink-0 items-center justify-center rounded-2xl"
+              style={{ background: stat.bg, color: stat.color }}
             >
-              <stat.icon size={20} />
+              <stat.icon size={22} />
             </div>
             <div>
-              <p className="text-2xl font-extrabold" style={{ color: 'var(--color-text)' }}>
+              <p
+                className="text-3xl font-black"
+                style={{ color: stat.color, fontFamily: 'Outfit, sans-serif', letterSpacing: '-0.03em' }}
+              >
                 {stat.value}
               </p>
-              <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
+              <p className="mt-0.5 text-sm" style={{ color: 'var(--color-text-muted)' }}>
                 {stat.label}
               </p>
             </div>
@@ -103,49 +112,44 @@ export default function DashboardPage() {
       {/* CV Progress + Goals */}
       <div className="grid gap-4 lg:grid-cols-2">
         <SurfaceCard>
-          <div className="mb-4 flex items-center gap-2">
+          <div className="mb-5 flex items-center gap-2">
             <Target size={16} style={{ color: 'var(--color-primary)' }} />
             <h3 className="font-bold" style={{ color: 'var(--color-text)' }}>
               Tiến độ hồ sơ
             </h3>
             <span
-              className="ml-auto text-sm font-bold"
-              style={{ color: 'var(--color-primary)' }}
+              className="ml-auto rounded-full px-3 py-0.5 text-sm font-black"
+              style={{ background: 'var(--color-primary-muted)', color: 'var(--color-primary)' }}
             >
               68%
             </span>
           </div>
-          <div
-            className="mb-5 h-2.5 w-full overflow-hidden rounded-full"
-            style={{ background: 'var(--color-border)' }}
-          >
+
+          {/* Progress bar */}
+          <div className="mb-6 h-2.5 w-full overflow-hidden rounded-full" style={{ background: 'var(--color-border)' }}>
             <div
-              className="h-full w-[68%] rounded-full transition-all"
-              style={{ background: 'linear-gradient(90deg, var(--color-primary), var(--color-accent-2))' }}
+              className="h-full rounded-full transition-all duration-700"
+              style={{ width: '68%', background: 'linear-gradient(90deg, var(--color-primary), var(--color-accent-2))' }}
             />
           </div>
-          <ul className="space-y-2.5">
+
+          <ul className="space-y-3">
             {PROGRESS_ITEMS.map(item => (
-              <li key={item.label} className="flex items-center gap-2.5 text-sm">
+              <li key={item.label} className="flex items-center gap-3">
                 {item.done ? (
-                  <CheckCircle2
-                    size={18}
-                    className="shrink-0"
-                    style={{ color: 'var(--color-success)' }}
-                  />
+                  <CheckCircle2 size={18} className="shrink-0" style={{ color: 'var(--color-success)' }} />
                 ) : (
-                  <Circle
-                    size={18}
-                    className="shrink-0"
-                    style={{ color: 'var(--color-border-strong)' }}
-                  />
+                  <Circle size={18} className="shrink-0" style={{ color: 'var(--color-border-strong)' }} />
                 )}
-                <span style={{ color: item.done ? 'var(--color-text)' : 'var(--color-text-subtle)' }}>
+                <span
+                  className="text-sm font-medium flex-1"
+                  style={{ color: item.done ? 'var(--color-text)' : 'var(--color-text-subtle)' }}
+                >
                   {item.label}
                 </span>
                 {!item.done && (
                   <span
-                    className="ml-auto rounded-full px-2 py-0.5 text-xs font-bold"
+                    className="rounded-full px-2.5 py-0.5 text-xs font-bold"
                     style={{ background: 'var(--color-warning-light)', color: 'var(--color-warning)' }}
                   >
                     Chưa xong
@@ -157,8 +161,8 @@ export default function DashboardPage() {
         </SurfaceCard>
 
         <SurfaceCard>
-          <div className="mb-4 flex items-center gap-2">
-            <Sparkles size={16} style={{ color: 'var(--color-warning)' }} />
+          <div className="mb-5 flex items-center gap-2">
+            <Flame size={16} style={{ color: 'var(--color-warning)' }} />
             <h3 className="font-bold" style={{ color: 'var(--color-text)' }}>
               Mục tiêu tuần này
             </h3>
@@ -171,19 +175,19 @@ export default function DashboardPage() {
             ].map((goal, i) => (
               <li
                 key={i}
-                className="flex items-start gap-3 rounded-xl p-3 text-sm"
+                className="flex items-start gap-3 rounded-xl p-3.5 text-sm"
                 style={{
                   background: 'var(--color-surface-raised)',
                   border: '1px solid var(--color-border)',
                 }}
               >
                 <span
-                  className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
-                  style={{ background: 'var(--color-primary)' }}
+                  className="mt-px flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-black"
+                  style={{ background: 'var(--color-primary)', color: 'var(--color-background)' }}
                 >
                   {i + 1}
                 </span>
-                <span style={{ color: 'var(--color-text-secondary)' }}>{goal}</span>
+                <span className="font-medium" style={{ color: 'var(--color-text-secondary)' }}>{goal}</span>
               </li>
             ))}
           </ul>
@@ -202,44 +206,41 @@ export default function DashboardPage() {
           <Badge variant="primary">4 vị trí mới</Badge>
         </div>
         <div className="grid gap-3 sm:grid-cols-2">
-          {recommendedJobs.map(job => (
-            <div
-              key={job.id}
-              className="card-hover flex items-center justify-between gap-3 rounded-xl p-4 transition-colors"
-              style={{
-                background: 'var(--color-surface-raised)',
-                border: '1px solid var(--color-border)',
-              }}
-            >
-              <div>
-                <p className="font-semibold text-sm" style={{ color: 'var(--color-text)' }}>
-                  {job.title}
-                </p>
-                <p className="mt-0.5 text-xs" style={{ color: 'var(--color-text-muted)' }}>
-                  {job.company}
-                </p>
-              </div>
-              <div className="flex flex-col items-end gap-2">
-                <span
-                  className="rounded-full px-2.5 py-1 text-xs font-bold"
-                  style={{
-                    background: job.match >= 85 ? 'var(--color-success-light)' : 'var(--color-primary-muted)',
-                    color: job.match >= 85 ? 'var(--color-success)' : 'var(--color-primary)',
-                  }}
-                >
-                  {job.match}%
-                </span>
-                <Link to={`/jobs/${job.id}`}>
-                  <button
-                    className="flex items-center gap-1 text-xs font-semibold"
-                    style={{ color: 'var(--color-primary)' }}
+          {recommendedJobs.map(job => {
+            const { main, light } = getScoreColor(job.match);
+            return (
+              <div
+                key={job.id}
+                className="card-hover flex items-center justify-between gap-3 rounded-xl p-4 transition-all"
+                style={{
+                  background: 'var(--color-surface-raised)',
+                  border: '1px solid var(--color-border)',
+                }}
+              >
+                <div className="min-w-0">
+                  <p className="truncate font-semibold text-sm" style={{ color: 'var(--color-text)' }}>
+                    {job.title}
+                  </p>
+                  <p className="mt-0.5 text-xs" style={{ color: 'var(--color-text-muted)' }}>
+                    {job.company}
+                  </p>
+                </div>
+                <div className="flex shrink-0 flex-col items-end gap-1.5">
+                  <span
+                    className="rounded-full px-2.5 py-0.5 text-xs font-black"
+                    style={{ background: light, color: main }}
                   >
-                    Xem <ArrowRight size={11} />
-                  </button>
-                </Link>
+                    {job.match}%
+                  </span>
+                  <Link to={`/jobs/${job.id}`}>
+                    <button className="flex items-center gap-1 text-xs font-semibold" style={{ color: 'var(--color-primary)' }}>
+                      Xem <ArrowRight size={10} />
+                    </button>
+                  </Link>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </SurfaceCard>
 
@@ -252,50 +253,37 @@ export default function DashboardPage() {
           </h3>
         </div>
         <div className="space-y-3">
-          {interviewHistory.map(session => (
-            <div
-              key={session.id}
-              className="flex flex-wrap items-center justify-between gap-3 rounded-xl p-4"
-              style={{
-                background: 'var(--color-surface-raised)',
-                border: '1px solid var(--color-border)',
-              }}
-            >
-              <div>
-                <p className="font-semibold text-sm" style={{ color: 'var(--color-text)' }}>
-                  {session.role}
-                </p>
-                <p className="mt-0.5 text-xs" style={{ color: 'var(--color-text-muted)' }}>
-                  {session.time}
-                </p>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-1.5">
-                  <div
-                    className="h-2 w-16 overflow-hidden rounded-full"
-                    style={{ background: 'var(--color-border)' }}
-                  >
-                    <div
-                      className="h-full rounded-full"
-                      style={{
-                        width: `${session.score}%`,
-                        background: session.score >= 80
-                          ? 'linear-gradient(90deg, var(--color-success), var(--color-accent-2))'
-                          : 'linear-gradient(90deg, var(--color-warning), var(--color-danger))',
-                      }}
-                    />
-                  </div>
+          {interviewHistory.map(session => {
+            const { main, light } = getScoreColor(session.score);
+            return (
+              <div
+                key={session.id}
+                className="flex flex-wrap items-center justify-between gap-3 rounded-xl p-4"
+                style={{
+                  background: 'var(--color-surface-raised)',
+                  border: '1px solid var(--color-border)',
+                }}
+              >
+                <div>
+                  <p className="font-semibold text-sm" style={{ color: 'var(--color-text)' }}>
+                    {session.role}
+                  </p>
+                  <p className="mt-0.5 text-xs" style={{ color: 'var(--color-text-muted)' }}>
+                    {session.time}
+                  </p>
+                </div>
+                <div className="flex items-center gap-3">
                   <span
-                    className="text-sm font-bold"
-                    style={{ color: session.score >= 80 ? 'var(--color-success)' : 'var(--color-warning)' }}
+                    className="rounded-full px-3 py-1 text-sm font-black"
+                    style={{ background: light, color: main }}
                   >
                     {session.score}/100
                   </span>
+                  <Button variant="ghost" size="sm">Xem chi tiết</Button>
                 </div>
-                <Button variant="ghost" size="sm">Xem chi tiết</Button>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </SurfaceCard>
     </div>

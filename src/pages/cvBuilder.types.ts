@@ -1,5 +1,5 @@
 export type Template = 'ats' | 'creative' | 'business';
-export type Step = 0 | 1 | 2 | 3 | 4;
+export type Step = 0 | 1 | 2 | 3;
 
 export interface ContactInfo {
     fullName: string; email: string; phone: string;

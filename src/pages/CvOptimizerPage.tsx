@@ -1,12 +1,13 @@
-﻿import { Button, SurfaceCard } from '@components/ui';
+import { Button, SurfaceCard } from '@components/ui';
 import { sleep } from '@lib/utils';
 import {
   AlertCircle, ArrowLeft, ArrowRight, Bot, CheckCircle2, ChevronDown,
   Download, LoaderCircle, Plus, Sparkles, Star, Trash2, WandSparkles, X,
+  Code2, Palette, BriefcaseBusiness
 } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { CvDraft, ExperienceEntry, LanguageEntry, Template, Step } from './cvBuilder.types';
-import { C_BAR, C_BG, C_TXT, computeCategories, getKeywords, healthScore, initialDraft, letterGrade, uid } from './cvBuilder.types';
+import { getKeywords, healthScore, initialDraft, uid } from './cvBuilder.types';
 
 // ─── Field Input ──────────────────────────────────────────────────────────────
 function FI({ label, value, onChange, placeholder, required }: {
@@ -24,10 +25,10 @@ function FI({ label, value, onChange, placeholder, required }: {
 
 // ─── STEP 0: Template Selector ────────────────────────────────────────────────
 function StepTemplate({ draft, setDraft }: { draft: CvDraft; setDraft: React.Dispatch<React.SetStateAction<CvDraft>> }) {
-  const TMPLS: { id: Template; label: string; sub: string; icon: string; g: string }[] = [
-    { id: 'ats',      label: 'Kỹ thuật (ATS)',          sub: '1 cột, ATS-friendly, tối ưu lập trình viên', icon: '🧑‍💻', g: 'from-slate-700 to-slate-900' },
-    { id: 'creative', label: 'Sáng tạo (Creative)',      sub: 'Màu sắc, skill bars, sidebar nổi bật',        icon: '🎨', g: 'from-violet-500 to-fuchsia-600' },
-    { id: 'business', label: 'Chuyên nghiệp (Business)', sub: '2 cột, Summary nổi bật, trang trọng',         icon: '💼', g: 'from-blue-600 to-indigo-700' },
+  const TMPLS: { id: Template; label: string; sub: string; icon: React.ElementType; g: string }[] = [
+    { id: 'ats',      label: 'Kỹ thuật (ATS)',          sub: '1 cột, ATS-friendly, tối ưu lập trình viên', icon: Code2, g: 'from-slate-700 to-slate-900' },
+    { id: 'creative', label: 'Sáng tạo (Creative)',      sub: 'Màu sắc, skill bars, sidebar nổi bật',        icon: Palette, g: 'from-violet-500 to-fuchsia-600' },
+    { id: 'business', label: 'Chuyên nghiệp (Business)', sub: '2 cột, Summary nổi bật, trang trọng',         icon: BriefcaseBusiness, g: 'from-blue-600 to-indigo-700' },
   ];
   return (
     <div className="space-y-5">
@@ -38,7 +39,7 @@ function StepTemplate({ draft, setDraft }: { draft: CvDraft; setDraft: React.Dis
           <button key={t.id} onClick={() => setDraft(d => ({ ...d, template: t.id }))}
             className={`relative flex flex-col items-center gap-3 rounded-2xl border-2 p-5 text-center transition-all ${draft.template === t.id ? 'border-indigo-500 bg-indigo-50 shadow-md' : 'border-slate-200 bg-white hover:border-indigo-300'}`}>
             {draft.template === t.id && <span className="absolute top-2 right-2 flex h-5 w-5 items-center justify-center rounded-full bg-indigo-500"><CheckCircle2 size={12} className="text-white" /></span>}
-            <div className={`flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br ${t.g} text-2xl`}>{t.icon}</div>
+            <div className={`flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br ${t.g}`}><t.icon size={26} className="text-white drop-shadow-sm" /></div>
             <div><p className="font-semibold text-slate-900">{t.label}</p><p className="mt-0.5 text-xs text-slate-500">{t.sub}</p></div>
           </button>
         ))}
@@ -210,90 +211,6 @@ function StepSkills({ draft, setDraft }: { draft: CvDraft; setDraft: React.Dispa
   );
 }
 
-// ─── STEP 4: CV Score Card ────────────────────────────────────────────────────
-function StepScore({ draft }: { draft: CvDraft }) {
-  const [open, setOpen] = useState<string | null>(null);
-  const cats = computeCategories(draft);
-  const total = healthScore(draft);
-  const { grade, label, bg } = letterGrade(total);
-  const circ = 2 * Math.PI * 48;
-  return (
-    <div className="space-y-5">
-      <h2 className="text-lg font-bold text-slate-900">Chấm điểm CV</h2>
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 to-indigo-950 p-6 text-white">
-        <div className="absolute -right-8 -top-8 h-40 w-40 rounded-full bg-white/5" />
-        <div className="absolute -bottom-6 -left-6 h-28 w-28 rounded-full bg-white/5" />
-        <div className="relative flex items-center gap-6">
-          <div className="relative shrink-0">
-            <svg width="112" height="112" viewBox="0 0 112 112">
-              <circle cx="56" cy="56" r="48" fill="none" stroke="#ffffff20" strokeWidth="8" />
-              <circle cx="56" cy="56" r="48" fill="none" stroke="url(#sg)" strokeWidth="8"
-                strokeDasharray={`${circ}`} strokeDashoffset={circ - (total / 100) * circ}
-                strokeLinecap="round" transform="rotate(-90 56 56)" style={{ transition: 'stroke-dashoffset 1s ease' }} />
-              <defs><linearGradient id="sg" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#818cf8" /><stop offset="100%" stopColor="#a78bfa" />
-              </linearGradient></defs>
-            </svg>
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-3xl font-black">{total}</span>
-              <span className="text-xs text-slate-400">/ 100</span>
-            </div>
-          </div>
-          <div className="space-y-2">
-            <div className={`inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${bg} text-lg font-black text-white shadow-lg`}>{grade}</div>
-            <div><p className="text-xl font-bold">{label}</p>
-              <p className="text-sm text-slate-400">Vị trí: <span className="text-indigo-300 font-medium">{draft.targetRole || '(chưa nhập)'}</span></p></div>
-          </div>
-        </div>
-        <div className="relative mt-4 grid grid-cols-3 gap-2">
-          {[
-            { l: 'Điểm cao nhất', v: `${Math.max(...cats.map(c => c.score))}` },
-            { l: 'Cần cải thiện', v: `${cats.filter(c => c.score < 60).length} mục` },
-            { l: 'Trạng thái', v: total >= 70 ? '✅ Sẵn sàng' : '⚠️ Cần thêm' },
-          ].map(s => (
-            <div key={s.l} className="rounded-xl bg-white/10 px-3 py-2 text-center">
-              <p className="text-sm font-bold">{s.v}</p><p className="text-xs text-slate-400">{s.l}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className="space-y-3">
-        <h3 className="font-semibold text-slate-800">Chi tiết theo tiêu chí</h3>
-        {cats.map(cat => {
-          const isO = open === cat.label;
-          return (
-            <div key={cat.label} className={`rounded-xl border ${C_BG[cat.color]} overflow-hidden`}>
-              <button className="flex w-full items-center gap-3 px-4 py-3 text-left" onClick={() => setOpen(isO ? null : cat.label)}>
-                <span className="text-lg">{cat.icon}</span>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between">
-                    <span className={`text-sm font-semibold ${C_TXT[cat.color]}`}>{cat.label}</span>
-                    <span className={`text-sm font-bold ${C_TXT[cat.color]}`}>{cat.score}/100</span>
-                  </div>
-                  <div className="mt-1.5 h-2 w-full rounded-full bg-white/60">
-                    <div className={`h-2 rounded-full ${C_BAR[cat.color]} transition-all duration-700`} style={{ width: `${cat.score}%` }} />
-                  </div>
-                </div>
-                <span className={`text-xs transition-transform ${isO ? 'rotate-180' : ''} ${C_TXT[cat.color]}`}>▾</span>
-              </button>
-              {isO && (
-                <div className="border-t border-white/40 px-4 py-3 space-y-1.5">
-                  {cat.tips.length === 0
-                    ? <div className={`flex items-center gap-2 text-sm ${C_TXT[cat.color]}`}><CheckCircle2 size={14} /><span>Tiêu chí này đã đạt điểm cao!</span></div>
-                    : cat.tips.map((t, i) => <div key={i} className={`flex items-start gap-2 text-sm ${C_TXT[cat.color]}`}><AlertCircle size={13} className="mt-0.5 shrink-0" /><span>{t}</span></div>)
-                  }
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
-      <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-violet-600 py-3 font-semibold text-white shadow-md hover:opacity-90 active:scale-95 transition">
-        <Download size={16} /> Tải xuống PDF (ATS-ready)
-      </button>
-    </div>
-  );
-}
 
 // ─── LIVE PREVIEW ─────────────────────────────────────────────────────────────
 function Preview({ draft }: { draft: CvDraft }) {
@@ -393,7 +310,7 @@ function Sidekick({ draft, setDraft }: { draft: CvDraft; setDraft: React.Dispatc
 }
 
 // ─── MAIN PAGE ────────────────────────────────────────────────────────────────
-const STEPS = ['Phong cách', 'Thông tin', 'Kinh nghiệm', 'Kỹ năng', 'Chấm điểm'];
+const STEPS = ['Phong cách', 'Thông tin', 'Kinh nghiệm', 'Kỹ năng'];
 
 export default function CvOptimizerPage() {
   const [draft, setDraft] = useState<CvDraft>(initialDraft);
@@ -406,7 +323,7 @@ export default function CvOptimizerPage() {
       {/* Header */}
       <div className="shrink-0 rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-violet-900 px-6 py-4 text-white mb-4">
         <div className="flex items-center justify-between">
-          <div><h1 className="text-xl font-bold">CV Studio ✨</h1><p className="text-sm text-slate-300 mt-0.5">Tạo CV chuyên nghiệp với AI — xem kết quả ngay khi bạn gõ</p></div>
+          <div><h1 className="text-xl font-bold inline-flex items-center gap-2">CV Studio <Sparkles className="text-amber-400" size={18} /></h1><p className="text-sm text-slate-300 mt-0.5">Tạo CV chuyên nghiệp với AI — xem kết quả ngay khi bạn gõ</p></div>
           <div className="hidden md:flex items-center gap-1">
             {STEPS.map((s, i) => (
               <button key={i} onClick={() => setStep(i as Step)} className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition ${step === i ? 'bg-white/20 text-white' : i < step ? 'text-green-400 hover:bg-white/10' : 'text-slate-400 hover:bg-white/10'}`}>
@@ -431,11 +348,14 @@ export default function CvOptimizerPage() {
             {step === 1 && <StepContact  draft={draft} setDraft={setDraft} />}
             {step === 2 && <StepExperience draft={draft} setDraft={setDraft} />}
             {step === 3 && <StepSkills   draft={draft} setDraft={setDraft} />}
-            {step === 4 && <StepScore    draft={draft} />}
           </SurfaceCard>
           <div className="mt-3 flex justify-between shrink-0">
-            <Button variant="outline" onClick={() => setStep(s => (s - 1) as Step)} disabled={step === 0}><ArrowLeft size={15} />Quay lại</Button>
-            {step < 4 && <Button onClick={() => setStep(s => (s + 1) as Step)}>Tiếp theo<ArrowRight size={15} /></Button>}
+            <Button variant="outline" onClick={() => setStep(s => (s - 1) as Step)} disabled={step === 0}><ArrowLeft size={15} className="mr-1" />Quay lại</Button>
+            {step < 3 ? (
+              <Button onClick={() => setStep(s => (s + 1) as Step)}>Tiếp theo<ArrowRight size={15} className="ml-1" /></Button>
+            ) : (
+              <Button className="bg-gradient-to-r from-indigo-500 to-violet-600 text-white border-0 hover:opacity-90 active:scale-95 shadow-md"><Download size={16} className="mr-1.5" /> Tải xuống PDF</Button>
+            )}
           </div>
         </div>
 
