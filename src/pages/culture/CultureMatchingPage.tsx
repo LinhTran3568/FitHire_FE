@@ -24,6 +24,7 @@ interface CompanyMatch {
   color: string;
   radarScores: number[];
   whyFit: string;
+  logoUrl?: string;
 }
 
 // ─── Data ────────────────────────────────────────────────────────────────────
@@ -35,22 +36,39 @@ const ECOSYSTEMS = [
 ];
 
 const SURVEY_QUESTIONS: SliderQuestion[] = [
-  { id: 'q1', leftLabel: 'Tôi thích quy trình rõ ràng, bài bản từ đầu đến cuối', rightLabel: 'Tôi thích tự do quyết định và linh hoạt sửa đổi quy trình', leftKeyword: 'Quy trình chuẩn mực', rightKeyword: 'Linh hoạt, tự chủ', leftCompanies: ['VNPT', 'Viettel', 'Techcombank'], rightCompanies: ['Base.vn', 'MoMo', 'Startups'] },
-  { id: 'q2', leftLabel: 'Sự ổn định và phúc lợi dài hạn là ưu tiên hàng đầu', rightLabel: 'Tốc độ phát triển và thử thách mới là động lực chính', leftKeyword: 'Ổn định, chắc chắn', rightKeyword: 'Thử thách, tốc độ', leftCompanies: ['FPT', 'Vietcombank'], rightCompanies: ['VNG', 'Shopee'] },
-  { id: 'q3', leftLabel: 'Tôi đóng góp tốt nhất trong một tập thể đông người, phân công rõ', rightLabel: 'Tôi tỏa sáng khi làm việc nhóm nhỏ, phản ứng siêu tốc', leftKeyword: 'Tập thể lớn', rightKeyword: 'Agile team', leftCompanies: ['Viettel', 'VinGroup'], rightCompanies: ['KiotViet', 'Base.vn'] },
-  { id: 'q4', leftLabel: 'Chỉ ra mắt sản phẩm khi đã hoàn hảo, không có bug', rightLabel: 'Ra mắt nhanh bản MVP rồi cuốn chiếu tính năng', leftKeyword: 'Cầu toàn', rightKeyword: 'Fail fast, learn fast', leftCompanies: ['Ngân hàng', 'Outsource'], rightCompanies: ['Tiki', 'VNG'] },
-  { id: 'q5', leftLabel: 'Tôi muốn được đào tạo chi tiết, có mentor cầm tay chỉ việc', rightLabel: 'Tôi muốn tự bơi, research liên tục và tự đề xuất hướng đi', leftKeyword: 'Hướng dẫn chi tiết', rightKeyword: 'Tự chủ độc lập', leftCompanies: ['Logistics', 'Enterprise'], rightCompanies: ['Startups', 'Got It'] },
-  { id: 'q6', leftLabel: 'Đánh giá nhân viên dựa trên sự tuân thủ quy trình và kỷ luật', rightLabel: 'Đánh giá dựa vào kết quả thực tế (Impact) không cần biết cách làm', leftKeyword: 'Tuân thủ nội quy', rightKeyword: 'Result-oriented', leftCompanies: ['Công ty Nhà nước'], rightCompanies: ['VNG', 'MoMo', 'Base.vn'] },
+  { id: 'q1', leftLabel: 'Ưu tiên quy trình chuẩn mực, hệ thống và bài bản', rightLabel: 'Đề cao sự linh hoạt, tự chủ và quyền tự quyết định', leftKeyword: 'Quy trình chuẩn', rightKeyword: 'Linh hoạt & Tự chủ', leftCompanies: ['VNPT', 'Viettel', 'Techcombank'], rightCompanies: ['Base.vn', 'MoMo', 'Startups'] },
+  { id: 'q2', leftLabel: 'Sự ổn định và phúc lợi dài hạn là ưu tiên hàng đầu', rightLabel: 'Cơ hội phát triển và thử thách mới là động lực chính', leftKeyword: 'Ổn định & Bền vững', rightKeyword: 'Thử thách & Tốc độ', leftCompanies: ['FPT', 'Vietcombank'], rightCompanies: ['VNG', 'Shopee'] },
+  { id: 'q3', leftLabel: 'Cống hiến tốt nhất trong tập thể lớn, phân công rõ ràng', rightLabel: 'Tỏa sáng khi làm việc nhóm nhỏ, linh hoạt và tốc độ', leftKeyword: 'Tập đoàn lớn', rightKeyword: 'Mô hình Agile', leftCompanies: ['Viettel', 'VinGroup'], rightCompanies: ['KiotViet', 'Base.vn'] },
+  { id: 'q4', leftLabel: 'Sản phẩm cần đạt sự hoàn thiện tuyệt đối trước khi ra mắt', rightLabel: 'Ưu tiên ra mắt nhanh (MVP) và cải thiện dựa trên dữ liệu', leftKeyword: 'Chất lượng tuyệt đối', rightKeyword: 'Tối ưu hóa tốc độ', leftCompanies: ['Ngân hàng', 'Outsource'], rightCompanies: ['Tiki', 'VNG'] },
+  { id: 'q5', leftLabel: 'Mong muốn được đào tạo bài bản và có lộ trình rõ ràng', rightLabel: 'Ưu tiên tự nghiên cứu, đề xuất và đột phá hướng đi mới', leftKeyword: 'Đào tạo & Hướng dẫn', rightKeyword: 'Tự chủ nghiên cứu', leftCompanies: ['Logistics', 'Enterprise'], rightCompanies: ['Startups', 'Got It'] },
+  { id: 'q6', leftLabel: 'Đánh giá dựa trên sự tuân thủ quy trình và kỷ luật chung', rightLabel: 'Đánh giá dựa trên kết quả thực tế và tác động (Impact)', leftKeyword: 'Kỷ luật & Quy trình', rightKeyword: 'Tập trung kết quả', leftCompanies: ['Công ty Nhà nước'], rightCompanies: ['VNG', 'MoMo', 'Base.vn'] },
 ];
 
 const RADAR_LABELS = ['Innovation', 'Discipline', 'Collaboration', 'Result-led', 'Agility'];
 
 const COMPANY_DATABASE: CompanyMatch[] = [
-  { name: 'VNG', icon: Gamepad2, match: 92, tagline: 'Đế chế gaming & tech Việt Nam', color: 'var(--color-success)', radarScores: [95, 60, 75, 90, 85], whyFit: 'Bạn có tư duy phản ứng tốc độ cực cao và sẵn sàng thử thách giới hạn y hệt văn hoá "Move fast, break things" của VNG.' },
-  { name: 'MoMo', icon: CreditCard, match: 85, tagline: 'Cực phẩm Fintech tỷ đô', color: 'var(--color-primary)', radarScores: [92, 70, 85, 95, 90], whyFit: 'Nỗi ám ảnh về trải nghiệm khách hàng (Customer Obsession) kết hợp với dựa trên dữ liệu là điểm tạo nên sự ăn ý tối đa.' },
-  { name: 'Tiki', icon: ShoppingCart, match: 78, tagline: 'Kỳ lân Thương mại điện tử', color: 'var(--color-info)', radarScores: [85, 65, 88, 85, 90], whyFit: 'Phong cách làm việc máu lửa cộng tác, đặt customer-first của bạn phù hợp tối đa với nhịp điệu logistics & tech của Tiki.' },
-  { name: 'Base.vn', icon: CloudCog, match: 72, tagline: 'Đỉnh cao SaaS vận hành doanh nghiệp', color: 'var(--color-warning)', radarScores: [88, 65, 75, 98, 80], whyFit: 'Sự yêu thích tính tự chủ và tư duy kết quả tuyệt đối (Result, No Reasons) của bạn là nền tảng văn hóa lõi của Base.vn.' },
+  { name: 'VNG', icon: Gamepad2, match: 92, tagline: 'Tập đoàn Công nghệ & Giải trí hàng đầu Việt Nam', color: 'var(--color-success)', radarScores: [95, 60, 75, 90, 85], whyFit: 'Bạn có phong cách làm việc quyết đoán, tốc độ và sẵn sàng đối mặt với thử thách, tương tự như văn hóa "Move fast, break things" của VNG.', logoUrl: 'https://logo.clearbit.com/vng.com.vn' },
+  { name: 'MoMo', icon: CreditCard, match: 85, tagline: 'Siêu ứng dụng Fintech hàng đầu Việt Nam', color: 'var(--color-primary)', radarScores: [92, 70, 85, 95, 90], whyFit: 'Tư duy "Khách hàng là trọng tâm" kết hợp cùng khả năng ra quyết định dựa trên dữ liệu giúp bạn hoàn toàn hòa nhập với môi trường MoMo.', logoUrl: 'https://logo.clearbit.com/momo.vn' },
+  { name: 'Tiki', icon: ShoppingCart, match: 78, tagline: 'Nền tảng Thương mại điện tử chất lượng cao', color: 'var(--color-info)', radarScores: [85, 65, 88, 85, 90], whyFit: 'Sự tỉ mỉ, tinh thần trách nhiệm và lòng nhiệt huyết trong công việc của bạn rất phù hợp với nhịp độ vận hành chuyên nghiệp của Tiki.', logoUrl: 'https://logo.clearbit.com/tiki.vn' },
+  { name: 'Base.vn', icon: CloudCog, match: 72, tagline: 'Nền tảng quản trị vận hành doanh nghiệp (SaaS)', color: 'var(--color-warning)', radarScores: [88, 65, 75, 98, 80], whyFit: 'Khát khao tự chủ và tư duy hướng đến kết quả cuối cùng (Result, No Reasons) là những giá trị cốt lõi mà Base.vn luôn tìm kiếm.', logoUrl: 'https://logo.clearbit.com/base.vn' },
 ];
+
+function CompanyLogo({ logoUrl, icon: Icon, name, size = 20, className = "" }: { logoUrl?: string; icon: React.ElementType; name: string; size?: number; className?: string }) {
+  const [error, setError] = useState(false);
+  
+  if (!logoUrl || error) {
+    return <Icon size={size} className={className} />;
+  }
+
+  return (
+    <img 
+      src={logoUrl} 
+      alt={name} 
+      className={`w-full h-full object-contain ${className}`}
+      onError={() => setError(true)}
+    />
+  );
+}
 
 // ─── Radar Chart SVG ─────────────────────────────────────────────────────────
 function RadarChart({ scores, color = 'var(--color-primary)' }: { scores: number[]; color?: string }) {
@@ -100,15 +118,15 @@ function HookScreen({ onStart }: { onStart: () => void }) {
             <Compass size={14} className="mr-1.5" /> AI Matching Engine
           </Badge>
           <h1 className="text-3xl md:text-5xl font-black mb-3" style={{ color: 'var(--color-primary)' }}>
-             Ecosystem Match
+             Culture Fit Check
           </h1>
           <p className="mt-2 text-sm md:text-base max-w-xl mx-auto leading-relaxed font-medium" style={{ color: 'var(--color-text)' }}>
-            Môi trường kỹ thuật xuất sắc không bằng một môi trường "thuộc về". 
-            Giải mã hệ sinh thái lý tưởng nhất thông qua 6 câu hỏi phân tích tâm lý ứng viên. Áp dụng cho 14 doanh nghiệp Tech Tier-1 Việt Nam.
+            Năng lực chuyên môn giúp bạn có việc làm, nhưng văn hóa phù hợp mới giúp bạn thăng tiến. 
+            Xác định hệ sinh thái doanh nghiệp lý tưởng với 6 câu hỏi phân tích phong cách làm việc.
           </p>
           <Button variant="primary" className="mt-8 h-12 px-10 text-sm font-bold shadow-md text-white" onClick={onStart}>
             <span className="flex items-center gap-2">
-               Vào bài test (2 phút) <ArrowRight size={16} />
+               Bắt đầu đánh giá (2 phút) <ArrowRight size={16} />
             </span>
           </Button>
         </div>
@@ -186,9 +204,9 @@ function SurveyScreen({ onComplete }: { onComplete: (answers: number[]) => void 
             <span className="flex h-6 w-6 items-center justify-center rounded-md border" style={{ background: 'var(--color-primary-muted)', color: 'var(--color-primary)', borderColor: 'var(--color-border)' }}>
               <Target size={14} />
             </span>
-            <span>Khảo sát Ecosystem</span>
+            <span>Phân tích Tương thích Văn hóa</span>
             <span className="mx-1" style={{ color: 'var(--color-text-subtle)' }}>/</span>
-            <span style={{ color: 'var(--color-text-muted)' }}>Câu {qIdx + 1}</span>
+            <span style={{ color: 'var(--color-text-muted)' }}>Bước {qIdx + 1}</span>
           </span>
           <span className="font-bold border px-2 py-0.5 rounded-md" style={{ color: 'var(--color-primary)', borderColor: 'var(--color-border)' }}>{Math.round(progress)}%</span>
         </div>
@@ -199,7 +217,7 @@ function SurveyScreen({ onComplete }: { onComplete: (answers: number[]) => void 
 
       <SurfaceCard className="!p-8">
         <p className="text-center text-[11px] font-black uppercase tracking-widest mb-10" style={{ color: 'var(--color-primary)' }}>
-          Kéo nút trượt về phía quan điểm của bạn
+          Di chuyển thanh trượt theo mức độ ưu tiên của bạn
         </p>
 
         <div className="grid grid-cols-[1fr_auto_1fr] gap-6 items-start">
@@ -321,20 +339,28 @@ function ResultScreen({ answers }: { answers: number[] }) {
         <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
           <div className="flex-1 text-center md:text-left">
             <Badge variant="primary" className="mb-4">
-              <Sparkles size={14} className="mr-1.5" /> KẾT QUẢ TỐT NHẤT
+              <Sparkles size={14} className="mr-1.5" /> MỨC ĐỘ PHÙ HỢP CAO NHẤT
             </Badge>
             <h1 className="text-4xl md:text-5xl font-black tracking-tight leading-tight mb-3" style={{ color: 'var(--color-text)' }}>
-              Bạn là mảnh ghép hoàn hảo cho <br />
+              Điểm đến văn hóa lý tưởng của bạn là <br />
               <span style={{ color: 'var(--color-primary)' }}>{topCompany.name}!</span>
             </h1>
             <p className="font-medium max-w-lg leading-relaxed text-sm md:text-base" style={{ color: 'var(--color-text-secondary)' }}>{topCompany.tagline}</p>
           </div>
           
-          <div className="shrink-0 flex flex-col items-center justify-center p-6 rounded-[2rem] border bg-white shadow-sm" style={{ borderColor: 'var(--color-border)' }}>
-             <p className="text-[11px] font-bold uppercase tracking-widest mb-1" style={{ color: 'var(--color-text-muted)' }}>Độ ăn rơ văn hóa</p>
-             <div className="flex items-center gap-2">
+          <div className="shrink-0 flex flex-col items-center justify-center p-6 rounded-[2rem] border bg-white shadow-sm min-w-[160px]" style={{ borderColor: 'var(--color-border)' }}>
+             <p className="text-[11px] font-bold uppercase tracking-widest mb-2" style={{ color: 'var(--color-text-muted)' }}>Chỉ số Tương thích</p>
+             <div className="flex items-center gap-3">
                 <p className="text-5xl font-black" style={{ color: 'var(--color-primary)', fontFamily: 'Outfit, sans-serif' }}>{topCompany.match}%</p>
-                <topCompany.icon size={36} className="drop-shadow-sm" style={{ color: 'var(--color-primary)' }} />
+                <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-white p-1 shadow-sm border" style={{ borderColor: 'var(--color-border)' }}>
+                  <CompanyLogo 
+                    logoUrl={topCompany.logoUrl} 
+                    icon={topCompany.icon} 
+                    name={topCompany.name} 
+                    size={28} 
+                    className="text-[var(--color-primary)]" 
+                  />
+                </div>
              </div>
           </div>
         </div>
@@ -353,10 +379,16 @@ function ResultScreen({ answers }: { answers: number[] }) {
             }}
           >
             <div className="flex items-center justify-between">
-               <div className="flex h-10 w-10 items-center justify-center rounded-xl border" style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border)', color: company.color }}>
-                 <company.icon size={20} />
+               <div className="flex h-11 w-11 items-center justify-center rounded-xl border bg-white p-2 shadow-sm" style={{ borderColor: selectedCompany === i ? 'var(--color-primary)' : 'var(--color-border)' }}>
+                 <CompanyLogo 
+                   logoUrl={company.logoUrl} 
+                   icon={company.icon} 
+                   name={company.name} 
+                   size={20} 
+                   className="text-[var(--color-primary)]" 
+                 />
                </div>
-               {selectedCompany === i && <CheckCircle size={18} style={{ color: 'var(--color-primary)' }} />}
+               {selectedCompany === i && <CheckCircle size={20} style={{ color: 'var(--color-primary)' }} className="drop-shadow-sm" />}
             </div>
             <div>
                <p className="font-bold text-base" style={{ color: 'var(--color-text)' }}>{company.name}</p>
@@ -394,7 +426,7 @@ function ResultScreen({ answers }: { answers: number[] }) {
           <SurfaceCard className="!p-6 flex-1">
             <div className="flex items-center gap-2 mb-4">
               <Sparkles size={18} style={{ color: 'var(--color-primary)' }} />
-              <p className="text-base font-bold" style={{ color: 'var(--color-text)' }}>Tại sao {topCompany.name} là "chân ái" với bạn?</p>
+              <p className="text-base font-bold" style={{ color: 'var(--color-text)' }}>Tại sao {topCompany.name} phù hợp với bạn?</p>
             </div>
             
             <div className="p-5 rounded-2xl border mb-6" style={{ background: 'var(--color-surface-raised)', borderColor: 'var(--color-border)' }}>
@@ -403,9 +435,9 @@ function ResultScreen({ answers }: { answers: number[] }) {
               </p>
             </div>
 
-            <p className="text-[11px] font-bold uppercase tracking-widest mb-3" style={{ color: 'var(--color-text-subtle)' }}>Culture keywords match</p>
+            <p className="text-[11px] font-bold uppercase tracking-widest mb-3" style={{ color: 'var(--color-text-subtle)' }}>Các giá trị văn hoá tương đồng</p>
             <div className="flex flex-wrap gap-2.5">
-              {['Tự chủ', 'Tốc độ', 'Thử thách', 'Dữ liệu quyết định'].map(k => (
+              {['Tự chủ', 'Quyết liệt', 'Minh bạch', 'Dựa trên dữ liệu'].map(k => (
                 <div key={k} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold" style={{ background: 'var(--color-surface-raised)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}>
                   <CheckCircle size={12} style={{ color: 'var(--color-success)' }} /> {k}
                 </div>
@@ -417,12 +449,12 @@ function ResultScreen({ answers }: { answers: number[] }) {
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
               <div>
                 <span className="inline-block px-2.5 py-1 text-[10px] font-black uppercase tracking-widest rounded-md mb-3 border bg-white" style={{ color: 'var(--color-danger)', borderColor: 'var(--color-border)' }}>ACTION REQUIRED</span>
-                <p className="font-black text-lg leading-tight" style={{ color: 'var(--color-primary)' }}>Luyện phỏng vấn theo <br />phong cách {topCompany.name}</p>
-                <p className="text-sm font-medium mt-1" style={{ color: 'var(--color-text)' }}>Hệ thống AI sẽ mô phỏng lại format phỏng vấn cực "khoai" của doanh nghiệp này.</p>
+                <p className="font-black text-lg leading-tight" style={{ color: 'var(--color-primary)' }}>Luyện tập phỏng vấn theo <br />phong cách {topCompany.name}</p>
+                <p className="text-sm font-medium mt-1" style={{ color: 'var(--color-text)' }}>Hệ thống AI sẽ mô phỏng lại format phỏng vấn đặc thù của doanh nghiệp này.</p>
               </div>
               <Button onClick={() => navigate('/interview')} variant="primary" className="h-12 px-6 font-bold shadow-sm shrink-0 whitespace-nowrap text-white">
                 <span className="flex items-center gap-2">
-                  Sang Luyện Mock <ArrowRight size={16} />
+                  Bắt đầu Luyện tập <ArrowRight size={16} />
                 </span>
               </Button>
             </div>
