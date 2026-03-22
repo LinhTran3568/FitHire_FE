@@ -348,7 +348,6 @@ function StepExperience({
   );
 }
 
-
 const Chip = ({ label, onRm, cls }: { label: string; onRm: () => void; cls: string }) => (
   <span className={`flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium ${cls}`}>
     {label}
