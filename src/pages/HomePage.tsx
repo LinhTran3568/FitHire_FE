@@ -14,6 +14,12 @@ import {
   BookOpen,
   Users,
   Award,
+  Layout,
+  Settings,
+  User,
+  ShieldCheck,
+  Globe,
+  Zap as ZapIcon
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -58,10 +64,10 @@ const STEPS = [
 ];
 
 const FEATURES = [
-  { icon: Zap, title: 'Tạo CV trong 5 phút', description: 'AI tự điền nội dung theo thông tin bạn cung cấp, chuẩn format nhà tuyển dụng.', color: '#f59e0b' },
+  { icon: ZapIcon, title: 'Tạo CV trong 5 phút', description: 'AI tự điền nội dung theo thông tin bạn cung cấp, chuẩn format nhà tuyển dụng.', color: '#f59e0b', image: '/feature_ats_scan_v2_1774195216889.png' },
   { icon: ScanSearch, title: 'Phân tích ATS thông minh', description: 'Kiểm tra điểm ATS, phát hiện từ khóa còn thiếu và đề xuất cải thiện tức thì.', color: '#0d9488' },
   { icon: BriefcaseBusiness, title: 'Gợi ý việc phù hợp', description: 'So khớp hồ sơ với hàng trăm JD, tìm ra vị trí bạn có cơ hội cao nhất.', color: '#3b82f6' },
-  { icon: MicVocal, title: 'Mock interview AI', description: 'Phỏng vấn thử với AI theo đúng JD bạn muốn apply, nhận góp ý chi tiết.', color: '#8b5cf6' },
+  { icon: MicVocal, title: 'Mock interview AI', description: 'Phỏng vấn thử với AI theo đúng JD bạn muốn apply, nhận góp ý chi tiết.', color: '#8b5cf6', image: '/feature_ai_interview_1774194843962.png' },
   { icon: Target, title: 'Theo dõi tiến độ', description: 'Dashboard rõ ràng giúp bạn biết mình đang ở đâu trong hành trình ứng tuyển.', color: '#ec4899' },
   { icon: BookOpen, title: 'Test tính cách & văn hóa', description: 'Khám phá phong cách làm việc và đánh giá mức độ phù hợp với doanh nghiệp.', color: '#10b981' },
 ];
@@ -103,6 +109,101 @@ const itemVariants: Variants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
 };
 
+// --- Mockup Component for Hero ---
+const ProductMockup = () => (
+  <div className="relative w-full h-full p-4 lg:p-8 flex flex-col gap-4 text-white">
+    {/* Sidebar Mock */}
+    <div className="absolute left-4 top-4 bottom-4 w-12 hidden md:flex flex-col gap-4 items-center py-4 bg-white/5 border-r border-white/10 rounded-l-2xl">
+      <div className="h-6 w-6 rounded-lg bg-teal-500/20 flex items-center justify-center"><Layout size={14} className="text-teal-400" /></div>
+      <div className="h-6 w-6 rounded-lg bg-white/5 flex items-center justify-center"><FileText size={14} className="text-white/40" /></div>
+      <div className="h-6 w-6 rounded-lg bg-white/5 flex items-center justify-center"><User size={14} className="text-white/40" /></div>
+      <div className="mt-auto h-6 w-6 rounded-lg bg-white/5 flex items-center justify-center"><Settings size={14} className="text-white/40" /></div>
+    </div>
+
+    {/* Header Mock */}
+    <div className="h-10 w-full flex items-center justify-between px-4 md:pl-16 bg-white/5 border-b border-white/10 rounded-t-2xl">
+      <div className="flex gap-1.5">
+        <div className="h-2 w-2 rounded-full bg-red-500/50" />
+        <div className="h-2 w-2 rounded-full bg-amber-500/50" />
+        <div className="h-2 w-2 rounded-full bg-emerald-500/50" />
+      </div>
+      <div className="flex items-center gap-3">
+        <div className="h-5 w-16 md:w-24 bg-white/5 rounded-full" />
+        <div className="h-6 w-6 rounded-full bg-gradient-to-br from-teal-400 to-blue-500" />
+      </div>
+    </div>
+
+    {/* Main Content Mock */}
+    <div className="flex-1 md:pl-12 grid grid-cols-1 md:grid-cols-2 gap-4 overflow-hidden">
+      {/* Left: CV Content */}
+      <div className="space-y-3 p-4 bg-white/[0.02] border border-white/5 rounded-xl transition-all duration-500 hover:bg-white/[0.05]">
+        <div className="flex gap-3">
+          <div className="h-10 w-10 md:h-12 md:w-12 rounded-lg bg-white/5" />
+          <div className="space-y-2 flex-1">
+             <div className="h-3 w-1/2 bg-white/10 rounded-full" />
+             <div className="h-2 w-1/3 bg-white/5 rounded-full" />
+          </div>
+        </div>
+        <div className="space-y-2">
+           <div className="h-2 w-full bg-white/5 rounded-full" />
+           <div className="h-2 w-full bg-white/5 rounded-full" />
+           <div className="h-2 w-3/4 bg-white/5 rounded-full" />
+        </div>
+        <div className="pt-2 md:pt-4 space-y-2">
+           <div className="h-2 w-1/4 bg-teal-500/20 rounded-full" />
+           <div className="h-10 md:h-14 w-full bg-white/10 rounded-lg border border-white/10 flex items-center px-4">
+              <motion.div 
+                initial={{ width: 0 }}
+                animate={{ width: '70%' }}
+                transition={{ duration: 2, repeat: Infinity, repeatType: 'reverse' }}
+                className="h-1.5 bg-teal-500/40 rounded-full" 
+              />
+           </div>
+        </div>
+      </div>
+
+      {/* Right: AI Analysis */}
+      <div className="space-y-3 md:space-y-4">
+        <div className="glass-card-bright p-3 md:p-4 rounded-xl space-y-2 md:space-y-3 shadow-xl">
+           <div className="flex items-center justify-between">
+              <span className="text-[8px] md:text-[10px] font-black uppercase text-white/40 tracking-wider">ATS MATCH RATE</span>
+              <span className="text-base md:text-lg font-black text-teal-400">92%</span>
+           </div>
+           <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+              <motion.div 
+                initial={{ width: 0 }}
+                animate={{ width: '92%' }}
+                transition={{ duration: 1.5, delay: 1 }}
+                className="h-full bg-gradient-to-r from-teal-500 to-emerald-400" 
+              />
+           </div>
+        </div>
+        
+        <div className="grid grid-cols-2 gap-2 md:gap-3">
+           <div className="glass-card p-2 md:p-3 rounded-xl border-blue-500/20">
+              <div className="h-1.5 md:h-2 w-1/2 bg-white/20 rounded-full mb-1.5 md:mb-2" />
+              <div className="h-3 md:h-4 w-3/4 bg-blue-400/20 rounded-full" />
+           </div>
+           <div className="glass-card p-2 md:p-3 rounded-xl border-emerald-500/20">
+              <div className="h-1.5 md:h-2 w-1/2 bg-white/20 rounded-full mb-1.5 md:mb-2" />
+              <div className="h-3 md:h-4 w-3/4 bg-emerald-400/20 rounded-full" />
+           </div>
+        </div>
+
+        <div className="p-3 md:p-4 bg-white/5 rounded-xl border border-white/10 flex items-center gap-3">
+           <div className="h-6 w-6 md:h-8 md:w-8 rounded-lg bg-teal-500/20 flex items-center justify-center text-teal-400">
+              <Sparkles size={14} />
+           </div>
+           <div className="flex-1 space-y-1 md:space-y-1.5 text-left">
+              <div className="h-1.5 md:h-2 w-1/2 bg-white/40 rounded-full" />
+              <div className="h-1 md:h-1.5 w-full bg-white/5 rounded-full" />
+           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
 export default function HomePage() {
   return (
     <div className="w-full overflow-hidden transition-colors duration-500" style={{ background: 'var(--color-background)' }}>
@@ -121,10 +222,7 @@ export default function HomePage() {
           style={{ background: 'radial-gradient(ellipse, var(--hero-orb-c) 0%, transparent 70%)' }} />
 
         {/* Dot grid */}
-        <div className="absolute inset-0 opacity-[0.035]" style={{
-          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)',
-          backgroundSize: '32px 32px',
-        }} />
+        <div className="absolute inset-0 opacity-[0.035] bg-dot-grid" />
 
         {/* Horizontal lines texture */}
         <div className="absolute inset-0 opacity-[0.025]" style={{
@@ -216,7 +314,7 @@ export default function HomePage() {
             transition={{ duration: 1, delay: 0.5, type: 'spring', bounce: 0.2 }}
             className="relative mx-auto mt-20 max-w-3xl px-4 lg:px-0"
           >
-            {/* Floating labels - Adjusted for smaller container */}
+            {/* Floating labels */}
             <div className="absolute -top-6 -right-10 z-30 bg-white/10 backdrop-blur-2xl border border-white/20 p-4 rounded-2xl animate-float lg:flex hidden flex-col gap-1 shadow-2xl glow-primary">
                <div className="flex items-center gap-2">
                  <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -237,18 +335,19 @@ export default function HomePage() {
               className="rounded-[2.5rem] p-px relative group transition-all duration-500 overflow-hidden shadow-2xl"
               style={{ background: 'linear-gradient(135deg, rgba(13,148,136,0.5), rgba(6,182,212,0.3), rgba(59,130,246,0.2))' }}
             >
-              {/* Glass overlay on hover */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-teal-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-20" />
-              
               <div
-                className="rounded-[2.45rem] overflow-hidden relative z-10"
-                style={{ background: 'rgba(8,13,28,0.92)' }}
+                className="rounded-[2.45rem] overflow-hidden relative z-10 w-full aspect-[4/3] md:aspect-[16/10]"
+                style={{ background: 'rgba(8,13,28,0.95)' }}
               >
-                <img 
-                  src="/hero_product_showcase_1774194387593.png" 
-                  alt="FitHire AI Product Showcase"
-                  className="w-full h-auto object-cover opacity-90 transition-transform duration-700 group-hover:scale-[1.01]"
-                />
+                {/* Dots background layer */}
+                <div className="absolute inset-0 bg-dot-grid opacity-20" />
+                
+                {/* Interactive Mockup Component */}
+                <ProductMockup />
+                
+                {/* Floating orbs for extra tech feel */}
+                <div className="absolute top-1/4 -left-20 h-48 w-48 rounded-full bg-teal-500/20 blur-[100px] animate-pulse-soft" />
+                <div className="absolute -bottom-1/4 -right-20 h-48 w-48 rounded-full bg-blue-500/20 blur-[100px] animate-pulse-soft" />
               </div>
             </div>
           </motion.div>
@@ -289,8 +388,11 @@ export default function HomePage() {
       </section>
 
       {/* ── 3 STEPS ── */}
-      <section className="px-6 py-28 lg:px-10 transition-colors" style={{ background: 'var(--color-background-alt)' }}>
-        <div className="mx-auto max-w-7xl">
+      <section className="px-6 py-28 lg:px-10 transition-colors relative" style={{ background: 'var(--color-background-alt)' }}>
+         {/* Background pattern */}
+         <div className="absolute inset-0 bg-dot-grid opacity-[0.02]" />
+
+        <div className="relative mx-auto max-w-7xl">
           <div className="text-center">
             <span className="section-label">
               <Sparkles size={13} /> Lộ trình bài bản
@@ -303,12 +405,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="mt-16 grid gap-6 md:grid-cols-3 relative">
-            {/* Connecting line (desktop) */}
-            <div className="absolute top-14 left-1/6 right-1/6 h-px hidden md:block" style={{
-              background: 'linear-gradient(90deg, transparent 0%, var(--color-border-strong) 20%, var(--color-border-strong) 80%, transparent 100%)',
-            }} />
-
+          <div className="mt-16 grid gap-8 md:grid-cols-3">
             {STEPS.map((step, i) => (
               <motion.div
                 key={step.number}
@@ -316,60 +413,51 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ duration: 0.55, delay: i * 0.14, ease: [0.22, 1, 0.36, 1] }}
-                className="card-hover relative flex flex-col rounded-3xl p-8"
+                className="card-hover relative flex flex-col rounded-[2.5rem] p-6 lg:p-8"
                 style={{
                   background: 'var(--color-surface)',
                   border: '1px solid var(--color-border)',
                   boxShadow: 'var(--shadow-sm)',
                 }}
               >
-                {/* Step number badge */}
-                <div
-                  className="absolute -top-4 -right-3 flex h-10 w-10 items-center justify-center rounded-2xl text-lg font-black"
-                  style={{
-                    background: `${step.color}15`,
-                    border: `2px solid ${step.color}30`,
-                    color: step.color,
-                    fontFamily: 'Outfit, sans-serif',
-                  }}
-                >
-                  {step.number}
-                </div>
-
-                <div className="mb-6 relative h-48 w-full overflow-hidden rounded-2xl group/img">
+                <div className="mb-6 relative h-56 w-full overflow-hidden rounded-[1.8rem] group/img shadow-2xl">
                   <img 
                     src={step.image} 
                     alt={step.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-110"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-110 opacity-90"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-surface)] via-transparent to-transparent opacity-60" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-surface)]/80 via-transparent to-transparent opacity-60" />
                   <div
-                    className="absolute bottom-4 left-4 flex h-12 w-12 items-center justify-center rounded-xl backdrop-blur-md border border-white/20"
+                    className="absolute bottom-5 left-5 flex h-14 w-14 items-center justify-center rounded-2xl backdrop-blur-xl border border-white/20"
                     style={{
-                      background: `${step.color}88`,
-                      boxShadow: `0 8px 24px ${step.color}35`,
+                      background: `${step.color}aa`,
+                      boxShadow: `0 8px 32px ${step.color}40`,
                     }}
                   >
-                    <step.icon size={22} className="text-white" />
+                    <step.icon size={26} className="text-white" />
                   </div>
                 </div>
 
-                <h3 className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>
-                  {step.title}
-                </h3>
-                <p className="mt-3 flex-1 text-base leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>
+                <div className="flex items-center gap-3 mb-4">
+                   <span className="text-3xl font-black opacity-10" style={{ color: step.color }}>{step.number}</span>
+                   <h3 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
+                    {step.title}
+                  </h3>
+                </div>
+                
+                <p className="flex-1 text-base leading-relaxed mb-8" style={{ color: 'var(--color-text-muted)' }}>
                   {step.description}
                 </p>
-                <Link to={step.link} className="mt-8 block">
+                <Link to={step.link}>
                   <button
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-bold text-white transition-all duration-300 hover:scale-105 hover:opacity-92"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-2xl px-6 py-4 text-sm font-bold text-white transition-all duration-300 hover:scale-[1.03] active:scale-95"
                     style={{
                       background: `linear-gradient(135deg, ${step.color}, ${step.color}cc)`,
-                      boxShadow: `0 6px 20px ${step.color}30`,
+                      boxShadow: `0 10px 25px ${step.color}40`,
                     }}
                   >
                     {step.cta}
-                    <ArrowRight size={16} />
+                    <ArrowRight size={18} />
                   </button>
                 </Link>
               </motion.div>
@@ -379,8 +467,10 @@ export default function HomePage() {
       </section>
 
       {/* ── FEATURES GRID ── */}
-      <section className="px-6 py-28 lg:px-10 transition-colors" style={{ background: 'var(--color-surface)' }}>
-        <div className="mx-auto max-w-7xl">
+      <section className="px-6 py-28 lg:px-10 transition-colors relative" style={{ background: 'var(--color-surface)' }}>
+         <div className="absolute top-0 right-0 w-1/3 h-1/2 bg-teal-500/5 blur-[120px] rounded-full" />
+
+        <div className="relative mx-auto max-w-7xl">
           <div className="text-center">
             <span className="section-label">
               <Zap size={13} /> Bộ công cụ mạnh mẽ
@@ -393,7 +483,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {FEATURES.map((f, i) => (
               <motion.div
                 key={f.title}
@@ -401,26 +491,33 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.45, delay: i * 0.07, ease: [0.22, 1, 0.36, 1] }}
-                className="card-hover group rounded-3xl p-7"
+                className="card-hover group relative overflow-hidden rounded-[2rem] p-8"
                 style={{
                   background: 'var(--color-background-alt)',
                   border: '1px solid var(--color-border)',
                 }}
               >
+                {/* Background image preview if available */}
+                {f.image && (
+                   <div className="absolute -right-8 -bottom-8 w-32 h-32 opacity-[0.08] grayscale group-hover:opacity-[0.14] transition-opacity duration-500">
+                      <img src={f.image} alt="" className="w-full h-full object-cover" />
+                   </div>
+                )}
+
                 <div
-                  className="mb-5 flex h-13 w-13 items-center justify-center rounded-2xl transition-all duration-300 group-hover:scale-110"
+                  className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl transition-all duration-300 group-hover:scale-110"
                   style={{
                     background: `${f.color}14`,
                     border: `1px solid ${f.color}28`,
                     color: f.color,
                   }}
                 >
-                  <f.icon size={22} />
+                  <f.icon size={26} />
                 </div>
-                <h3 className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>
+                <h3 className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>
                   {f.title}
                 </h3>
-                <p className="mt-2.5 text-sm leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>
+                <p className="mt-3 text-base leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>
                   {f.description}
                 </p>
               </motion.div>
@@ -430,8 +527,10 @@ export default function HomePage() {
       </section>
 
       {/* ── TESTIMONIALS ── */}
-      <section className="px-6 py-28 lg:px-10 transition-colors" style={{ background: 'var(--color-background-alt)' }}>
-        <div className="mx-auto max-w-7xl">
+      <section className="px-6 py-28 lg:px-10 transition-colors relative" style={{ background: 'var(--color-background-alt)' }}>
+         <div className="absolute inset-0 bg-dot-grid opacity-[0.02]" />
+
+        <div className="relative mx-auto max-w-7xl">
           <div className="text-center">
             <span className="section-label">
               <Users size={13} /> Cộng đồng FitHire
@@ -440,7 +539,7 @@ export default function HomePage() {
               Được tin dùng bởi hàng ngàn bạn trẻ
             </h2>
           </div>
-          <div className="mt-16 grid gap-6 md:grid-cols-3">
+          <div className="mt-16 grid gap-8 md:grid-cols-3">
             {TESTIMONIALS.map((t, i) => (
               <motion.div
                 key={t.name}
@@ -448,44 +547,37 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }}
-                className="card-hover relative rounded-3xl p-8"
+                className="card-hover relative rounded-[2.5rem] p-8 lg:p-10"
                 style={{
                   background: 'var(--color-surface)',
                   border: '1px solid var(--color-border)',
                   boxShadow: 'var(--shadow-sm)',
                 }}
               >
-                {/* Quote mark */}
-                <div
-                  className="absolute top-6 right-7 text-5xl font-black leading-none opacity-10"
-                  style={{ color: t.color, fontFamily: 'Georgia, serif' }}
-                >
-                  "
-                </div>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-5">
                   <div
-                    className="h-12 w-12 shrink-0 overflow-hidden rounded-2xl shadow-lg border-2 border-white/10"
+                    className="h-16 w-16 shrink-0 overflow-hidden rounded-[1.2rem] shadow-2xl border-2 border-white/10"
                   >
                     {t.avatar.startsWith('/') ? (
                       <img src={t.avatar} alt={t.name} className="h-full w-full object-cover" />
                     ) : (
-                      <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-700 to-slate-900 text-base font-black text-white">
+                      <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-700 to-slate-900 text-xl font-black text-white">
                         {t.avatar}
                       </div>
                     )}
                   </div>
                   <div>
-                    <p className="font-bold text-base" style={{ color: 'var(--color-text)' }}>{t.name}</p>
-                    <p className="text-xs font-semibold mt-0.5" style={{ color: 'var(--color-text-muted)' }}>{t.role}</p>
+                    <p className="font-bold text-lg" style={{ color: 'var(--color-text)' }}>{t.name}</p>
+                    <p className="text-sm font-semibold opacity-60 mt-0.5" style={{ color: t.color }}>{t.role}</p>
                   </div>
                 </div>
                 {/* Stars */}
-                <div className="mt-5 flex gap-1">
+                <div className="mt-6 flex gap-1.5">
                   {Array.from({ length: t.stars }).map((_, si) => (
-                    <Star key={si} size={13} fill="#fbbf24" className="text-amber-400" />
+                    <Star key={si} size={15} fill="#fbbf24" className="text-amber-400" />
                   ))}
                 </div>
-                <p className="mt-4 text-sm leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
+                <p className="mt-6 text-base leading-relaxed italic" style={{ color: 'var(--color-text-secondary)' }}>
                   "{t.text}"
                 </p>
               </motion.div>
@@ -501,52 +593,49 @@ export default function HomePage() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="mx-auto max-w-5xl overflow-hidden rounded-[2.5rem] p-12 text-center md:p-20 relative"
+          className="mx-auto max-w-5xl overflow-hidden rounded-[3rem] p-12 text-center md:p-24 relative shadow-[0_40px_100px_rgba(0,0,0,0.4)]"
           style={{ background: 'var(--hero-bg)' }}
         >
           {/* CTA orbs */}
-          <div className="pointer-events-none absolute -top-24 -right-24 h-80 w-80 rounded-full"
+          <div className="pointer-events-none absolute -top-24 -right-24 h-96 w-96 rounded-full"
             style={{ background: 'radial-gradient(circle, var(--hero-orb-a) 0%, transparent 70%)' }} />
-          <div className="pointer-events-none absolute -bottom-24 -left-24 h-64 w-64 rounded-full"
+          <div className="pointer-events-none absolute -bottom-24 -left-24 h-80 w-80 rounded-full"
             style={{ background: 'radial-gradient(circle, var(--hero-orb-b) 0%, transparent 70%)' }} />
           {/* Dot grid */}
-          <div className="absolute inset-0 opacity-[0.04]" style={{
-            backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.9) 1px, transparent 1px)',
-            backgroundSize: '28px 28px',
-          }} />
+          <div className="absolute inset-0 opacity-[0.06] bg-dot-grid" />
 
           <div className="relative z-10">
             <span
-              className="inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-bold text-white backdrop-blur-lg"
-              style={{ background: 'rgba(13,148,136,0.2)', border: '1px solid rgba(13,148,136,0.4)' }}
+              className="inline-flex items-center gap-3 rounded-full px-6 py-2.5 text-sm font-bold text-white backdrop-blur-xl border border-white/20 shadow-xl"
+              style={{ background: 'rgba(255,255,255,0.05)' }}
             >
-              <Award size={14} style={{ color: '#5eead4' }} />
-              Sử dụng nền tảng miễn phí
+              <Award size={16} className="text-teal-400" />
+              Gia nhập cùng 5,000+ người dùng thông thái
             </span>
-            <h2 className="mt-8 text-4xl font-black text-white md:text-5xl lg:text-6xl tracking-tight" style={{ fontFamily: 'Outfit, sans-serif', letterSpacing: '-0.04em' }}>
-              Khai phóng tiềm năng,
+            <h2 className="mt-10 text-4xl font-black text-white md:text-5xl lg:text-7xl tracking-tighter leading-tight" style={{ fontFamily: 'Outfit, sans-serif' }}>
+              Bắt đầu sự nghiệp
               <br />
-              <span className="text-gradient-hero">bứt tốc sự nghiệp</span>
+              <span className="text-gradient-hero">đột phá ngay hôm nay</span>
             </h2>
-            <p className="mx-auto mt-6 max-w-2xl text-xl font-medium" style={{ color: 'rgba(255,255,255,0.6)' }}>
-              Đừng để tài năng của bạn chìm khuất sau thiết kế CV nhạt nhoà. Bắt đầu ngay chuyên nghiệp hoá hồ sơ.
+            <p className="mx-auto mt-8 max-w-2xl text-xl font-medium opacity-70" style={{ color: 'white' }}>
+              Chỉ mất 5 phút để có một bộ hồ sơ chuẩn chỉnh và lộ trình nghề nghiệp vững vàng. Hoàn toàn miễn phí khởi đầu.
             </p>
-            <div className="mt-12 flex flex-wrap justify-center gap-4">
+            <div className="mt-14 flex flex-wrap justify-center gap-6">
               <Link to="/cv-builder?flow=build">
                 <button
-                  className="group inline-flex items-center gap-2.5 rounded-full bg-white px-10 py-4 text-base font-bold shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_48px_rgba(255,255,255,0.25)]"
+                  className="group relative flex items-center gap-3 rounded-2xl bg-white px-12 py-5 text-lg font-black shadow-2xl transition-all duration-300 hover:scale-105 hover:bg-teal-50"
                   style={{ color: '#0d9488' }}
                 >
-                  Tạo CV của bạn
-                  <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-1.5" />
+                  Khám phá ngay
+                  <ArrowRight size={22} className="transition-transform duration-300 group-hover:translate-x-2" />
                 </button>
               </Link>
               <Link to="/subscription">
                 <button
-                  className="inline-flex items-center gap-2.5 rounded-full border border-white/20 bg-white/8 px-10 py-4 text-base font-bold text-white backdrop-blur-md transition-all duration-300 hover:bg-white/14 hover:border-white/35"
+                  className="flex items-center gap-3 rounded-2xl border-2 border-white/20 bg-white/5 px-12 py-5 text-lg font-bold text-white backdrop-blur-xl transition-all duration-300 hover:bg-white/10 hover:border-white/40 shadow-xl"
                 >
-                  <Sparkles size={16} />
-                  Xem gói Pro
+                  <Sparkles size={20} className="text-teal-400" />
+                  Gói Pro
                 </button>
               </Link>
             </div>
