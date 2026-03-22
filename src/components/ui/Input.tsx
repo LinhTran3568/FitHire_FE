@@ -50,10 +50,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 
         <div className="relative flex items-center">
           {leftAddon && (
-            <span
-              className="absolute left-3.5"
-              style={{ color: 'var(--color-text-subtle)' }}
-            >
+            <span className="absolute left-3.5" style={{ color: 'var(--color-text-subtle)' }}>
               {leftAddon}
             </span>
           )}
@@ -67,8 +64,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               'placeholder:text-[var(--color-text-subtle)]',
               'disabled:cursor-not-allowed disabled:opacity-50',
               hasError
-                ? 'border-[var(--color-danger)] focus:ring-2 focus:ring-[var(--color-danger)]/20 bg-[var(--color-danger-light)]'
-                : 'border-[var(--color-border)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary-muted)] bg-[var(--color-surface)]',
+                ? 'border-[var(--color-danger)] bg-[var(--color-danger-light)] focus:ring-2 focus:ring-[var(--color-danger)]/20'
+                : 'border-[var(--color-border)] bg-[var(--color-surface)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary-muted)]',
               'text-[var(--color-text)]',
               leftAddon && 'pl-10',
               rightAddon && 'pr-10',
@@ -79,10 +76,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           />
 
           {rightAddon && (
-            <span
-              className="absolute right-3.5"
-              style={{ color: 'var(--color-text-subtle)' }}
-            >
+            <span className="absolute right-3.5" style={{ color: 'var(--color-text-subtle)' }}>
               {rightAddon}
             </span>
           )}
@@ -90,7 +84,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 
         {(helperText ?? errorMessage) && (
           <p
-            className={cn('text-xs font-medium', hasError ? 'text-[var(--color-danger)]' : 'text-[var(--color-text-muted)]')}
+            className={cn(
+              'text-xs font-medium',
+              hasError ? 'text-[var(--color-danger)]' : 'text-[var(--color-text-muted)]',
+            )}
           >
             {errorMessage ?? helperText}
           </p>

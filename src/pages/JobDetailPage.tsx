@@ -129,7 +129,7 @@ export default function JobDetailPage() {
             border: '1px solid var(--color-primary)',
           }}
         >
-          <div className="flex items-center gap-2 mb-2">
+          <div className="mb-2 flex items-center gap-2">
             <Sparkles size={15} style={{ color: 'var(--color-primary)' }} />
             <p className="text-sm font-bold" style={{ color: 'var(--color-primary)' }}>
               Vì sao công việc này phù hợp với bạn?
@@ -137,7 +137,11 @@ export default function JobDetailPage() {
           </div>
           <ul className="space-y-1.5">
             {job.skills.slice(0, 4).map(skill => (
-              <li key={skill} className="flex items-center gap-2 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+              <li
+                key={skill}
+                className="flex items-center gap-2 text-sm"
+                style={{ color: 'var(--color-text-secondary)' }}
+              >
                 <CheckCircle2 size={13} style={{ color: 'var(--color-primary)' }} />
                 JD đang ưu tiên kỹ năng: <strong>{skill}</strong>
               </li>
@@ -148,7 +152,7 @@ export default function JobDetailPage() {
 
       {/* JD Detail */}
       <SurfaceCard id="job-jd" className="space-y-4">
-        <div className="flex items-center gap-2 mb-1">
+        <div className="mb-1 flex items-center gap-2">
           <Building2 size={16} style={{ color: 'var(--color-text-muted)' }} />
           <h3 className="font-bold" style={{ color: 'var(--color-text)' }}>
             Mô tả công việc chi tiết
@@ -162,13 +166,21 @@ export default function JobDetailPage() {
               border: '1px solid var(--color-border)',
             }}
           >
-            <h4 className="text-sm font-bold mb-3" style={{ color: 'var(--color-text)' }}>
+            <h4 className="mb-3 text-sm font-bold" style={{ color: 'var(--color-text)' }}>
               Quyền lợi
             </h4>
             <ul className="space-y-2">
               {job.benefits.map(benefit => (
-                <li key={benefit} className="flex items-start gap-2 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-                  <CheckCircle2 size={13} className="mt-0.5 shrink-0" style={{ color: 'var(--color-success)' }} />
+                <li
+                  key={benefit}
+                  className="flex items-start gap-2 text-sm"
+                  style={{ color: 'var(--color-text-secondary)' }}
+                >
+                  <CheckCircle2
+                    size={13}
+                    className="mt-0.5 shrink-0"
+                    style={{ color: 'var(--color-success)' }}
+                  />
                   {benefit}
                 </li>
               ))}
@@ -184,13 +196,23 @@ export default function JobDetailPage() {
           >
             <div className="grid gap-4 md:grid-cols-2">
               <div>
-                <p className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: 'var(--color-text-muted)' }}>
+                <p
+                  className="mb-2 text-xs font-bold tracking-wide uppercase"
+                  style={{ color: 'var(--color-text-muted)' }}
+                >
                   Trách nhiệm chính
                 </p>
                 <ul className="space-y-2">
                   {job.responsibilities.map(item => (
-                    <li key={item} className="flex items-start gap-2 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-                      <span className="mt-1.5 h-1.5 w-1.5 rounded-full shrink-0" style={{ background: 'var(--color-primary)' }} />
+                    <li
+                      key={item}
+                      className="flex items-start gap-2 text-sm"
+                      style={{ color: 'var(--color-text-secondary)' }}
+                    >
+                      <span
+                        className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full"
+                        style={{ background: 'var(--color-primary)' }}
+                      />
                       {item}
                     </li>
                   ))}
@@ -198,13 +220,23 @@ export default function JobDetailPage() {
               </div>
 
               <div>
-                <p className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: 'var(--color-text-muted)' }}>
+                <p
+                  className="mb-2 text-xs font-bold tracking-wide uppercase"
+                  style={{ color: 'var(--color-text-muted)' }}
+                >
                   Yêu cầu ứng viên
                 </p>
                 <ul className="space-y-2">
                   {job.requirements.map(item => (
-                    <li key={item} className="flex items-start gap-2 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-                      <span className="mt-1.5 h-1.5 w-1.5 rounded-full shrink-0" style={{ background: 'var(--color-accent-2)' }} />
+                    <li
+                      key={item}
+                      className="flex items-start gap-2 text-sm"
+                      style={{ color: 'var(--color-text-secondary)' }}
+                    >
+                      <span
+                        className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full"
+                        style={{ background: 'var(--color-accent-2)' }}
+                      />
                       {item}
                     </li>
                   ))}
@@ -233,7 +265,11 @@ export default function JobDetailPage() {
               `Câu hỏi tình huống theo môi trường ${job.company}`,
               'Gợi ý cải thiện câu trả lời theo STAR',
             ].map(item => (
-              <li key={item} className="flex items-center gap-2 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+              <li
+                key={item}
+                className="flex items-center gap-2 text-sm"
+                style={{ color: 'var(--color-text-secondary)' }}
+              >
                 <CheckCircle2 size={12} style={{ color: 'var(--color-primary)' }} />
                 {item}
               </li>
@@ -263,14 +299,20 @@ export default function JobDetailPage() {
               'Điểm cần lưu ý khi vào team',
               'Khuyến nghị cách thích nghi trong 30 ngày đầu',
             ].map(item => (
-              <li key={item} className="flex items-center gap-2 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+              <li
+                key={item}
+                className="flex items-center gap-2 text-sm"
+                style={{ color: 'var(--color-text-secondary)' }}
+              >
                 <CheckCircle2 size={12} style={{ color: 'var(--color-warning)' }} />
                 {item}
               </li>
             ))}
           </ul>
           <Link to={`/culture/matching?jobId=${job.id}`} reloadDocument>
-            <Button variant="outline" className="mt-2">Chạy test phù hợp doanh nghiệp</Button>
+            <Button variant="outline" className="mt-2">
+              Chạy test phù hợp doanh nghiệp
+            </Button>
           </Link>
         </SurfaceCard>
       </div>
@@ -279,7 +321,9 @@ export default function JobDetailPage() {
       <SurfaceCard id="apply" className="space-y-4">
         <div className="flex items-center gap-2">
           <BriefcaseBusiness size={16} style={{ color: 'var(--color-primary)' }} />
-          <h3 className="font-bold" style={{ color: 'var(--color-text)' }}>Ứng tuyển</h3>
+          <h3 className="font-bold" style={{ color: 'var(--color-text)' }}>
+            Ứng tuyển
+          </h3>
         </div>
         <p className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
           Bạn có thể nộp hồ sơ ngay với CV hiện tại.

@@ -17,8 +17,13 @@ export function MarketingFooter() {
             <p className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>
               FitHire AI
             </p>
-            <p className="mt-0.5 text-xs flex items-center gap-1" style={{ color: 'var(--color-text-muted)' }}>
-              Made with <Heart size={11} style={{ color: 'var(--color-primary)' }} fill="currentColor" /> for job seekers
+            <p
+              className="mt-0.5 flex items-center gap-1 text-xs"
+              style={{ color: 'var(--color-text-muted)' }}
+            >
+              Made with{' '}
+              <Heart size={11} style={{ color: 'var(--color-primary)' }} fill="currentColor" /> for
+              job seekers
             </p>
           </div>
 

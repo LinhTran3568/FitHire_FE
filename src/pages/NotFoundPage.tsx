@@ -7,18 +7,21 @@ export default function NotFoundPage() {
 
   return (
     <div
-      className="flex min-h-screen flex-col items-center justify-center gap-8 text-center px-6"
+      className="flex min-h-screen flex-col items-center justify-center gap-8 px-6 text-center"
       style={{ background: 'var(--color-background)' }}
     >
       {/* 404 Art */}
       <div className="relative">
         <div
-          className="absolute inset-0 rounded-full blur-3xl opacity-30"
+          className="absolute inset-0 rounded-full opacity-30 blur-3xl"
           style={{ background: 'var(--color-primary)', transform: 'scale(2)' }}
         />
         <div
           className="relative flex h-32 w-32 items-center justify-center rounded-3xl"
-          style={{ background: 'var(--color-primary-muted)', border: '1px solid var(--color-border)' }}
+          style={{
+            background: 'var(--color-primary-muted)',
+            border: '1px solid var(--color-border)',
+          }}
         >
           <SearchX size={56} style={{ color: 'var(--color-primary)' }} />
         </div>
@@ -31,10 +34,7 @@ export default function NotFoundPage() {
         >
           404
         </p>
-        <h1
-          className="mt-2 text-2xl font-bold"
-          style={{ color: 'var(--color-text)' }}
-        >
+        <h1 className="mt-2 text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
           Không tìm thấy trang
         </h1>
         <p className="mt-2 text-base" style={{ color: 'var(--color-text-muted)' }}>

@@ -37,9 +37,11 @@ export function Sidebar() {
                 style={({ isActive }) => ({
                   background: isActive ? 'var(--sidebar-active-bg)' : 'transparent',
                   color: isActive ? 'var(--sidebar-active-text)' : 'var(--sidebar-text)',
-                  ...(isActive ? {
-                    boxShadow: `inset 3px 0 0 var(--sidebar-active-text)`,
-                  } : {}),
+                  ...(isActive
+                    ? {
+                        boxShadow: `inset 3px 0 0 var(--sidebar-active-text)`,
+                      }
+                    : {}),
                 })}
                 onMouseEnter={e => {
                   const el = e.currentTarget;

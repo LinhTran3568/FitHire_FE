@@ -17,8 +17,7 @@ const variantStyles: Record<BadgeVariant, string> = {
     'bg-[var(--color-warning-light)] text-[var(--color-warning)] border border-[var(--color-warning)]/20',
   danger:
     'bg-[var(--color-danger-light)] text-[var(--color-danger)] border border-[var(--color-danger)]/20',
-  info:
-    'bg-[var(--color-info-light)] text-[var(--color-info)] border border-[var(--color-info)]/20',
+  info: 'bg-[var(--color-info-light)] text-[var(--color-info)] border border-[var(--color-info)]/20',
 };
 
 export function Badge({ variant = 'default', children, className, ...props }: BadgeProps) {

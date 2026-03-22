@@ -17,7 +17,7 @@ import {
   Layout,
   Settings,
   User,
-  Zap as ZapIcon
+  Zap as ZapIcon,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -33,11 +33,12 @@ const STEPS = [
     number: '01',
     icon: FileText,
     title: 'Xây CV có định hướng',
-    description: 'AI hỏi thông tin và tạo CV chuẩn ATS chỉ trong 5 phút. Không cần template phức tạp.',
+    description:
+      'AI hỏi thông tin và tạo CV chuẩn ATS chỉ trong 5 phút. Không cần template phức tạp.',
     link: '/cv-builder?flow=build',
     cta: 'Tạo CV ngay',
     color: '#0d9488',
-    image: '/hero_product_showcase_1774194387593.png'
+    image: '/hero_product_showcase_1774194387593.png',
   },
   {
     number: '02',
@@ -47,27 +48,60 @@ const STEPS = [
     link: '/cv-scoring',
     cta: 'Chấm điểm CV',
     color: '#3b82f6',
-    image: '/feature_ats_scan_v2_1774195216889.png'
+    image: '/feature_ats_scan_v2_1774195216889.png',
   },
   {
     number: '03',
     icon: MicVocal,
     title: 'Luyện phỏng vấn với AI',
-    description: 'Mock interview theo JD thực tế. Nhận nhận xét chi tiết và gợi ý cải thiện ngay lập tức.',
+    description:
+      'Mock interview theo JD thực tế. Nhận nhận xét chi tiết và gợi ý cải thiện ngay lập tức.',
     link: '/interview',
     cta: 'Luyện ngay',
     color: '#8b5cf6',
-    image: '/feature_ai_interview_1774194843962.png'
+    image: '/feature_ai_interview_1774194843962.png',
   },
 ];
 
 const FEATURES = [
-  { icon: ZapIcon, title: 'Tạo CV trong 5 phút', description: 'AI tự điền nội dung theo thông tin bạn cung cấp, chuẩn format nhà tuyển dụng.', color: '#f59e0b', image: '/feature_ats_scan_v2_1774195216889.png' },
-  { icon: ScanSearch, title: 'Phân tích ATS thông minh', description: 'Kiểm tra điểm ATS, phát hiện từ khóa còn thiếu và đề xuất cải thiện tức thì.', color: '#0d9488' },
-  { icon: BriefcaseBusiness, title: 'Gợi ý việc phù hợp', description: 'So khớp hồ sơ với hàng trăm JD, tìm ra vị trí bạn có cơ hội cao nhất.', color: '#3b82f6' },
-  { icon: MicVocal, title: 'Mock interview AI', description: 'Phỏng vấn thử với AI theo đúng JD bạn muốn apply, nhận góp ý chi tiết.', color: '#8b5cf6', image: '/feature_ai_interview_1774194843962.png' },
-  { icon: Target, title: 'Theo dõi tiến độ', description: 'Dashboard rõ ràng giúp bạn biết mình đang ở đâu trong hành trình ứng tuyển.', color: '#ec4899' },
-  { icon: BookOpen, title: 'Test tính cách & văn hóa', description: 'Khám phá phong cách làm việc và đánh giá mức độ phù hợp với doanh nghiệp.', color: '#10b981' },
+  {
+    icon: ZapIcon,
+    title: 'Tạo CV trong 5 phút',
+    description: 'AI tự điền nội dung theo thông tin bạn cung cấp, chuẩn format nhà tuyển dụng.',
+    color: '#f59e0b',
+    image: '/feature_ats_scan_v2_1774195216889.png',
+  },
+  {
+    icon: ScanSearch,
+    title: 'Phân tích ATS thông minh',
+    description: 'Kiểm tra điểm ATS, phát hiện từ khóa còn thiếu và đề xuất cải thiện tức thì.',
+    color: '#0d9488',
+  },
+  {
+    icon: BriefcaseBusiness,
+    title: 'Gợi ý việc phù hợp',
+    description: 'So khớp hồ sơ với hàng trăm JD, tìm ra vị trí bạn có cơ hội cao nhất.',
+    color: '#3b82f6',
+  },
+  {
+    icon: MicVocal,
+    title: 'Mock interview AI',
+    description: 'Phỏng vấn thử với AI theo đúng JD bạn muốn apply, nhận góp ý chi tiết.',
+    color: '#8b5cf6',
+    image: '/feature_ai_interview_1774194843962.png',
+  },
+  {
+    icon: Target,
+    title: 'Theo dõi tiến độ',
+    description: 'Dashboard rõ ràng giúp bạn biết mình đang ở đâu trong hành trình ứng tuyển.',
+    color: '#ec4899',
+  },
+  {
+    icon: BookOpen,
+    title: 'Test tính cách & văn hóa',
+    description: 'Khám phá phong cách làm việc và đánh giá mức độ phù hợp với doanh nghiệp.',
+    color: '#10b981',
+  },
 ];
 
 const TESTIMONIALS = [
@@ -109,93 +143,103 @@ const itemVariants: Variants = {
 
 // --- Mockup Component for Hero ---
 const ProductMockup = () => (
-  <div className="relative w-full h-full p-4 lg:p-8 flex flex-col gap-4 text-white">
+  <div className="relative flex h-full w-full flex-col gap-4 p-4 text-white lg:p-8">
     {/* Sidebar Mock */}
-    <div className="absolute left-4 top-4 bottom-4 w-12 hidden md:flex flex-col gap-4 items-center py-4 bg-white/5 border-r border-white/10 rounded-l-2xl">
-      <div className="h-6 w-6 rounded-lg bg-teal-500/20 flex items-center justify-center"><Layout size={14} className="text-teal-400" /></div>
-      <div className="h-6 w-6 rounded-lg bg-white/5 flex items-center justify-center"><FileText size={14} className="text-white/40" /></div>
-      <div className="h-6 w-6 rounded-lg bg-white/5 flex items-center justify-center"><User size={14} className="text-white/40" /></div>
-      <div className="mt-auto h-6 w-6 rounded-lg bg-white/5 flex items-center justify-center"><Settings size={14} className="text-white/40" /></div>
+    <div className="absolute top-4 bottom-4 left-4 hidden w-12 flex-col items-center gap-4 rounded-l-2xl border-r border-white/10 bg-white/5 py-4 md:flex">
+      <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-teal-500/20">
+        <Layout size={14} className="text-teal-400" />
+      </div>
+      <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-white/5">
+        <FileText size={14} className="text-white/40" />
+      </div>
+      <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-white/5">
+        <User size={14} className="text-white/40" />
+      </div>
+      <div className="mt-auto flex h-6 w-6 items-center justify-center rounded-lg bg-white/5">
+        <Settings size={14} className="text-white/40" />
+      </div>
     </div>
 
     {/* Header Mock */}
-    <div className="h-10 w-full flex items-center justify-between px-4 md:pl-16 bg-white/5 border-b border-white/10 rounded-t-2xl">
+    <div className="flex h-10 w-full items-center justify-between rounded-t-2xl border-b border-white/10 bg-white/5 px-4 md:pl-16">
       <div className="flex gap-1.5">
         <div className="h-2 w-2 rounded-full bg-red-500/50" />
         <div className="h-2 w-2 rounded-full bg-amber-500/50" />
         <div className="h-2 w-2 rounded-full bg-emerald-500/50" />
       </div>
       <div className="flex items-center gap-3">
-        <div className="h-5 w-16 md:w-24 bg-white/5 rounded-full" />
+        <div className="h-5 w-16 rounded-full bg-white/5 md:w-24" />
         <div className="h-6 w-6 rounded-full bg-gradient-to-br from-teal-400 to-blue-500" />
       </div>
     </div>
 
     {/* Main Content Mock */}
-    <div className="flex-1 md:pl-12 grid grid-cols-1 md:grid-cols-2 gap-4 overflow-hidden">
+    <div className="grid flex-1 grid-cols-1 gap-4 overflow-hidden md:grid-cols-2 md:pl-12">
       {/* Left: CV Content */}
-      <div className="space-y-3 p-4 bg-white/[0.02] border border-white/5 rounded-xl transition-all duration-500 hover:bg-white/[0.05]">
+      <div className="space-y-3 rounded-xl border border-white/5 bg-white/[0.02] p-4 transition-all duration-500 hover:bg-white/[0.05]">
         <div className="flex gap-3">
-          <div className="h-10 w-10 md:h-12 md:w-12 rounded-lg bg-white/5" />
-          <div className="space-y-2 flex-1">
-             <div className="h-3 w-1/2 bg-white/10 rounded-full" />
-             <div className="h-2 w-1/3 bg-white/5 rounded-full" />
+          <div className="h-10 w-10 rounded-lg bg-white/5 md:h-12 md:w-12" />
+          <div className="flex-1 space-y-2">
+            <div className="h-3 w-1/2 rounded-full bg-white/10" />
+            <div className="h-2 w-1/3 rounded-full bg-white/5" />
           </div>
         </div>
         <div className="space-y-2">
-           <div className="h-2 w-full bg-white/5 rounded-full" />
-           <div className="h-2 w-full bg-white/5 rounded-full" />
-           <div className="h-2 w-3/4 bg-white/5 rounded-full" />
+          <div className="h-2 w-full rounded-full bg-white/5" />
+          <div className="h-2 w-full rounded-full bg-white/5" />
+          <div className="h-2 w-3/4 rounded-full bg-white/5" />
         </div>
-        <div className="pt-2 md:pt-4 space-y-2">
-           <div className="h-2 w-1/4 bg-teal-500/20 rounded-full" />
-           <div className="h-10 md:h-14 w-full bg-white/10 rounded-lg border border-white/10 flex items-center px-4">
-              <motion.div 
-                initial={{ width: 0 }}
-                animate={{ width: '70%' }}
-                transition={{ duration: 2, repeat: Infinity, repeatType: 'reverse' }}
-                className="h-1.5 bg-teal-500/40 rounded-full" 
-              />
-           </div>
+        <div className="space-y-2 pt-2 md:pt-4">
+          <div className="h-2 w-1/4 rounded-full bg-teal-500/20" />
+          <div className="flex h-10 w-full items-center rounded-lg border border-white/10 bg-white/10 px-4 md:h-14">
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: '70%' }}
+              transition={{ duration: 2, repeat: Infinity, repeatType: 'reverse' }}
+              className="h-1.5 rounded-full bg-teal-500/40"
+            />
+          </div>
         </div>
       </div>
 
       {/* Right: AI Analysis */}
       <div className="space-y-3 md:space-y-4">
-        <div className="glass-card-bright p-3 md:p-4 rounded-xl space-y-2 md:space-y-3 shadow-xl">
-           <div className="flex items-center justify-between">
-              <span className="text-[8px] md:text-[10px] font-black uppercase text-white/40 tracking-wider">ATS MATCH RATE</span>
-              <span className="text-base md:text-lg font-black text-teal-400">92%</span>
-           </div>
-           <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
-              <motion.div 
-                initial={{ width: 0 }}
-                animate={{ width: '92%' }}
-                transition={{ duration: 1.5, delay: 1 }}
-                className="h-full bg-gradient-to-r from-teal-500 to-emerald-400" 
-              />
-           </div>
-        </div>
-        
-        <div className="grid grid-cols-2 gap-2 md:gap-3">
-           <div className="glass-card p-2 md:p-3 rounded-xl border-blue-500/20">
-              <div className="h-1.5 md:h-2 w-1/2 bg-white/20 rounded-full mb-1.5 md:mb-2" />
-              <div className="h-3 md:h-4 w-3/4 bg-blue-400/20 rounded-full" />
-           </div>
-           <div className="glass-card p-2 md:p-3 rounded-xl border-emerald-500/20">
-              <div className="h-1.5 md:h-2 w-1/2 bg-white/20 rounded-full mb-1.5 md:mb-2" />
-              <div className="h-3 md:h-4 w-3/4 bg-emerald-400/20 rounded-full" />
-           </div>
+        <div className="glass-card-bright space-y-2 rounded-xl p-3 shadow-xl md:space-y-3 md:p-4">
+          <div className="flex items-center justify-between">
+            <span className="text-[8px] font-black tracking-wider text-white/40 uppercase md:text-[10px]">
+              ATS MATCH RATE
+            </span>
+            <span className="text-base font-black text-teal-400 md:text-lg">92%</span>
+          </div>
+          <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/5">
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: '92%' }}
+              transition={{ duration: 1.5, delay: 1 }}
+              className="h-full bg-gradient-to-r from-teal-500 to-emerald-400"
+            />
+          </div>
         </div>
 
-        <div className="p-3 md:p-4 bg-white/5 rounded-xl border border-white/10 flex items-center gap-3">
-           <div className="h-6 w-6 md:h-8 md:w-8 rounded-lg bg-teal-500/20 flex items-center justify-center text-teal-400">
-              <Sparkles size={14} />
-           </div>
-           <div className="flex-1 space-y-1 md:space-y-1.5 text-left">
-              <div className="h-1.5 md:h-2 w-1/2 bg-white/40 rounded-full" />
-              <div className="h-1 md:h-1.5 w-full bg-white/5 rounded-full" />
-           </div>
+        <div className="grid grid-cols-2 gap-2 md:gap-3">
+          <div className="glass-card rounded-xl border-blue-500/20 p-2 md:p-3">
+            <div className="mb-1.5 h-1.5 w-1/2 rounded-full bg-white/20 md:mb-2 md:h-2" />
+            <div className="h-3 w-3/4 rounded-full bg-blue-400/20 md:h-4" />
+          </div>
+          <div className="glass-card rounded-xl border-emerald-500/20 p-2 md:p-3">
+            <div className="mb-1.5 h-1.5 w-1/2 rounded-full bg-white/20 md:mb-2 md:h-2" />
+            <div className="h-3 w-3/4 rounded-full bg-emerald-400/20 md:h-4" />
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-3 md:p-4">
+          <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-teal-500/20 text-teal-400 md:h-8 md:w-8">
+            <Sparkles size={14} />
+          </div>
+          <div className="flex-1 space-y-1 text-left md:space-y-1.5">
+            <div className="h-1.5 w-1/2 rounded-full bg-white/40 md:h-2" />
+            <div className="h-1 w-full rounded-full bg-white/5 md:h-1.5" />
+          </div>
         </div>
       </div>
     </div>
@@ -204,29 +248,40 @@ const ProductMockup = () => (
 
 export default function HomePage() {
   return (
-    <div className="w-full overflow-hidden transition-colors duration-500" style={{ background: 'var(--color-background)' }}>
-
+    <div
+      className="w-full overflow-hidden transition-colors duration-500"
+      style={{ background: 'var(--color-background)' }}
+    >
       {/* ── HERO ── */}
       <section
         className="relative overflow-hidden px-6 pt-24 pb-36 lg:px-10 lg:pt-36"
         style={{ background: 'var(--hero-bg)' }}
       >
         {/* Ambient orbs */}
-        <div className="pointer-events-none absolute -top-40 -left-40 h-[600px] w-[600px] rounded-full"
-          style={{ background: 'radial-gradient(circle, var(--hero-orb-a) 0%, transparent 70%)' }} />
-        <div className="pointer-events-none absolute -top-20 right-[-100px] h-[500px] w-[500px] rounded-full"
-          style={{ background: 'radial-gradient(circle, var(--hero-orb-b) 0%, transparent 70%)' }} />
-        <div className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2 h-[400px] w-[600px] rounded-full"
-          style={{ background: 'radial-gradient(ellipse, var(--hero-orb-c) 0%, transparent 70%)' }} />
+        <div
+          className="pointer-events-none absolute -top-40 -left-40 h-[600px] w-[600px] rounded-full"
+          style={{ background: 'radial-gradient(circle, var(--hero-orb-a) 0%, transparent 70%)' }}
+        />
+        <div
+          className="pointer-events-none absolute -top-20 right-[-100px] h-[500px] w-[500px] rounded-full"
+          style={{ background: 'radial-gradient(circle, var(--hero-orb-b) 0%, transparent 70%)' }}
+        />
+        <div
+          className="pointer-events-none absolute bottom-0 left-1/2 h-[400px] w-[600px] -translate-x-1/2 rounded-full"
+          style={{ background: 'radial-gradient(ellipse, var(--hero-orb-c) 0%, transparent 70%)' }}
+        />
 
         {/* Dot grid */}
-        <div className="absolute inset-0 opacity-[0.035] bg-dot-grid" />
+        <div className="bg-dot-grid absolute inset-0 opacity-[0.035]" />
 
         {/* Horizontal lines texture */}
-        <div className="absolute inset-0 opacity-[0.025]" style={{
-          backgroundImage: 'linear-gradient(rgba(255,255,255,1) 1px, transparent 1px)',
-          backgroundSize: '100% 64px',
-        }} />
+        <div
+          className="absolute inset-0 opacity-[0.025]"
+          style={{
+            backgroundImage: 'linear-gradient(rgba(255,255,255,1) 1px, transparent 1px)',
+            backgroundSize: '100% 64px',
+          }}
+        />
 
         <div className="relative mx-auto max-w-7xl">
           <motion.div
@@ -245,19 +300,18 @@ export default function HomePage() {
                   color: '#5eead4',
                 }}
               >
-                <span className="flex h-5 w-5 items-center justify-center rounded-full" style={{ background: 'rgba(13,148,136,0.3)' }}>
+                <span
+                  className="flex h-5 w-5 items-center justify-center rounded-full"
+                  style={{ background: 'rgba(13,148,136,0.3)' }}
+                >
                   <Sparkles size={11} />
                 </span>
                 Nền tảng AI số 1 cho sinh viên & người tìm việc
               </span>
             </motion.div>
 
-            <motion.h1
-              variants={itemVariants}
-              className="hero-title mt-8 text-white"
-            >
-              Tìm việc đúng,{' '}
-              <span className="text-gradient-hero">nhanh hơn</span>
+            <motion.h1 variants={itemVariants} className="hero-title mt-8 text-white">
+              Tìm việc đúng, <span className="text-gradient-hero">nhanh hơn</span>
               <br />
               với trợ lý AI
             </motion.h1>
@@ -267,11 +321,15 @@ export default function HomePage() {
               className="mx-auto mt-7 max-w-2xl text-lg leading-relaxed font-medium"
               style={{ color: 'rgba(255,255,255,0.6)' }}
             >
-              FitHire giúp bạn thiết kế định hướng sự nghiệp, làm đẹp CV chuẩn ATS và luyện phỏng vấn mô phỏng hệt như thật — tất cả trên một bệ phóng mượt mà.
+              FitHire giúp bạn thiết kế định hướng sự nghiệp, làm đẹp CV chuẩn ATS và luyện phỏng
+              vấn mô phỏng hệt như thật — tất cả trên một bệ phóng mượt mà.
             </motion.p>
 
             {/* CTA Buttons */}
-            <motion.div variants={itemVariants} className="mt-10 flex flex-wrap justify-center gap-4">
+            <motion.div
+              variants={itemVariants}
+              className="mt-10 flex flex-wrap justify-center gap-4"
+            >
               <Link to="/cv-builder?flow=build">
                 <button
                   className="group glow-primary inline-flex items-center gap-2.5 rounded-full px-9 py-4 text-base font-bold text-white transition-all duration-300 hover:scale-105"
@@ -280,11 +338,14 @@ export default function HomePage() {
                   }}
                 >
                   Bắt đầu miễn phí
-                  <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-1" />
+                  <ArrowRight
+                    size={18}
+                    className="transition-transform duration-300 group-hover:translate-x-1"
+                  />
                 </button>
               </Link>
               <Link to="/jobs">
-                <button className="inline-flex items-center gap-2.5 rounded-full border border-white/20 bg-white/8 px-9 py-4 text-base font-bold text-white backdrop-blur-md transition-all duration-300 hover:bg-white/14 hover:border-white/35">
+                <button className="inline-flex items-center gap-2.5 rounded-full border border-white/20 bg-white/8 px-9 py-4 text-base font-bold text-white backdrop-blur-md transition-all duration-300 hover:border-white/35 hover:bg-white/14">
                   <BriefcaseBusiness size={18} />
                   Khám phá việc làm
                 </button>
@@ -297,12 +358,14 @@ export default function HomePage() {
               className="mt-8 flex flex-wrap justify-center gap-6 text-sm font-semibold"
               style={{ color: 'rgba(255,255,255,0.45)' }}
             >
-              {['Miễn phí trọn bộ cơ bản', 'Tạo CV nhanh trong 5 phút', 'Tuyệt đối bảo mật'].map(item => (
-                <span key={item} className="inline-flex items-center gap-2">
-                  <CheckCircle2 size={14} style={{ color: '#0d9488' }} />
-                  {item}
-                </span>
-              ))}
+              {['Miễn phí trọn bộ cơ bản', 'Tạo CV nhanh trong 5 phút', 'Tuyệt đối bảo mật'].map(
+                item => (
+                  <span key={item} className="inline-flex items-center gap-2">
+                    <CheckCircle2 size={14} style={{ color: '#0d9488' }} />
+                    {item}
+                  </span>
+                ),
+              )}
             </motion.div>
           </motion.div>
 
@@ -313,39 +376,56 @@ export default function HomePage() {
             className="relative mx-auto mt-20 max-w-3xl px-4 lg:px-0"
           >
             {/* Floating labels */}
-            <div className="absolute -top-6 -right-10 z-30 bg-white/10 backdrop-blur-2xl border border-white/20 p-4 rounded-2xl animate-float lg:flex hidden flex-col gap-1 shadow-2xl glow-primary">
-               <div className="flex items-center gap-2">
-                 <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                 <span className="text-[10px] uppercase font-black text-white/50 tracking-widest">ATS Score</span>
-               </div>
-               <span className="text-2xl font-black text-emerald-400" style={{ fontFamily: 'Outfit, sans-serif' }}>91%</span>
+            <div className="animate-float glow-primary absolute -top-6 -right-10 z-30 hidden flex-col gap-1 rounded-2xl border border-white/20 bg-white/10 p-4 shadow-2xl backdrop-blur-2xl lg:flex">
+              <div className="flex items-center gap-2">
+                <div className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
+                <span className="text-[10px] font-black tracking-widest text-white/50 uppercase">
+                  ATS Score
+                </span>
+              </div>
+              <span
+                className="text-2xl font-black text-emerald-400"
+                style={{ fontFamily: 'Outfit, sans-serif' }}
+              >
+                91%
+              </span>
             </div>
 
-            <div className="absolute -bottom-6 -left-10 z-30 bg-white/10 backdrop-blur-2xl border border-white/20 p-4 rounded-2xl animate-float-d1 lg:flex hidden flex-col gap-1 shadow-2xl">
-               <div className="flex items-center gap-2">
-                 <div className="h-2 w-2 rounded-full bg-blue-400 animate-pulse" />
-                 <span className="text-[10px] uppercase font-black text-white/50 tracking-widest">Matching</span>
-               </div>
-               <span className="text-2xl font-black text-blue-400" style={{ fontFamily: 'Outfit, sans-serif' }}>Top 5%</span>
+            <div className="animate-float-d1 absolute -bottom-6 -left-10 z-30 hidden flex-col gap-1 rounded-2xl border border-white/20 bg-white/10 p-4 shadow-2xl backdrop-blur-2xl lg:flex">
+              <div className="flex items-center gap-2">
+                <div className="h-2 w-2 animate-pulse rounded-full bg-blue-400" />
+                <span className="text-[10px] font-black tracking-widest text-white/50 uppercase">
+                  Matching
+                </span>
+              </div>
+              <span
+                className="text-2xl font-black text-blue-400"
+                style={{ fontFamily: 'Outfit, sans-serif' }}
+              >
+                Top 5%
+              </span>
             </div>
 
             <div
-              className="rounded-[2.5rem] p-px relative group transition-all duration-500 overflow-hidden shadow-2xl"
-              style={{ background: 'linear-gradient(135deg, rgba(13,148,136,0.5), rgba(6,182,212,0.3), rgba(59,130,246,0.2))' }}
+              className="group relative overflow-hidden rounded-[2.5rem] p-px shadow-2xl transition-all duration-500"
+              style={{
+                background:
+                  'linear-gradient(135deg, rgba(13,148,136,0.5), rgba(6,182,212,0.3), rgba(59,130,246,0.2))',
+              }}
             >
               <div
-                className="rounded-[2.45rem] overflow-hidden relative z-10 w-full aspect-[4/3] md:aspect-[16/10]"
+                className="relative z-10 aspect-[4/3] w-full overflow-hidden rounded-[2.45rem] md:aspect-[16/10]"
                 style={{ background: 'rgba(8,13,28,0.95)' }}
               >
                 {/* Dots background layer */}
-                <div className="absolute inset-0 bg-dot-grid opacity-20" />
-                
+                <div className="bg-dot-grid absolute inset-0 opacity-20" />
+
                 {/* Interactive Mockup Component */}
                 <ProductMockup />
-                
+
                 {/* Floating orbs for extra tech feel */}
-                <div className="absolute top-1/4 -left-20 h-48 w-48 rounded-full bg-teal-500/20 blur-[100px] animate-pulse-soft" />
-                <div className="absolute -bottom-1/4 -right-20 h-48 w-48 rounded-full bg-blue-500/20 blur-[100px] animate-pulse-soft" />
+                <div className="animate-pulse-soft absolute top-1/4 -left-20 h-48 w-48 rounded-full bg-teal-500/20 blur-[100px]" />
+                <div className="animate-pulse-soft absolute -right-20 -bottom-1/4 h-48 w-48 rounded-full bg-blue-500/20 blur-[100px]" />
               </div>
             </div>
           </motion.div>
@@ -353,7 +433,12 @@ export default function HomePage() {
       </section>
 
       {/* ── STATS STRIP ── */}
-      <section style={{ background: 'var(--color-surface)', borderBottom: '1px solid var(--color-border)' }}>
+      <section
+        style={{
+          background: 'var(--color-surface)',
+          borderBottom: '1px solid var(--color-border)',
+        }}
+      >
         <div className="mx-auto max-w-7xl px-6 py-14 lg:px-10">
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
             {STATS.map((stat, i) => (
@@ -376,7 +461,10 @@ export default function HomePage() {
                   <stat.icon size={22} />
                 </div>
                 <p className="stat-value">{stat.value}</p>
-                <p className="mt-1.5 text-sm font-medium" style={{ color: 'var(--color-text-muted)' }}>
+                <p
+                  className="mt-1.5 text-sm font-medium"
+                  style={{ color: 'var(--color-text-muted)' }}
+                >
                   {stat.label}
                 </p>
               </motion.div>
@@ -386,19 +474,28 @@ export default function HomePage() {
       </section>
 
       {/* ── 3 STEPS ── */}
-      <section className="px-6 py-28 lg:px-10 transition-colors relative" style={{ background: 'var(--color-background-alt)' }}>
-         {/* Background pattern */}
-         <div className="absolute inset-0 bg-dot-grid opacity-[0.02]" />
+      <section
+        className="relative px-6 py-28 transition-colors lg:px-10"
+        style={{ background: 'var(--color-background-alt)' }}
+      >
+        {/* Background pattern */}
+        <div className="bg-dot-grid absolute inset-0 opacity-[0.02]" />
 
         <div className="relative mx-auto max-w-7xl">
           <div className="text-center">
             <span className="section-label">
               <Sparkles size={13} /> Lộ trình bài bản
             </span>
-            <h2 className="mt-5 text-4xl font-extrabold tracking-tight md:text-5xl" style={{ color: 'var(--color-text)' }}>
+            <h2
+              className="mt-5 text-4xl font-extrabold tracking-tight md:text-5xl"
+              style={{ color: 'var(--color-text)' }}
+            >
               3 bước đến công việc mơ ước
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-lg" style={{ color: 'var(--color-text-muted)' }}>
+            <p
+              className="mx-auto mt-4 max-w-2xl text-lg"
+              style={{ color: 'var(--color-text-muted)' }}
+            >
               Tối ưu hóa hành trình của bạn với quy trình khép kín, được bảo trợ toàn diện bởi AI.
             </p>
           </div>
@@ -418,15 +515,15 @@ export default function HomePage() {
                   boxShadow: 'var(--shadow-sm)',
                 }}
               >
-                <div className="mb-6 relative h-56 w-full overflow-hidden rounded-[1.8rem] group/img shadow-2xl">
-                  <img 
-                    src={step.image} 
+                <div className="group/img relative mb-6 h-56 w-full overflow-hidden rounded-[1.8rem] shadow-2xl">
+                  <img
+                    src={step.image}
                     alt={step.title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-110 opacity-90"
+                    className="h-full w-full object-cover opacity-90 transition-transform duration-700 group-hover/img:scale-110"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-surface)]/80 via-transparent to-transparent opacity-60" />
                   <div
-                    className="absolute bottom-5 left-5 flex h-14 w-14 items-center justify-center rounded-2xl backdrop-blur-xl border border-white/20"
+                    className="absolute bottom-5 left-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/20 backdrop-blur-xl"
                     style={{
                       background: `${step.color}aa`,
                       boxShadow: `0 8px 32px ${step.color}40`,
@@ -436,14 +533,19 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 mb-4">
-                   <span className="text-3xl font-black opacity-10" style={{ color: step.color }}>{step.number}</span>
-                   <h3 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
+                <div className="mb-4 flex items-center gap-3">
+                  <span className="text-3xl font-black opacity-10" style={{ color: step.color }}>
+                    {step.number}
+                  </span>
+                  <h3 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
                     {step.title}
                   </h3>
                 </div>
-                
-                <p className="flex-1 text-base leading-relaxed mb-8" style={{ color: 'var(--color-text-muted)' }}>
+
+                <p
+                  className="mb-8 flex-1 text-base leading-relaxed"
+                  style={{ color: 'var(--color-text-muted)' }}
+                >
                   {step.description}
                 </p>
                 <Link to={step.link}>
@@ -465,18 +567,27 @@ export default function HomePage() {
       </section>
 
       {/* ── FEATURES GRID ── */}
-      <section className="px-6 py-28 lg:px-10 transition-colors relative" style={{ background: 'var(--color-surface)' }}>
-         <div className="absolute top-0 right-0 w-1/3 h-1/2 bg-teal-500/5 blur-[120px] rounded-full" />
+      <section
+        className="relative px-6 py-28 transition-colors lg:px-10"
+        style={{ background: 'var(--color-surface)' }}
+      >
+        <div className="absolute top-0 right-0 h-1/2 w-1/3 rounded-full bg-teal-500/5 blur-[120px]" />
 
         <div className="relative mx-auto max-w-7xl">
           <div className="text-center">
             <span className="section-label">
               <Zap size={13} /> Bộ công cụ mạnh mẽ
             </span>
-            <h2 className="mt-5 text-4xl font-extrabold tracking-tight md:text-5xl" style={{ color: 'var(--color-text)' }}>
+            <h2
+              className="mt-5 text-4xl font-extrabold tracking-tight md:text-5xl"
+              style={{ color: 'var(--color-text)' }}
+            >
               Hệ thống công cụ đắc lực
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-lg" style={{ color: 'var(--color-text-muted)' }}>
+            <p
+              className="mx-auto mt-4 max-w-2xl text-lg"
+              style={{ color: 'var(--color-text-muted)' }}
+            >
               Các tính năng chuyên sâu giúp bạn thống trị mọi bài ứng tuyển khó nhằn nhất.
             </p>
           </div>
@@ -497,9 +608,9 @@ export default function HomePage() {
               >
                 {/* Background image preview if available */}
                 {f.image && (
-                   <div className="absolute -right-8 -bottom-8 w-32 h-32 opacity-[0.08] grayscale group-hover:opacity-[0.14] transition-opacity duration-500">
-                      <img src={f.image} alt="" className="w-full h-full object-cover" />
-                   </div>
+                  <div className="absolute -right-8 -bottom-8 h-32 w-32 opacity-[0.08] grayscale transition-opacity duration-500 group-hover:opacity-[0.14]">
+                    <img src={f.image} alt="" className="h-full w-full object-cover" />
+                  </div>
                 )}
 
                 <div
@@ -515,7 +626,10 @@ export default function HomePage() {
                 <h3 className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>
                   {f.title}
                 </h3>
-                <p className="mt-3 text-base leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>
+                <p
+                  className="mt-3 text-base leading-relaxed"
+                  style={{ color: 'var(--color-text-muted)' }}
+                >
                   {f.description}
                 </p>
               </motion.div>
@@ -525,15 +639,21 @@ export default function HomePage() {
       </section>
 
       {/* ── TESTIMONIALS ── */}
-      <section className="px-6 py-28 lg:px-10 transition-colors relative" style={{ background: 'var(--color-background-alt)' }}>
-         <div className="absolute inset-0 bg-dot-grid opacity-[0.02]" />
+      <section
+        className="relative px-6 py-28 transition-colors lg:px-10"
+        style={{ background: 'var(--color-background-alt)' }}
+      >
+        <div className="bg-dot-grid absolute inset-0 opacity-[0.02]" />
 
         <div className="relative mx-auto max-w-7xl">
           <div className="text-center">
             <span className="section-label">
               <Users size={13} /> Cộng đồng FitHire
             </span>
-            <h2 className="mt-5 text-4xl font-extrabold tracking-tight md:text-5xl" style={{ color: 'var(--color-text)' }}>
+            <h2
+              className="mt-5 text-4xl font-extrabold tracking-tight md:text-5xl"
+              style={{ color: 'var(--color-text)' }}
+            >
               Được tin dùng bởi hàng ngàn bạn trẻ
             </h2>
           </div>
@@ -553,9 +673,7 @@ export default function HomePage() {
                 }}
               >
                 <div className="flex items-center gap-5">
-                  <div
-                    className="h-16 w-16 shrink-0 overflow-hidden rounded-[1.2rem] shadow-2xl border-2 border-white/10"
-                  >
+                  <div className="h-16 w-16 shrink-0 overflow-hidden rounded-[1.2rem] border-2 border-white/10 shadow-2xl">
                     {t.avatar.startsWith('/') ? (
                       <img src={t.avatar} alt={t.name} className="h-full w-full object-cover" />
                     ) : (
@@ -565,8 +683,15 @@ export default function HomePage() {
                     )}
                   </div>
                   <div>
-                    <p className="font-bold text-lg" style={{ color: 'var(--color-text)' }}>{t.name}</p>
-                    <p className="text-sm font-semibold opacity-60 mt-0.5" style={{ color: t.color }}>{t.role}</p>
+                    <p className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>
+                      {t.name}
+                    </p>
+                    <p
+                      className="mt-0.5 text-sm font-semibold opacity-60"
+                      style={{ color: t.color }}
+                    >
+                      {t.role}
+                    </p>
                   </div>
                 </div>
                 {/* Stars */}
@@ -575,7 +700,10 @@ export default function HomePage() {
                     <Star key={si} size={15} fill="#fbbf24" className="text-amber-400" />
                   ))}
                 </div>
-                <p className="mt-6 text-base leading-relaxed italic" style={{ color: 'var(--color-text-secondary)' }}>
+                <p
+                  className="mt-6 text-base leading-relaxed italic"
+                  style={{ color: 'var(--color-text-secondary)' }}
+                >
                   "{t.text}"
                 </p>
               </motion.div>
@@ -591,32 +719,43 @@ export default function HomePage() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="mx-auto max-w-5xl overflow-hidden rounded-[3rem] p-12 text-center md:p-24 relative shadow-[0_40px_100px_rgba(0,0,0,0.4)]"
+          className="relative mx-auto max-w-5xl overflow-hidden rounded-[3rem] p-12 text-center shadow-[0_40px_100px_rgba(0,0,0,0.4)] md:p-24"
           style={{ background: 'var(--hero-bg)' }}
         >
           {/* CTA orbs */}
-          <div className="pointer-events-none absolute -top-24 -right-24 h-96 w-96 rounded-full"
-            style={{ background: 'radial-gradient(circle, var(--hero-orb-a) 0%, transparent 70%)' }} />
-          <div className="pointer-events-none absolute -bottom-24 -left-24 h-80 w-80 rounded-full"
-            style={{ background: 'radial-gradient(circle, var(--hero-orb-b) 0%, transparent 70%)' }} />
+          <div
+            className="pointer-events-none absolute -top-24 -right-24 h-96 w-96 rounded-full"
+            style={{ background: 'radial-gradient(circle, var(--hero-orb-a) 0%, transparent 70%)' }}
+          />
+          <div
+            className="pointer-events-none absolute -bottom-24 -left-24 h-80 w-80 rounded-full"
+            style={{ background: 'radial-gradient(circle, var(--hero-orb-b) 0%, transparent 70%)' }}
+          />
           {/* Dot grid */}
-          <div className="absolute inset-0 opacity-[0.06] bg-dot-grid" />
+          <div className="bg-dot-grid absolute inset-0 opacity-[0.06]" />
 
           <div className="relative z-10">
             <span
-              className="inline-flex items-center gap-3 rounded-full px-6 py-2.5 text-sm font-bold text-white backdrop-blur-xl border border-white/20 shadow-xl"
+              className="inline-flex items-center gap-3 rounded-full border border-white/20 px-6 py-2.5 text-sm font-bold text-white shadow-xl backdrop-blur-xl"
               style={{ background: 'rgba(255,255,255,0.05)' }}
             >
               <Award size={16} className="text-teal-400" />
               Gia nhập cùng 5,000+ người dùng thông thái
             </span>
-            <h2 className="mt-10 text-4xl font-black text-white md:text-5xl lg:text-7xl tracking-tighter leading-tight" style={{ fontFamily: 'Outfit, sans-serif' }}>
+            <h2
+              className="mt-10 text-4xl leading-tight font-black tracking-tighter text-white md:text-5xl lg:text-7xl"
+              style={{ fontFamily: 'Outfit, sans-serif' }}
+            >
               Bắt đầu sự nghiệp
               <br />
               <span className="text-gradient-hero">đột phá ngay hôm nay</span>
             </h2>
-            <p className="mx-auto mt-8 max-w-2xl text-xl font-medium opacity-70" style={{ color: 'white' }}>
-              Chỉ mất 5 phút để có một bộ hồ sơ chuẩn chỉnh và lộ trình nghề nghiệp vững vàng. Hoàn toàn miễn phí khởi đầu.
+            <p
+              className="mx-auto mt-8 max-w-2xl text-xl font-medium opacity-70"
+              style={{ color: 'white' }}
+            >
+              Chỉ mất 5 phút để có một bộ hồ sơ chuẩn chỉnh và lộ trình nghề nghiệp vững vàng. Hoàn
+              toàn miễn phí khởi đầu.
             </p>
             <div className="mt-14 flex flex-wrap justify-center gap-6">
               <Link to="/cv-builder?flow=build">
@@ -625,13 +764,14 @@ export default function HomePage() {
                   style={{ color: '#0d9488' }}
                 >
                   Khám phá ngay
-                  <ArrowRight size={22} className="transition-transform duration-300 group-hover:translate-x-2" />
+                  <ArrowRight
+                    size={22}
+                    className="transition-transform duration-300 group-hover:translate-x-2"
+                  />
                 </button>
               </Link>
               <Link to="/subscription">
-                <button
-                  className="flex items-center gap-3 rounded-2xl border-2 border-white/20 bg-white/5 px-12 py-5 text-lg font-bold text-white backdrop-blur-xl transition-all duration-300 hover:bg-white/10 hover:border-white/40 shadow-xl"
-                >
+                <button className="flex items-center gap-3 rounded-2xl border-2 border-white/20 bg-white/5 px-12 py-5 text-lg font-bold text-white shadow-xl backdrop-blur-xl transition-all duration-300 hover:border-white/40 hover:bg-white/10">
                   <Sparkles size={20} className="text-teal-400" />
                   Gói Pro
                 </button>

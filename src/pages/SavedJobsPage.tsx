@@ -7,7 +7,15 @@ import {
   type CompanyInfo,
   mockJobs,
 } from '@lib/mockJobs';
-import { Bookmark, BookmarkX, BriefcaseBusiness, ExternalLink, MapPin, Clock, Search } from 'lucide-react';
+import {
+  Bookmark,
+  BookmarkX,
+  BriefcaseBusiness,
+  ExternalLink,
+  MapPin,
+  Clock,
+  Search,
+} from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -100,7 +108,10 @@ export default function SavedJobsPage() {
                     <BriefcaseBusiness size={20} />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold transition-colors" style={{ color: 'var(--color-text)' }}>
+                    <h3
+                      className="text-lg font-bold transition-colors"
+                      style={{ color: 'var(--color-text)' }}
+                    >
                       {job.title}
                     </h3>
                     <button
@@ -111,14 +122,23 @@ export default function SavedJobsPage() {
                     >
                       {job.company}
                     </button>
-                    <div className="mt-1 flex flex-wrap items-center gap-2 text-xs" style={{ color: 'var(--color-text-muted)' }}>
-                      <span className="flex items-center gap-1"><MapPin size={11} />{job.location}</span>
+                    <div
+                      className="mt-1 flex flex-wrap items-center gap-2 text-xs"
+                      style={{ color: 'var(--color-text-muted)' }}
+                    >
+                      <span className="flex items-center gap-1">
+                        <MapPin size={11} />
+                        {job.location}
+                      </span>
                       <span>•</span>
                       <span>{job.position}</span>
                       <span>•</span>
                       <span>{job.workMode}</span>
                       <span>•</span>
-                      <span className="flex items-center gap-1"><Clock size={11} />{formatPostedDate(job.postedAt)}</span>
+                      <span className="flex items-center gap-1">
+                        <Clock size={11} />
+                        {formatPostedDate(job.postedAt)}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -126,13 +146,18 @@ export default function SavedJobsPage() {
                 <div
                   className="flex flex-col items-center rounded-xl px-3 py-2"
                   style={{
-                    background: job.matchScore >= 85 ? 'var(--color-success-light)' : 'var(--color-primary-muted)',
+                    background:
+                      job.matchScore >= 85
+                        ? 'var(--color-success-light)'
+                        : 'var(--color-primary-muted)',
                     border: `1px solid ${job.matchScore >= 85 ? 'var(--color-success)' : 'var(--color-primary)'}`,
                   }}
                 >
                   <p
                     className="text-xl font-extrabold"
-                    style={{ color: job.matchScore >= 85 ? 'var(--color-success)' : 'var(--color-primary)' }}
+                    style={{
+                      color: job.matchScore >= 85 ? 'var(--color-success)' : 'var(--color-primary)',
+                    }}
                   >
                     {job.matchScore}%
                   </p>
@@ -142,7 +167,10 @@ export default function SavedJobsPage() {
                 </div>
               </div>
 
-              <p className="mt-3 text-sm leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>
+              <p
+                className="mt-3 text-sm leading-relaxed"
+                style={{ color: 'var(--color-text-muted)' }}
+              >
                 {job.summary}
               </p>
 
@@ -150,7 +178,9 @@ export default function SavedJobsPage() {
                 <Badge variant="default">{job.field}</Badge>
                 <Badge variant="default">{formatSalaryVnd(job.salaryMin, job.salaryMax)}</Badge>
                 {job.skills.slice(0, 3).map(skill => (
-                  <Badge key={skill} variant="default">{skill}</Badge>
+                  <Badge key={skill} variant="default">
+                    {skill}
+                  </Badge>
                 ))}
               </div>
 

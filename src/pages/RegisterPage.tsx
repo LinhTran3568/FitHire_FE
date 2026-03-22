@@ -24,10 +24,14 @@ export default function RegisterPage() {
           className="pointer-events-none absolute bottom-0 left-0 h-96 w-96 rounded-full blur-3xl"
           style={{ background: 'var(--hero-orb-b)' }}
         />
-        <div className="absolute inset-0 opacity-[0.04]" style={{
-          backgroundImage: 'linear-gradient(rgba(255,255,255,.4) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.4) 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
-        }} />
+        <div
+          className="absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(255,255,255,.4) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.4) 1px, transparent 1px)',
+            backgroundSize: '40px 40px',
+          }}
+        />
 
         <Link
           to="/"
@@ -60,7 +64,10 @@ export default function RegisterPage() {
               <li key={perk.text} className="flex items-center gap-3">
                 <span
                   className="flex h-9 w-9 items-center justify-center rounded-xl"
-                  style={{ background: 'var(--color-primary-muted)', color: 'var(--color-primary)' }}
+                  style={{
+                    background: 'var(--color-primary-muted)',
+                    color: 'var(--color-primary)',
+                  }}
                 >
                   <perk.icon size={15} />
                 </span>
@@ -72,7 +79,9 @@ export default function RegisterPage() {
           </ul>
         </div>
 
-        <p className="relative text-xs" style={{ color: 'rgba(255,255,255,0.35)' }}>© 2026 FitHire AI</p>
+        <p className="relative text-xs" style={{ color: 'rgba(255,255,255,0.35)' }}>
+          © 2026 FitHire AI
+        </p>
       </div>
 
       {/* ── RIGHT PANEL ── */}
@@ -102,7 +111,11 @@ export default function RegisterPage() {
           <form className="space-y-4">
             <Input type="text" label="Họ và tên" placeholder="Nguyễn Văn A" />
             <Input type="email" label="Email" placeholder="you@example.com" />
-            <Input type="password" label="Mật khẩu" placeholder="Tạo mật khẩu (tối thiểu 6 ký tự)" />
+            <Input
+              type="password"
+              label="Mật khẩu"
+              placeholder="Tạo mật khẩu (tối thiểu 6 ký tự)"
+            />
             <Input type="password" label="Xác nhận mật khẩu" placeholder="Nhập lại mật khẩu" />
 
             <button
@@ -127,7 +140,7 @@ export default function RegisterPage() {
 
           <p className="mt-4 text-center text-xs" style={{ color: 'var(--color-text-subtle)' }}>
             Bằng cách tạo tài khoản, bạn đồng ý với{' '}
-            <span className="underline cursor-pointer">Chính sách bảo mật</span> của chúng tôi.
+            <span className="cursor-pointer underline">Chính sách bảo mật</span> của chúng tôi.
           </p>
         </div>
       </div>

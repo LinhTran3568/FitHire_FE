@@ -7,7 +7,10 @@ import { Link } from 'react-router-dom';
 export function Header() {
   const [isDark, setIsDark] = useState(() => {
     if (typeof window !== 'undefined') {
-      return document.documentElement.classList.contains('dark') || localStorage.getItem('theme') === 'dark';
+      return (
+        document.documentElement.classList.contains('dark') ||
+        localStorage.getItem('theme') === 'dark'
+      );
     }
     return false;
   });

@@ -1,7 +1,15 @@
 import { Input } from '@components/ui';
 import { useAuthStore } from '@features/auth/store/authStore';
 import type { AuthUser } from '@features/auth/types';
-import { ArrowLeft, BriefcaseBusiness, CheckCircle2, FileText, MicVocal, Sparkles, ArrowRight } from 'lucide-react';
+import {
+  ArrowLeft,
+  BriefcaseBusiness,
+  CheckCircle2,
+  FileText,
+  MicVocal,
+  Sparkles,
+  ArrowRight,
+} from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
@@ -67,18 +75,27 @@ export default function LoginPage() {
         style={{ background: 'var(--hero-bg)' }}
       >
         {/* Orbs */}
-        <div className="pointer-events-none absolute -top-32 -left-32 h-96 w-96 rounded-full"
-          style={{ background: 'radial-gradient(circle, var(--hero-orb-a) 0%, transparent 70%)' }} />
-        <div className="pointer-events-none absolute right-0 bottom-0 h-80 w-80 rounded-full"
-          style={{ background: 'radial-gradient(circle, var(--hero-orb-b) 0%, transparent 70%)' }} />
-        <div className="pointer-events-none absolute top-1/2 -right-16 h-64 w-64 rounded-full"
-          style={{ background: 'radial-gradient(circle, var(--hero-orb-c) 0%, transparent 70%)' }} />
+        <div
+          className="pointer-events-none absolute -top-32 -left-32 h-96 w-96 rounded-full"
+          style={{ background: 'radial-gradient(circle, var(--hero-orb-a) 0%, transparent 70%)' }}
+        />
+        <div
+          className="pointer-events-none absolute right-0 bottom-0 h-80 w-80 rounded-full"
+          style={{ background: 'radial-gradient(circle, var(--hero-orb-b) 0%, transparent 70%)' }}
+        />
+        <div
+          className="pointer-events-none absolute top-1/2 -right-16 h-64 w-64 rounded-full"
+          style={{ background: 'radial-gradient(circle, var(--hero-orb-c) 0%, transparent 70%)' }}
+        />
 
         {/* Dot grid */}
-        <div className="absolute inset-0 opacity-[0.04]" style={{
-          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.9) 1px, transparent 1px)',
-          backgroundSize: '32px 32px',
-        }} />
+        <div
+          className="absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.9) 1px, transparent 1px)',
+            backgroundSize: '32px 32px',
+          }}
+        />
 
         {/* Back link */}
         <Link
@@ -94,13 +111,17 @@ export default function LoginPage() {
         <div className="relative">
           <div
             className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold"
-            style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.14)', color: 'rgba(255,255,255,0.8)' }}
+            style={{
+              background: 'rgba(255,255,255,0.08)',
+              border: '1px solid rgba(255,255,255,0.14)',
+              color: 'rgba(255,255,255,0.8)',
+            }}
           >
             <Sparkles size={14} style={{ color: '#5eead4' }} />
             Chào mừng trở lại!
           </div>
           <h2
-            className="mt-6 text-4xl font-black leading-tight text-white"
+            className="mt-6 text-4xl leading-tight font-black text-white"
             style={{ fontFamily: 'Outfit, sans-serif', letterSpacing: '-0.04em' }}
           >
             Hành trình nhận việc
@@ -120,7 +141,11 @@ export default function LoginPage() {
               >
                 <span
                   className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
-                  style={{ background: `${perk.color}18`, border: `1px solid ${perk.color}30`, color: perk.color }}
+                  style={{
+                    background: `${perk.color}18`,
+                    border: `1px solid ${perk.color}30`,
+                    color: perk.color,
+                  }}
                 >
                   <perk.icon size={17} />
                 </span>
@@ -141,10 +166,23 @@ export default function LoginPage() {
               <div
                 key={s.label}
                 className="rounded-2xl p-3 text-center"
-                style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}
+                style={{
+                  background: 'rgba(255,255,255,0.06)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                }}
               >
-                <p className="text-xl font-black text-white" style={{ fontFamily: 'Outfit, sans-serif' }}>{s.value}</p>
-                <p className="text-xs font-medium mt-0.5" style={{ color: 'rgba(255,255,255,0.4)' }}>{s.label}</p>
+                <p
+                  className="text-xl font-black text-white"
+                  style={{ fontFamily: 'Outfit, sans-serif' }}
+                >
+                  {s.value}
+                </p>
+                <p
+                  className="mt-0.5 text-xs font-medium"
+                  style={{ color: 'rgba(255,255,255,0.4)' }}
+                >
+                  {s.label}
+                </p>
               </div>
             ))}
           </div>
@@ -172,7 +210,14 @@ export default function LoginPage() {
           </Link>
 
           <div className="mb-8">
-            <h1 className="text-3xl font-black" style={{ color: 'var(--color-text)', fontFamily: 'Outfit, sans-serif', letterSpacing: '-0.03em' }}>
+            <h1
+              className="text-3xl font-black"
+              style={{
+                color: 'var(--color-text)',
+                fontFamily: 'Outfit, sans-serif',
+                letterSpacing: '-0.03em',
+              }}
+            >
               Đăng nhập
             </h1>
             <p className="mt-2 text-sm font-medium" style={{ color: 'var(--color-text-muted)' }}>
@@ -188,9 +233,15 @@ export default function LoginPage() {
               border: `1px solid color-mix(in srgb, var(--color-primary) 30%, transparent)`,
             }}
           >
-            <CheckCircle2 size={16} className="mt-0.5 shrink-0" style={{ color: 'var(--color-primary)' }} />
+            <CheckCircle2
+              size={16}
+              className="mt-0.5 shrink-0"
+              style={{ color: 'var(--color-primary)' }}
+            />
             <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-              <span className="font-bold" style={{ color: 'var(--color-primary)' }}>Tài khoản demo: </span>
+              <span className="font-bold" style={{ color: 'var(--color-primary)' }}>
+                Tài khoản demo:{' '}
+              </span>
               {MOCK_EMAIL} · {MOCK_PASSWORD}
             </p>
           </div>
@@ -217,18 +268,21 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="group mt-2 flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-base font-bold text-white transition-all duration-300 hover:scale-[1.02] disabled:opacity-70 disabled:scale-100"
+              className="group mt-2 flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-base font-bold text-white transition-all duration-300 hover:scale-[1.02] disabled:scale-100 disabled:opacity-70"
               style={{
                 background: 'linear-gradient(135deg, var(--color-primary), var(--color-accent-2))',
                 boxShadow: 'var(--shadow-primary)',
               }}
             >
               {isLoading ? (
-                <span className="h-5 w-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                <span className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
               ) : (
                 <>
                   Đăng nhập
-                  <ArrowRight size={17} className="transition-transform duration-300 group-hover:translate-x-1" />
+                  <ArrowRight
+                    size={17}
+                    className="transition-transform duration-300 group-hover:translate-x-1"
+                  />
                 </>
               )}
             </button>

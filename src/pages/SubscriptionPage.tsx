@@ -1,5 +1,16 @@
-
-import { Check, CircleHelp, Crown, Sparkles, Target, Zap, Star, ArrowRight, Shield, Clock, ChevronRight } from 'lucide-react';
+import {
+  Check,
+  CircleHelp,
+  Crown,
+  Sparkles,
+  Target,
+  Zap,
+  Star,
+  ArrowRight,
+  Shield,
+  Clock,
+  ChevronRight,
+} from 'lucide-react';
 import { useState } from 'react';
 
 interface Plan {
@@ -105,27 +116,43 @@ export default function SubscriptionPage() {
   const [hoveredPlan, setHoveredPlan] = useState<string | null>(null);
 
   return (
-    <div className="min-h-screen transition-colors" style={{ background: 'var(--color-background)' }}>
+    <div
+      className="min-h-screen transition-colors"
+      style={{ background: 'var(--color-background)' }}
+    >
       <div className="mx-auto w-full max-w-7xl space-y-10 px-4 py-8 sm:px-6 sm:py-12 lg:px-10">
-
         {/* ── Hero Banner ── */}
         <div
           className="relative overflow-hidden rounded-3xl px-8 py-12 md:px-12"
           style={{ background: 'var(--hero-bg)' }}
         >
           {/* Ambient orbs */}
-          <div className="pointer-events-none absolute -top-20 -right-20 h-72 w-72 rounded-full"
-            style={{ background: 'radial-gradient(circle, var(--hero-orb-a) 0%, transparent 70%)' }} />
-          <div className="pointer-events-none absolute -bottom-16 left-1/3 h-56 w-56 rounded-full"
-            style={{ background: 'radial-gradient(circle, var(--hero-orb-b) 0%, transparent 70%)' }} />
+          <div
+            className="pointer-events-none absolute -top-20 -right-20 h-72 w-72 rounded-full"
+            style={{ background: 'radial-gradient(circle, var(--hero-orb-a) 0%, transparent 70%)' }}
+          />
+          <div
+            className="pointer-events-none absolute -bottom-16 left-1/3 h-56 w-56 rounded-full"
+            style={{ background: 'radial-gradient(circle, var(--hero-orb-b) 0%, transparent 70%)' }}
+          />
           {/* Dot grid */}
-          <div className="pointer-events-none absolute inset-0 opacity-[0.05]"
-            style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
+          <div
+            className="pointer-events-none absolute inset-0 opacity-[0.05]"
+            style={{
+              backgroundImage:
+                'radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)',
+              backgroundSize: '28px 28px',
+            }}
+          />
 
           <div className="relative z-10 text-center">
             <span
               className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold"
-              style={{ background: 'rgba(13,148,136,0.2)', border: '1px solid rgba(13,148,136,0.4)', color: '#5eead4' }}
+              style={{
+                background: 'rgba(13,148,136,0.2)',
+                border: '1px solid rgba(13,148,136,0.4)',
+                color: '#5eead4',
+              }}
             >
               <Crown size={13} />
               Chọn gói phù hợp với bạn
@@ -144,27 +171,34 @@ export default function SubscriptionPage() {
 
             {/* Trust pills */}
             <div className="mt-6 flex flex-wrap justify-center gap-3">
-              {['Không phí ẩn', 'Hủy bất kỳ lúc nào', 'Dữ liệu bảo mật', 'Bắt đầu từ 0₫'].map(tag => (
-                <span key={tag}
-                  className="inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-semibold"
-                  style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.75)', border: '1px solid rgba(255,255,255,0.14)' }}
-                >
-                  <Check size={11} strokeWidth={3} color="#5eead4" /> {tag}
-                </span>
-              ))}
+              {['Không phí ẩn', 'Hủy bất kỳ lúc nào', 'Dữ liệu bảo mật', 'Bắt đầu từ 0₫'].map(
+                tag => (
+                  <span
+                    key={tag}
+                    className="inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-semibold"
+                    style={{
+                      background: 'rgba(255,255,255,0.08)',
+                      color: 'rgba(255,255,255,0.75)',
+                      border: '1px solid rgba(255,255,255,0.14)',
+                    }}
+                  >
+                    <Check size={11} strokeWidth={3} color="#5eead4" /> {tag}
+                  </span>
+                ),
+              )}
             </div>
           </div>
         </div>
 
         {/* ── Plans Grid ── */}
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4 items-stretch">
+        <div className="grid items-stretch gap-5 md:grid-cols-2 lg:grid-cols-4">
           {PLANS.map((plan, index) => {
             const isHovered = hoveredPlan === plan.id;
             const isActive = plan.highlighted || isHovered;
             return (
               <div
                 key={plan.id}
-                className="relative flex flex-col rounded-3xl overflow-hidden"
+                className="relative flex flex-col overflow-hidden rounded-3xl"
                 style={{
                   background: plan.highlighted
                     ? `linear-gradient(160deg, var(--color-surface) 0%, color-mix(in srgb, ${plan.color} 8%, var(--color-surface)) 100%)`
@@ -183,14 +217,12 @@ export default function SubscriptionPage() {
                 onMouseLeave={() => setHoveredPlan(null)}
               >
                 {/* Shimmer overlay on Pro */}
-                {plan.highlighted && (
-                  <div className="shimmer-overlay" />
-                )}
+                {plan.highlighted && <div className="shimmer-overlay" />}
 
                 {/* Most popular ribbon */}
                 {plan.highlighted && (
                   <div
-                    className="absolute -right-9 top-6 rotate-45 px-12 py-1 text-xs font-black text-white"
+                    className="absolute top-6 -right-9 rotate-45 px-12 py-1 text-xs font-black text-white"
                     style={{ background: 'linear-gradient(135deg, #f59e0b, #f97316)' }}
                   >
                     HOT
@@ -226,25 +258,45 @@ export default function SubscriptionPage() {
                     )}
                   </div>
 
-                  <h3 className="mt-4 text-xl font-black" style={{ color: 'var(--color-text)', fontFamily: 'Outfit, sans-serif' }}>
+                  <h3
+                    className="mt-4 text-xl font-black"
+                    style={{ color: 'var(--color-text)', fontFamily: 'Outfit, sans-serif' }}
+                  >
                     {plan.name}
                   </h3>
-                  <p className="mt-1.5 text-sm leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>
+                  <p
+                    className="mt-1.5 text-sm leading-relaxed"
+                    style={{ color: 'var(--color-text-muted)' }}
+                  >
                     {plan.description}
                   </p>
 
                   {/* Price */}
-                  <div className="my-5 pb-5 border-b" style={{ borderColor: 'var(--color-border)' }}>
+                  <div
+                    className="my-5 border-b pb-5"
+                    style={{ borderColor: 'var(--color-border)' }}
+                  >
                     <div className="flex items-baseline gap-1.5">
                       <span
                         className="text-4xl font-black"
-                        style={{ color: plan.color, fontFamily: 'Outfit, sans-serif', letterSpacing: '-0.04em' }}
+                        style={{
+                          color: plan.color,
+                          fontFamily: 'Outfit, sans-serif',
+                          letterSpacing: '-0.04em',
+                        }}
                       >
                         {plan.price}
                       </span>
-                      {plan.id !== 'free' && <span className="text-lg font-bold" style={{ color: plan.color }}>₫</span>}
+                      {plan.id !== 'free' && (
+                        <span className="text-lg font-bold" style={{ color: plan.color }}>
+                          ₫
+                        </span>
+                      )}
                     </div>
-                    <p className="text-xs font-semibold mt-1" style={{ color: 'var(--color-text-subtle)' }}>
+                    <p
+                      className="mt-1 text-xs font-semibold"
+                      style={{ color: 'var(--color-text-subtle)' }}
+                    >
                       {plan.priceNote}
                     </p>
                     {plan.aiModel && (
@@ -267,7 +319,10 @@ export default function SubscriptionPage() {
                         >
                           <Check size={11} strokeWidth={3} />
                         </span>
-                        <span className="text-sm leading-snug" style={{ color: 'var(--color-text-secondary)' }}>
+                        <span
+                          className="text-sm leading-snug"
+                          style={{ color: 'var(--color-text-secondary)' }}
+                        >
                           {detail}
                         </span>
                       </li>
@@ -311,8 +366,16 @@ export default function SubscriptionPage() {
         {/* ── Trust signals ── */}
         <div className="grid gap-4 sm:grid-cols-2">
           {[
-            { icon: Shield, title: 'Bảo mật dữ liệu', desc: 'Dữ liệu CV được mã hóa AES-256 và tuyệt đối không chia sẻ với bên thứ ba.' },
-            { icon: Clock, title: 'Nâng cấp linh hoạt', desc: 'Đổi gói bất kỳ lúc nào, hủy chỉ 1 click. Không có khoản phí ẩn nào.' },
+            {
+              icon: Shield,
+              title: 'Bảo mật dữ liệu',
+              desc: 'Dữ liệu CV được mã hóa AES-256 và tuyệt đối không chia sẻ với bên thứ ba.',
+            },
+            {
+              icon: Clock,
+              title: 'Nâng cấp linh hoạt',
+              desc: 'Đổi gói bất kỳ lúc nào, hủy chỉ 1 click. Không có khoản phí ẩn nào.',
+            },
           ].map(feature => (
             <div
               key={feature.title}
@@ -330,8 +393,12 @@ export default function SubscriptionPage() {
                 <feature.icon size={20} />
               </div>
               <div>
-                <p className="font-bold" style={{ color: 'var(--color-text)' }}>{feature.title}</p>
-                <p className="text-sm mt-0.5" style={{ color: 'var(--color-text-muted)' }}>{feature.desc}</p>
+                <p className="font-bold" style={{ color: 'var(--color-text)' }}>
+                  {feature.title}
+                </p>
+                <p className="mt-0.5 text-sm" style={{ color: 'var(--color-text-muted)' }}>
+                  {feature.desc}
+                </p>
               </div>
             </div>
           ))}
@@ -345,11 +412,17 @@ export default function SubscriptionPage() {
             border: '1px solid var(--color-border)',
           }}
         >
-          <CircleHelp size={18} style={{ color: 'var(--color-text-muted)', marginTop: '2px', flexShrink: 0 }} />
+          <CircleHelp
+            size={18}
+            style={{ color: 'var(--color-text-muted)', marginTop: '2px', flexShrink: 0 }}
+          />
           <div>
-            <h3 className="text-sm font-bold mb-1" style={{ color: 'var(--color-text)' }}>Ghi chú giá</h3>
+            <h3 className="mb-1 text-sm font-bold" style={{ color: 'var(--color-text)' }}>
+              Ghi chú giá
+            </h3>
             <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>
-              Giá gói và giới hạn sử dụng có thể được điều chỉnh theo chính sách vận hành và chi phí hệ thống trong từng giai đoạn phát triển của dịch vụ.
+              Giá gói và giới hạn sử dụng có thể được điều chỉnh theo chính sách vận hành và chi phí
+              hệ thống trong từng giai đoạn phát triển của dịch vụ.
             </p>
           </div>
         </div>

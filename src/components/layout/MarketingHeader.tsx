@@ -50,7 +50,10 @@ export function MarketingHeader() {
 
   const [isDark, setIsDark] = useState(() => {
     if (typeof window !== 'undefined') {
-      return document.documentElement.classList.contains('dark') || localStorage.getItem('theme') === 'dark';
+      return (
+        document.documentElement.classList.contains('dark') ||
+        localStorage.getItem('theme') === 'dark'
+      );
     }
     return false;
   });
@@ -107,7 +110,9 @@ export function MarketingHeader() {
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
     cn(
       'relative text-sm font-semibold transition-all duration-200 px-1 py-0.5 nav-underline',
-      isActive ? 'text-[var(--color-primary)] active' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-primary)]',
+      isActive
+        ? 'text-[var(--color-primary)] active'
+        : 'text-[var(--color-text-secondary)] hover:text-[var(--color-primary)]',
     );
 
   return (
@@ -126,13 +131,16 @@ export function MarketingHeader() {
     >
       {/* Top brand accent line */}
       <div
-        className="absolute top-0 inset-x-0 h-px"
-        style={{ background: 'linear-gradient(90deg, transparent 0%, var(--color-primary) 30%, var(--color-accent-2) 70%, transparent 100%)' }}
+        className="absolute inset-x-0 top-0 h-px"
+        style={{
+          background:
+            'linear-gradient(90deg, transparent 0%, var(--color-primary) 30%, var(--color-accent-2) 70%, transparent 100%)',
+        }}
       />
 
       <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-6 lg:px-10">
         {/* Logo */}
-        <Link to="/" className="flex items-center group">
+        <Link to="/" className="group flex items-center">
           <img
             src={logoImg}
             alt="FitHire AI"
@@ -151,9 +159,9 @@ export function MarketingHeader() {
             <button
               type="button"
               className={cn(
-                'inline-flex items-center gap-1.5 text-sm font-semibold transition-all duration-200 nav-underline px-1 py-0.5',
+                'nav-underline inline-flex items-center gap-1.5 px-1 py-0.5 text-sm font-semibold transition-all duration-200',
                 cvActive
-                  ? 'text-[var(--color-primary)] active'
+                  ? 'active text-[var(--color-primary)]'
                   : 'text-[var(--color-text-secondary)] group-hover/dropdown:text-[var(--color-primary)]',
               )}
             >
@@ -263,8 +271,11 @@ export function MarketingHeader() {
                   />
                 ) : (
                   <div
-                    className="flex h-8 w-8 items-center justify-center rounded-xl font-bold text-white text-sm"
-                    style={{ background: 'linear-gradient(135deg, var(--color-primary), var(--color-accent-2))' }}
+                    className="flex h-8 w-8 items-center justify-center rounded-xl text-sm font-bold text-white"
+                    style={{
+                      background:
+                        'linear-gradient(135deg, var(--color-primary), var(--color-accent-2))',
+                    }}
                   >
                     {user?.name?.charAt(0)?.toUpperCase() ?? <User size={16} />}
                   </div>
@@ -288,14 +299,20 @@ export function MarketingHeader() {
                       className="mb-1 border-b px-4 py-3"
                       style={{ borderColor: 'var(--color-border)' }}
                     >
-                      <p className="truncate text-sm font-bold" style={{ color: 'var(--color-text)' }}>
+                      <p
+                        className="truncate text-sm font-bold"
+                        style={{ color: 'var(--color-text)' }}
+                      >
                         {user?.name}
                       </p>
-                      <p className="mt-0.5 truncate text-xs" style={{ color: 'var(--color-text-muted)' }}>
+                      <p
+                        className="mt-0.5 truncate text-xs"
+                        style={{ color: 'var(--color-text-muted)' }}
+                      >
                         {user?.email}
                       </p>
                     </div>
-                    <div className="px-1.5 flex flex-col gap-0.5">
+                    <div className="flex flex-col gap-0.5 px-1.5">
                       {[
                         { to: '/profile', icon: User, label: 'Hồ sơ của tôi' },
                         { to: '/my-cv', icon: FileUser, label: 'CV của tôi' },
@@ -308,12 +325,14 @@ export function MarketingHeader() {
                           className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-all"
                           style={{ color: 'var(--color-text-secondary)' }}
                           onMouseEnter={e => {
-                            (e.currentTarget as HTMLElement).style.background = 'var(--color-primary-muted)';
+                            (e.currentTarget as HTMLElement).style.background =
+                              'var(--color-primary-muted)';
                             (e.currentTarget as HTMLElement).style.color = 'var(--color-primary)';
                           }}
                           onMouseLeave={e => {
                             (e.currentTarget as HTMLElement).style.background = 'transparent';
-                            (e.currentTarget as HTMLElement).style.color = 'var(--color-text-secondary)';
+                            (e.currentTarget as HTMLElement).style.color =
+                              'var(--color-text-secondary)';
                           }}
                         >
                           <item.icon size={15} />
@@ -327,7 +346,8 @@ export function MarketingHeader() {
                         className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-all"
                         style={{ color: 'var(--color-danger)' }}
                         onMouseEnter={e => {
-                          (e.currentTarget as HTMLElement).style.background = 'var(--color-danger-light)';
+                          (e.currentTarget as HTMLElement).style.background =
+                            'var(--color-danger-light)';
                         }}
                         onMouseLeave={e => {
                           (e.currentTarget as HTMLElement).style.background = 'transparent';
@@ -361,7 +381,7 @@ export function MarketingHeader() {
         <button
           type="button"
           onClick={() => setMobileOpen(o => !o)}
-          className="flex h-9 w-9 items-center justify-center rounded-xl md:hidden transition-all"
+          className="flex h-9 w-9 items-center justify-center rounded-xl transition-all md:hidden"
           style={{
             background: 'var(--color-surface-raised)',
             color: 'var(--color-text-secondary)',
@@ -381,7 +401,10 @@ export function MarketingHeader() {
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.22 }}
             className="overflow-hidden md:hidden"
-            style={{ borderTop: '1px solid var(--color-border)', background: 'var(--color-surface)' }}
+            style={{
+              borderTop: '1px solid var(--color-border)',
+              background: 'var(--color-surface)',
+            }}
           >
             <div className="flex flex-col gap-1 p-4">
               {[
@@ -408,17 +431,24 @@ export function MarketingHeader() {
                 <button
                   onClick={toggleTheme}
                   className="flex h-10 w-10 items-center justify-center rounded-xl"
-                  style={{ background: 'var(--color-primary-muted)', color: 'var(--color-primary)' }}
+                  style={{
+                    background: 'var(--color-primary-muted)',
+                    color: 'var(--color-primary)',
+                  }}
                 >
                   {isDark ? <Sun size={17} /> : <Moon size={17} />}
                 </button>
                 {!isAuthenticated && (
                   <>
                     <NavLink to="/login" className="flex-1" onClick={() => setMobileOpen(false)}>
-                      <Button variant="outline" size="sm" className="w-full">Đăng nhập</Button>
+                      <Button variant="outline" size="sm" className="w-full">
+                        Đăng nhập
+                      </Button>
                     </NavLink>
                     <NavLink to="/register" className="flex-1" onClick={() => setMobileOpen(false)}>
-                      <Button size="sm" className="w-full">Đăng ký</Button>
+                      <Button size="sm" className="w-full">
+                        Đăng ký
+                      </Button>
                     </NavLink>
                   </>
                 )}

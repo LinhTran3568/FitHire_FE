@@ -56,14 +56,27 @@ export default function HrCandidatesPage() {
           className="overflow-x-auto rounded-xl"
           style={{ border: '1px solid var(--color-border)' }}
         >
-          <table className="min-w-full divide-y text-sm" style={{ borderColor: 'var(--color-border)' }}>
-            <thead style={{ background: 'var(--color-surface-raised)', color: 'var(--color-text-muted)' }}>
+          <table
+            className="min-w-full divide-y text-sm"
+            style={{ borderColor: 'var(--color-border)' }}
+          >
+            <thead
+              style={{
+                background: 'var(--color-surface-raised)',
+                color: 'var(--color-text-muted)',
+              }}
+            >
               <tr>
-                {['Ứng viên', 'Điểm CV', 'Điểm Phỏng vấn AI', 'Culture Fit', 'Hành động'].map(col => (
-                  <th key={col} className="px-4 py-3 text-left font-bold text-xs uppercase tracking-wide">
-                    {col}
-                  </th>
-                ))}
+                {['Ứng viên', 'Điểm CV', 'Điểm Phỏng vấn AI', 'Culture Fit', 'Hành động'].map(
+                  col => (
+                    <th
+                      key={col}
+                      className="px-4 py-3 text-left text-xs font-bold tracking-wide uppercase"
+                    >
+                      {col}
+                    </th>
+                  ),
+                )}
               </tr>
             </thead>
             <tbody
@@ -76,7 +89,8 @@ export default function HrCandidatesPage() {
                   className="transition-colors"
                   style={{ borderColor: 'var(--color-border)' }}
                   onMouseEnter={e => {
-                    (e.currentTarget as HTMLElement).style.background = 'var(--color-surface-raised)';
+                    (e.currentTarget as HTMLElement).style.background =
+                      'var(--color-surface-raised)';
                   }}
                   onMouseLeave={e => {
                     (e.currentTarget as HTMLElement).style.background = 'var(--color-surface)';
@@ -96,7 +110,9 @@ export default function HrCandidatesPage() {
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-1.5">
                       <TrendingUp size={13} style={{ color: 'var(--color-success)' }} />
-                      <span style={{ color: 'var(--color-text-secondary)' }}>{candidate.cvScore}</span>
+                      <span style={{ color: 'var(--color-text-secondary)' }}>
+                        {candidate.cvScore}
+                      </span>
                     </div>
                   </td>
                   <td className="px-4 py-3" style={{ color: 'var(--color-text-secondary)' }}>

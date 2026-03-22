@@ -12,7 +12,7 @@ export function SurfaceCard({ children, className, hover = false, ...props }: Su
       {...props}
       className={cn(
         'rounded-2xl border p-5',
-        'bg-[var(--color-surface)] border-[var(--color-border)]',
+        'border-[var(--color-border)] bg-[var(--color-surface)]',
         'shadow-[var(--shadow-sm)]',
         'transition-colors duration-300',
         hover && 'card-hover cursor-pointer',

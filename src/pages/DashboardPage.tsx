@@ -35,10 +35,34 @@ const interviewHistory = [
 ];
 
 const QUICK_LINKS = [
-  { to: '/cv-builder', label: 'Tạo CV', icon: FileText, color: '#0d9488', bg: 'rgba(13,148,136,0.1)' },
-  { to: '/cv-scoring', label: 'Chấm điểm CV', icon: ScanSearch, color: '#3b82f6', bg: 'rgba(59,130,246,0.1)' },
-  { to: '/interview', label: 'Phỏng vấn AI', icon: MicVocal, color: '#8b5cf6', bg: 'rgba(139,92,246,0.1)' },
-  { to: '/jobs', label: 'Tìm việc', icon: BriefcaseBusiness, color: '#10b981', bg: 'rgba(16,185,129,0.1)' },
+  {
+    to: '/cv-builder',
+    label: 'Tạo CV',
+    icon: FileText,
+    color: '#0d9488',
+    bg: 'rgba(13,148,136,0.1)',
+  },
+  {
+    to: '/cv-scoring',
+    label: 'Chấm điểm CV',
+    icon: ScanSearch,
+    color: '#3b82f6',
+    bg: 'rgba(59,130,246,0.1)',
+  },
+  {
+    to: '/interview',
+    label: 'Phỏng vấn AI',
+    icon: MicVocal,
+    color: '#8b5cf6',
+    bg: 'rgba(139,92,246,0.1)',
+  },
+  {
+    to: '/jobs',
+    label: 'Tìm việc',
+    icon: BriefcaseBusiness,
+    color: '#10b981',
+    bg: 'rgba(16,185,129,0.1)',
+  },
 ];
 
 function getScoreColor(score: number) {
@@ -83,9 +107,27 @@ export default function DashboardPage() {
       {/* Stats row */}
       <div className="grid gap-4 md:grid-cols-3">
         {[
-          { icon: Target, label: 'Hoàn thành hồ sơ', value: '68%', color: '#0d9488', bg: 'rgba(13,148,136,0.1)' },
-          { icon: BriefcaseBusiness, label: 'Việc phù hợp', value: '24', color: '#3b82f6', bg: 'rgba(59,130,246,0.1)' },
-          { icon: TrendingUp, label: 'Trung bình phỏng vấn', value: '82/100', color: '#10b981', bg: 'rgba(16,185,129,0.1)' },
+          {
+            icon: Target,
+            label: 'Hoàn thành hồ sơ',
+            value: '68%',
+            color: '#0d9488',
+            bg: 'rgba(13,148,136,0.1)',
+          },
+          {
+            icon: BriefcaseBusiness,
+            label: 'Việc phù hợp',
+            value: '24',
+            color: '#3b82f6',
+            bg: 'rgba(59,130,246,0.1)',
+          },
+          {
+            icon: TrendingUp,
+            label: 'Trung bình phỏng vấn',
+            value: '82/100',
+            color: '#10b981',
+            bg: 'rgba(16,185,129,0.1)',
+          },
         ].map(stat => (
           <SurfaceCard key={stat.label} className="flex items-center gap-4">
             <div
@@ -97,7 +139,11 @@ export default function DashboardPage() {
             <div>
               <p
                 className="text-3xl font-black"
-                style={{ color: stat.color, fontFamily: 'Outfit, sans-serif', letterSpacing: '-0.03em' }}
+                style={{
+                  color: stat.color,
+                  fontFamily: 'Outfit, sans-serif',
+                  letterSpacing: '-0.03em',
+                }}
               >
                 {stat.value}
               </p>
@@ -126,10 +172,16 @@ export default function DashboardPage() {
           </div>
 
           {/* Progress bar */}
-          <div className="mb-6 h-2.5 w-full overflow-hidden rounded-full" style={{ background: 'var(--color-border)' }}>
+          <div
+            className="mb-6 h-2.5 w-full overflow-hidden rounded-full"
+            style={{ background: 'var(--color-border)' }}
+          >
             <div
               className="h-full rounded-full transition-all duration-700"
-              style={{ width: '68%', background: 'linear-gradient(90deg, var(--color-primary), var(--color-accent-2))' }}
+              style={{
+                width: '68%',
+                background: 'linear-gradient(90deg, var(--color-primary), var(--color-accent-2))',
+              }}
             />
           </div>
 
@@ -137,12 +189,20 @@ export default function DashboardPage() {
             {PROGRESS_ITEMS.map(item => (
               <li key={item.label} className="flex items-center gap-3">
                 {item.done ? (
-                  <CheckCircle2 size={18} className="shrink-0" style={{ color: 'var(--color-success)' }} />
+                  <CheckCircle2
+                    size={18}
+                    className="shrink-0"
+                    style={{ color: 'var(--color-success)' }}
+                  />
                 ) : (
-                  <Circle size={18} className="shrink-0" style={{ color: 'var(--color-border-strong)' }} />
+                  <Circle
+                    size={18}
+                    className="shrink-0"
+                    style={{ color: 'var(--color-border-strong)' }}
+                  />
                 )}
                 <span
-                  className="text-sm font-medium flex-1"
+                  className="flex-1 text-sm font-medium"
                   style={{ color: item.done ? 'var(--color-text)' : 'var(--color-text-subtle)' }}
                 >
                   {item.label}
@@ -150,7 +210,10 @@ export default function DashboardPage() {
                 {!item.done && (
                   <span
                     className="rounded-full px-2.5 py-0.5 text-xs font-bold"
-                    style={{ background: 'var(--color-warning-light)', color: 'var(--color-warning)' }}
+                    style={{
+                      background: 'var(--color-warning-light)',
+                      color: 'var(--color-warning)',
+                    }}
                   >
                     Chưa xong
                   </span>
@@ -187,7 +250,9 @@ export default function DashboardPage() {
                 >
                   {i + 1}
                 </span>
-                <span className="font-medium" style={{ color: 'var(--color-text-secondary)' }}>{goal}</span>
+                <span className="font-medium" style={{ color: 'var(--color-text-secondary)' }}>
+                  {goal}
+                </span>
               </li>
             ))}
           </ul>
@@ -218,7 +283,10 @@ export default function DashboardPage() {
                 }}
               >
                 <div className="min-w-0">
-                  <p className="truncate font-semibold text-sm" style={{ color: 'var(--color-text)' }}>
+                  <p
+                    className="truncate text-sm font-semibold"
+                    style={{ color: 'var(--color-text)' }}
+                  >
                     {job.title}
                   </p>
                   <p className="mt-0.5 text-xs" style={{ color: 'var(--color-text-muted)' }}>
@@ -233,7 +301,10 @@ export default function DashboardPage() {
                     {job.match}%
                   </span>
                   <Link to={`/jobs/${job.id}`}>
-                    <button className="flex items-center gap-1 text-xs font-semibold" style={{ color: 'var(--color-primary)' }}>
+                    <button
+                      className="flex items-center gap-1 text-xs font-semibold"
+                      style={{ color: 'var(--color-primary)' }}
+                    >
                       Xem <ArrowRight size={10} />
                     </button>
                   </Link>
@@ -265,7 +336,7 @@ export default function DashboardPage() {
                 }}
               >
                 <div>
-                  <p className="font-semibold text-sm" style={{ color: 'var(--color-text)' }}>
+                  <p className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
                     {session.role}
                   </p>
                   <p className="mt-0.5 text-xs" style={{ color: 'var(--color-text-muted)' }}>
@@ -279,7 +350,9 @@ export default function DashboardPage() {
                   >
                     {session.score}/100
                   </span>
-                  <Button variant="ghost" size="sm">Xem chi tiết</Button>
+                  <Button variant="ghost" size="sm">
+                    Xem chi tiết
+                  </Button>
                 </div>
               </div>
             );
