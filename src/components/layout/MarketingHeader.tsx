@@ -6,12 +6,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Bookmark,
   ChevronDown,
+  Compass,
   FileUser,
   LogOut,
+  Mic,
   User,
   Sun,
   Moon,
-  Briefcase,
   FileText,
   ScanSearch,
   MenuIcon,
@@ -192,10 +193,17 @@ export function MarketingHeader() {
             </div>
           </div>
 
-          <NavLink to="/jobs" className={navLinkClass}>
+          <NavLink to="/interview" className={navLinkClass}>
             <span className="flex items-center gap-1.5">
-              <Briefcase size={15} />
-              Tìm việc
+              <Mic size={15} />
+              Phỏng vấn giả lập
+            </span>
+          </NavLink>
+
+          <NavLink to="/culture/matching" className={navLinkClass}>
+            <span className="flex items-center gap-1.5">
+              <Compass size={15} />
+              Khảo sát văn hoá
             </span>
           </NavLink>
 
@@ -371,7 +379,8 @@ export function MarketingHeader() {
               {[
                 { to: '/', label: 'Trang chủ' },
                 { to: '/cv-builder?flow=build', label: 'Tạo CV' },
-                { to: '/jobs', label: 'Tìm việc' },
+                { to: '/interview', label: 'Phỏng vấn giả lập' },
+                { to: '/culture/matching', label: 'Khảo sát văn hoá' },
                 { to: '/subscription', label: 'Gói Pro' },
               ].map(item => (
                 <NavLink

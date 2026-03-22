@@ -1,435 +1,605 @@
-import { Badge, Button, SectionTitle, SurfaceCard } from '@components/ui';
-import { cn } from '@lib/utils';
-import { Building2, Flame, Medal, RefreshCw, Sparkles, Target } from 'lucide-react';
-import { useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Button } from '@components/ui';
+import { ArrowRight, CheckCircle, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-type CultureId = 'startup' | 'corporate' | 'product' | 'remote';
+// ─── Types ──────────────────────────────────────────────────────────────────
+type Step = 'hook' | 'survey' | 'matching' | 'result';
 
-interface CultureProfile {
-  id: CultureId;
+interface SliderQuestion {
+  id: string;
+  leftLabel: string;
+  rightLabel: string;
+  leftKeyword: string;
+  rightKeyword: string;
+  leftCompanies: string[];
+  rightCompanies: string[];
+}
+
+interface CompanyMatch {
   name: string;
-  description: string;
-  badgeVariant: 'success' | 'info' | 'warning' | 'default';
-  barClass: string;
+  emoji: string;
+  match: number;
+  tagline: string;
+  color: string;
+  radarScores: number[];
+  whyFit: string;
 }
 
-interface ScenarioOption {
-  id: string;
-  title: string;
-  detail: string;
-  scores: Record<CultureId, number>;
-}
+// ─── Data ────────────────────────────────────────────────────────────────────
+const ECOSYSTEMS = [
+  { label: 'Fintech', emoji: '💳', color: '#0891b2', desc: 'MoMo, VNPay, Timo' },
+  { label: 'Ecommerce', emoji: '🛒', color: '#f59e0b', desc: 'Tiki, Shopee, Lazada' },
+  { label: 'SaaS', emoji: '⚙️', color: '#8b5cf6', desc: 'Base.vn, KiotViet, Misa' },
+  { label: 'Big Tech', emoji: '🎮', color: '#0d9488', desc: 'VNG, FPT, Axon' },
+];
 
-interface ScenarioQuestion {
-  id: string;
-  title: string;
-  situation: string;
-  options: ScenarioOption[];
-}
-
-const cultureProfiles: CultureProfile[] = [
+const SURVEY_QUESTIONS: SliderQuestion[] = [
   {
-    id: 'startup',
-    name: 'Startup năng động',
-    description: 'Nhịp làm việc nhanh, ưu tiên thử nghiệm và chủ động chốt hành động.',
-    badgeVariant: 'success',
-    barClass: 'bg-emerald-500',
+    id: 'q1',
+    leftLabel: 'Tôi thích quy trình rõ ràng, bài bản',
+    rightLabel: 'Tôi thích tự chủ, tự tạo quy trình',
+    leftKeyword: 'Quy trình',
+    rightKeyword: 'Tự chủ',
+    leftCompanies: ['VNPT', 'Viettel'],
+    rightCompanies: ['Base.vn', 'One Mount'],
   },
   {
-    id: 'corporate',
-    name: 'Tập đoàn quy củ',
-    description: 'Quy trình rõ ràng, phân cấp trách nhiệm và tiêu chuẩn vận hành ổn định.',
-    badgeVariant: 'info',
-    barClass: 'bg-blue-500',
+    id: 'q2',
+    leftLabel: 'Ổn định lâu dài quan trọng hơn',
+    rightLabel: 'Thách thức và tốc độ quan trọng hơn',
+    leftKeyword: 'Ổn định',
+    rightKeyword: 'Tốc độ',
+    leftCompanies: ['FPT', 'Vietcombank'],
+    rightCompanies: ['VNG', 'MoMo'],
   },
   {
-    id: 'product',
-    name: 'Product tập trung kết quả',
-    description: 'Ra quyết định dựa trên dữ liệu, cân bằng tốc độ và chất lượng trải nghiệm.',
-    badgeVariant: 'warning',
-    barClass: 'bg-amber-500',
+    id: 'q3',
+    leftLabel: 'Tôi làm việc tốt hơn trong tập thể lớn',
+    rightLabel: 'Tôi thích nhóm nhỏ, ra quyết định nhanh',
+    leftKeyword: 'Tập thể',
+    rightKeyword: 'Nhóm nhỏ',
+    leftCompanies: ['Viettel', 'BIDV'],
+    rightCompanies: ['Startups', 'Base.vn'],
   },
   {
-    id: 'remote',
-    name: 'Đội ngũ remote linh hoạt',
-    description: 'Tự chủ cao, phối hợp async rõ ràng, giao tiếp có cấu trúc.',
-    badgeVariant: 'default',
-    barClass: 'bg-slate-500',
+    id: 'q4',
+    leftLabel: 'Tôi ưu tiên sản phẩm hoàn chỉnh rồi mới ra mắt',
+    rightLabel: 'Tôi thích ra mắt nhanh rồi cải tiến dần',
+    leftKeyword: 'Hoàn chỉnh',
+    rightKeyword: 'MVP nhanh',
+    leftCompanies: ['Tập đoàn lớn'],
+    rightCompanies: ['Tiki', 'VNG'],
+  },
+  {
+    id: 'q5',
+    leftLabel: 'Tôi thích được hướng dẫn chi tiết khi nhận việc',
+    rightLabel: 'Tôi thích chủ động nghiên cứu và đề xuất cách làm',
+    leftKeyword: 'Hướng dẫn',
+    rightKeyword: 'Chủ động',
+    leftCompanies: ['Corporate'],
+    rightCompanies: ['Startup', 'Base.vn'],
+  },
+  {
+    id: 'q6',
+    leftLabel: 'Kết quả đo lường bằng quy trình & tuân thủ',
+    rightLabel: 'Kết quả đo lường bằng impact & outcome',
+    leftKeyword: 'Tuân thủ',
+    rightKeyword: 'Impact',
+    leftCompanies: ['VNPT', 'Viettel'],
+    rightCompanies: ['VNG', 'MoMo'],
+  },
+  {
+    id: 'q7',
+    leftLabel: 'Tôi thích môi trường cạnh tranh, thẳng thắn',
+    rightLabel: 'Tôi thích môi trường hợp tác, hỗ trợ lẫn nhau',
+    leftKeyword: 'Cạnh tranh',
+    rightKeyword: 'Hợp tác',
+    leftCompanies: ['Axon', 'Big4'],
+    rightCompanies: ['Tiki', 'Kyna'],
   },
 ];
 
-const scenarioQuestions: ScenarioQuestion[] = [
+const RADAR_LABELS = ['Innovation', 'Discipline', 'Collaboration', 'Result-oriented', 'Customer-centric'];
+
+const COMPANY_DATABASE: CompanyMatch[] = [
   {
-    id: 'deadline',
-    title: 'Tình huống 1: Deadline đột ngột',
-    situation:
-      'Team nhận yêu cầu từ khách hàng: rút ngắn thời gian giao tính năng còn 1/2 so với kế hoạch.',
-    options: [
-      {
-        id: 'deadline-startup',
-        title: 'Chia nhỏ, thử nhanh MVP rồi tối ưu dần',
-        detail: 'Ưu tiên triển khai nhanh phần cốt lõi để lấy phản hồi thực tế sớm.',
-        scores: { startup: 5, corporate: 2, product: 4, remote: 3 },
-      },
-      {
-        id: 'deadline-corporate',
-        title: 'Lập lại kế hoạch và xin phê duyệt mốc mới',
-        detail: 'Giữ quy trình rõ ràng, quản trị rủi ro trước khi thay đổi phạm vi.',
-        scores: { startup: 2, corporate: 5, product: 3, remote: 2 },
-      },
-      {
-        id: 'deadline-remote',
-        title: 'Phân task ownership, đồng bộ async theo block',
-        detail: 'Mỗi người chịu trách nhiệm một phần rõ ràng, cập nhật tiến độ theo nhịp ngắn.',
-        scores: { startup: 3, corporate: 2, product: 4, remote: 5 },
-      },
-    ],
+    name: 'VNG', emoji: '🎮', match: 92, tagline: 'Đế chế gaming & tech Việt Nam',
+    color: '#0d9488',
+    radarScores: [95, 60, 75, 90, 80],
+    whyFit: 'Bạn có tư duy tốc độ và sẵn sàng thử thách giống văn hoá "Move fast, break things" của VNG.',
   },
   {
-    id: 'feedback',
-    title: 'Tình huống 2: Nhận feedback trái chiều',
-    situation: 'Bạn nhận hai luồng góp ý ngược nhau từ PM và Tech Lead về giải pháp kỹ thuật.',
-    options: [
-      {
-        id: 'feedback-product',
-        title: 'Đưa dữ liệu đo lường để chọn phương án',
-        detail: 'So sánh impact theo business + effort để chốt quyết định minh bạch.',
-        scores: { startup: 4, corporate: 3, product: 5, remote: 3 },
-      },
-      {
-        id: 'feedback-corporate',
-        title: 'Ưu tiên theo cấp phê duyệt và quy trình hiện hành',
-        detail: 'Giảm xung đột bằng cách bám vai trò và cơ chế ra quyết định chuẩn.',
-        scores: { startup: 2, corporate: 5, product: 3, remote: 2 },
-      },
-      {
-        id: 'feedback-startup',
-        title: 'Đề xuất thử A/B nhỏ để học nhanh',
-        detail: 'Chấp nhận thử nghiệm trong phạm vi an toàn để tìm đáp án thực tế nhanh.',
-        scores: { startup: 5, corporate: 2, product: 4, remote: 3 },
-      },
-    ],
+    name: 'MoMo', emoji: '💙', match: 85, tagline: 'Fintech dẫn đầu thị trường',
+    color: '#8b5cf6',
+    radarScores: [88, 70, 85, 92, 95],
+    whyFit: 'Obsession với trải nghiệm khách hàng và dữ liệu là điểm chung giữa bạn và MoMo.',
   },
   {
-    id: 'collaboration',
-    title: 'Tình huống 3: Hợp tác liên phòng ban',
-    situation: 'Bạn cần phối hợp với Design, QA và DevOps để release tính năng trong tuần này.',
-    options: [
-      {
-        id: 'collab-remote',
-        title: 'Thiết lập workspace chung + checklist async',
-        detail: 'Chuẩn hóa giao tiếp, ghi rõ owner và deadline từng hạng mục.',
-        scores: { startup: 3, corporate: 3, product: 4, remote: 5 },
-      },
-      {
-        id: 'collab-product',
-        title: 'Ưu tiên flow tác động lớn đến user trước',
-        detail: 'Đồng thuận theo mục tiêu sản phẩm thay vì làm đồng loạt tất cả hạng mục.',
-        scores: { startup: 4, corporate: 2, product: 5, remote: 4 },
-      },
-      {
-        id: 'collab-corporate',
-        title: 'Đi theo quy trình bàn giao chuẩn của tổ chức',
-        detail: 'Giữ sự ổn định và khả năng kiểm soát khi có nhiều bên liên quan.',
-        scores: { startup: 2, corporate: 5, product: 3, remote: 2 },
-      },
-    ],
+    name: 'Tiki', emoji: '🛒', match: 78, tagline: 'Ecommerce & logistics innovator',
+    color: '#0891b2',
+    radarScores: [75, 72, 88, 85, 90],
+    whyFit: 'Phong cách làm việc cộng tác, customer-first của bạn phù hợp tốt với Tiki.',
+  },
+  {
+    name: 'Base.vn', emoji: '⚙️', match: 72, tagline: 'SaaS quản trị doanh nghiệp',
+    color: '#f59e0b',
+    radarScores: [80, 65, 70, 88, 75],
+    whyFit: 'Bạn có tư duy kết quả (Result, No Reasons) giống văn hoá của Base.vn.',
   },
 ];
 
-const cultureIds: CultureId[] = ['startup', 'corporate', 'product', 'remote'];
+// ─── Radar Chart SVG ─────────────────────────────────────────────────────────
+function RadarChart({ scores, color = 'var(--color-primary)' }: { scores: number[]; color?: string }) {
+  const cx = 110, cy = 110, r = 75;
+  const n = RADAR_LABELS.length;
+  const step = (2 * Math.PI) / n;
 
-export default function CultureMatchingPage() {
-  const [searchParams] = useSearchParams();
-  const [answers, setAnswers] = useState<Record<string, string>>({});
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [submittedAt, setSubmittedAt] = useState<string | null>(null);
-  const targetJob = searchParams.get('jobId');
+  const pt = (val: number, i: number) => {
+    const a = i * step - Math.PI / 2;
+    const d = (val / 100) * r;
+    return { x: cx + d * Math.cos(a), y: cy + d * Math.sin(a) };
+  };
+  const outerPts = RADAR_LABELS.map((_, i) => pt(100, i));
+  const scorePts = scores.map((s, i) => pt(s, i));
+  const toD = (arr: { x: number; y: number }[]) =>
+    arr.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ') + 'Z';
 
-  const companyName = useMemo(() => {
-    if (!targetJob) return 'Công ty mục tiêu';
-
-    if (targetJob.includes('techify')) return 'Techify Vietnam';
-    if (targetJob.includes('nextgen')) return 'NextGen Solutions';
-    if (targetJob.includes('finstack')) return 'FinStack';
-    if (targetJob.includes('growthlab')) return 'GrowthLab';
-
-    return 'Công ty mục tiêu';
-  }, [targetJob]);
-
-  const selectedQuestions = useMemo(
-    () => scenarioQuestions.filter(question => Boolean(answers[question.id])),
-    [answers],
+  return (
+    <svg viewBox="0 0 220 220" className="w-full max-w-[200px] mx-auto">
+      {([25, 50, 75, 100] as const).map(pct => (
+        <path key={pct} d={toD(RADAR_LABELS.map((_, i) => pt(pct, i)))} fill="none" stroke="var(--color-border)" strokeWidth={1} />
+      ))}
+      {outerPts.map((p, i) => (
+        <line key={i} x1={cx} y1={cy} x2={p.x} y2={p.y} stroke="var(--color-border)" strokeWidth={1} />
+      ))}
+      <path d={toD(scorePts)} fill={color} fillOpacity={0.2} stroke={color} strokeWidth={2} />
+      {scorePts.map((p, i) => <circle key={i} cx={p.x} cy={p.y} r={3.5} fill={color} />)}
+      {outerPts.map((p, i) => {
+        const a = i * step - Math.PI / 2;
+        const lx = cx + (r + 20) * Math.cos(a);
+        const ly = cy + (r + 20) * Math.sin(a);
+        return (
+          <text key={i} x={lx} y={ly} textAnchor="middle" dominantBaseline="middle" fontSize={7.5} fill="var(--color-text-muted)">
+            {RADAR_LABELS[i]}
+          </text>
+        );
+      })}
+    </svg>
   );
+}
 
-  const scoreBoard = useMemo(() => {
-    const base: Record<CultureId, number> = {
-      startup: 0,
-      corporate: 0,
-      product: 0,
-      remote: 0,
-    };
+// ─── Hook Screen ─────────────────────────────────────────────────────────────
+function HookScreen({ onStart }: { onStart: () => void }) {
+  return (
+    <div className="mx-auto max-w-2xl space-y-8 py-8 text-center">
+      <div
+        className="relative overflow-hidden rounded-3xl px-8 py-12"
+        style={{ background: 'var(--hero-bg)' }}
+      >
+        <div className="pointer-events-none absolute -top-12 -right-12 h-48 w-48 rounded-full blur-3xl" style={{ background: 'var(--hero-orb-a)', opacity: 0.4 }} />
+        <div className="pointer-events-none absolute -bottom-8 -left-8 h-36 w-36 rounded-full blur-3xl" style={{ background: 'var(--hero-orb-b)', opacity: 0.3 }} />
+        <div className="relative z-10">
+          <div className="text-4xl mb-4">🧭</div>
+          <h1 className="text-3xl font-black text-white leading-tight">
+            Tìm môi trường làm việc<br />
+            <span style={{ color: '#5eead4' }}>"thuộc về"</span> bạn
+          </h1>
+          <p className="mt-3 text-sm text-white/60 max-w-md mx-auto">
+            Bạn là một <strong className="text-white/80">Builder tự do</strong> hay một <strong className="text-white/80">Chiến binh kỷ luật</strong>? 
+            7 câu hỏi, 2 phút, kết quả matching với 14 doanh nghiệp hàng đầu Việt Nam.
+          </p>
+        </div>
+      </div>
 
-    selectedQuestions.forEach(question => {
-      const selectedOptionId = answers[question.id];
-      const selectedOption = question.options.find(option => option.id === selectedOptionId);
-      if (!selectedOption) return;
+      {/* Ecosystem icons */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {ECOSYSTEMS.map(eco => (
+          <div
+            key={eco.label}
+            className="rounded-2xl p-4 transition-all hover:scale-105 hover:-translate-y-1 cursor-default"
+            style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}
+          >
+            <div className="text-2xl mb-2">{eco.emoji}</div>
+            <p className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>{eco.label}</p>
+            <p className="text-xs mt-0.5" style={{ color: 'var(--color-text-subtle)' }}>{eco.desc}</p>
+          </div>
+        ))}
+      </div>
 
-      cultureIds.forEach(cultureId => {
-        base[cultureId] += selectedOption.scores[cultureId];
-      });
+      <Button variant="primary" className="text-base px-8 py-3 font-black" onClick={onStart}>
+        <Sparkles size={17} />
+        Bắt đầu khám phá (2 phút)
+        <ArrowRight size={17} />
+      </Button>
+
+      <p className="text-xs" style={{ color: 'var(--color-text-subtle)' }}>
+        Dựa trên nghiên cứu văn hoá từ báo cáo thường niên của 14 doanh nghiệp hàng đầu Việt Nam.
+      </p>
+    </div>
+  );
+}
+
+// ─── Survey Screen ────────────────────────────────────────────────────────────
+function SurveyScreen({ onComplete }: { onComplete: (answers: number[]) => void }) {
+  const [qIdx, setQIdx] = useState(0);
+  const [values, setValues] = useState<number[]>(Array(SURVEY_QUESTIONS.length).fill(50));
+  const [isDragging, setIsDragging] = useState(false);
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  const current = SURVEY_QUESTIONS[qIdx];
+  const val = values[qIdx];
+  const progress = ((qIdx + 1) / SURVEY_QUESTIONS.length) * 100;
+
+  const updateValue = useCallback((clientX: number) => {
+    if (!trackRef.current) return;
+    const rect = trackRef.current.getBoundingClientRect();
+    const pct = Math.min(100, Math.max(0, ((clientX - rect.left) / rect.width) * 100));
+    setValues(prev => {
+      const next = [...prev];
+      next[qIdx] = Math.round(pct);
+      return next;
     });
+  }, [qIdx]);
 
-    return base;
-  }, [answers, selectedQuestions]);
+  const handleMouseDown = (e: React.MouseEvent) => { setIsDragging(true); updateValue(e.clientX); };
+  const handleMouseMove = useCallback((e: MouseEvent) => { if (isDragging) updateValue(e.clientX); }, [isDragging, updateValue]);
+  const handleMouseUp = useCallback(() => setIsDragging(false), []);
 
-  const ranking = useMemo(() => {
-    const maxByCulture: Record<CultureId, number> = {
-      startup: 0,
-      corporate: 0,
-      product: 0,
-      remote: 0,
-    };
+  useEffect(() => {
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+    return () => { window.removeEventListener('mousemove', handleMouseMove); window.removeEventListener('mouseup', handleMouseUp); };
+  }, [handleMouseMove, handleMouseUp]);
 
-    selectedQuestions.forEach(question => {
-      cultureIds.forEach(cultureId => {
-        const questionMax = Math.max(...question.options.map(option => option.scores[cultureId]));
-        maxByCulture[cultureId] += questionMax;
+  const handleTouch = (e: React.TouchEvent) => {
+    updateValue(e.touches[0].clientX);
+  };
+
+  const handleNext = () => {
+    if (qIdx < SURVEY_QUESTIONS.length - 1) setQIdx(i => i + 1);
+    else onComplete(values);
+  };
+
+  const handlePrev = () => { if (qIdx > 0) setQIdx(i => i - 1); };
+
+  // Derived keyword visibility
+  const leftOpacity = val < 40 ? 1 : val < 50 ? 0.5 : 0.1;
+  const rightOpacity = val > 60 ? 1 : val > 50 ? 0.5 : 0.1;
+
+  return (
+    <div className="mx-auto max-w-xl space-y-6 py-4">
+      {/* Progress bar */}
+      <div className="space-y-1.5">
+        <div className="flex justify-between text-xs" style={{ color: 'var(--color-text-muted)' }}>
+          <span>Câu {qIdx + 1} / {SURVEY_QUESTIONS.length}</span>
+          <span>{Math.round(progress)}%</span>
+        </div>
+        <div className="h-2 rounded-full" style={{ background: 'var(--color-border-strong)' }}>
+          <div className="h-full rounded-full transition-all duration-500" style={{ width: `${progress}%`, background: 'var(--color-primary)' }} />
+        </div>
+      </div>
+
+      {/* Question card */}
+      <div className="rounded-3xl p-6 space-y-8" style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', boxShadow: 'var(--shadow-md)' }}>
+        <p className="text-center text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--color-text-subtle)' }}>
+          Kéo thanh về phía bạn đồng ý hơn
+        </p>
+
+        {/* Opposing labels */}
+        <div className="grid grid-cols-[1fr_auto_1fr] gap-2 items-center">
+          <div className="text-right space-y-1.5">
+            <p className="text-sm font-semibold leading-snug" style={{ color: 'var(--color-text)' }}>{current.leftLabel}</p>
+            <div className="flex justify-end flex-wrap gap-1">
+              {current.leftCompanies.map(c => (
+                <span key={c} className="text-xs rounded-full px-2 py-0.5 transition-opacity duration-300"
+                  style={{ background: 'var(--color-primary-muted)', color: 'var(--color-primary)', opacity: leftOpacity }}>
+                  {c}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="text-lg font-black" style={{ color: 'var(--color-text-subtle)' }}>VS</div>
+          <div className="text-left space-y-1.5">
+            <p className="text-sm font-semibold leading-snug" style={{ color: 'var(--color-text)' }}>{current.rightLabel}</p>
+            <div className="flex flex-wrap gap-1">
+              {current.rightCompanies.map(c => (
+                <span key={c} className="text-xs rounded-full px-2 py-0.5 transition-opacity duration-300"
+                  style={{ background: 'rgba(13,148,136,0.12)', color: '#0d9488', opacity: rightOpacity }}>
+                  {c}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Slider track */}
+        <div className="space-y-3">
+          <div
+            ref={trackRef}
+            className="relative h-5 cursor-pointer rounded-full select-none"
+            style={{ background: 'var(--color-border-strong)' }}
+            onMouseDown={handleMouseDown}
+            onTouchMove={e => handleTouch(e)}
+          >
+            <div className="absolute inset-y-0 left-0 rounded-full transition-all"
+              style={{ width: `${val}%`, background: 'linear-gradient(90deg, var(--color-primary), #6366f1)' }} />
+            <div
+              className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-7 w-7 rounded-full shadow-lg transition-transform hover:scale-110 cursor-grab active:cursor-grabbing"
+              style={{ left: `${val}%`, background: 'white', border: '2.5px solid var(--color-primary)', boxShadow: '0 2px 8px rgba(0,0,0,0.2)' }}
+            />
+          </div>
+
+          {/* Keyword flash */}
+          <div className="flex justify-between text-xs font-semibold">
+            <span className="transition-opacity duration-300" style={{ color: 'var(--color-primary)', opacity: leftOpacity }}>
+              ← {current.leftKeyword}
+            </span>
+            <span className="transition-opacity duration-300" style={{ color: '#0d9488', opacity: rightOpacity }}>
+              {current.rightKeyword} →
+            </span>
+          </div>
+        </div>
+
+        {/* Navigation */}
+        <div className="flex items-center justify-between pt-2">
+          <button
+            onClick={handlePrev}
+            disabled={qIdx === 0}
+            className="flex items-center gap-1.5 text-sm font-medium disabled:opacity-30 transition hover:opacity-70"
+            style={{ color: 'var(--color-text-muted)' }}
+          >
+            <ChevronLeft size={16} /> Quay lại
+          </button>
+          <Button variant="primary" onClick={handleNext} className="font-bold px-6">
+            {qIdx === SURVEY_QUESTIONS.length - 1 ? (
+              <><CheckCircle size={14} /> Xem kết quả</>
+            ) : (
+              <>Tiếp theo <ChevronRight size={14} /></>
+            )}
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Matching Screen ──────────────────────────────────────────────────────────
+function MatchingScreen({ onDone }: { onDone: () => void }) {
+  const [progress, setProgress] = useState(0);
+  const [currentCompany, setCurrentCompany] = useState(0);
+  const companies = ['VNG', 'MoMo', 'Tiki', 'Base.vn', 'Shopee', 'VNPT', 'Viettel', 'FPT', 'KiotViet', 'Misa', 'Axon', 'One Mount', 'Kyna', 'GrowthLab'];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setProgress(p => {
+        if (p >= 100) { clearInterval(interval); setTimeout(onDone, 600); return 100; }
+        return p + 2;
       });
-    });
+    }, 40);
+    const compInterval = setInterval(() => {
+      setCurrentCompany(c => (c + 1) % companies.length);
+    }, 150);
+    return () => { clearInterval(interval); clearInterval(compInterval); };
+  }, [onDone, companies.length]);
 
-    return cultureProfiles
-      .map(profile => {
-        const maxScore = maxByCulture[profile.id];
-        const rawScore = scoreBoard[profile.id];
-        const percentage = maxScore === 0 ? 0 : Math.round((rawScore / maxScore) * 100);
+  return (
+    <div className="flex flex-col items-center justify-center py-16 gap-8 text-center">
+      <div className="relative h-36 w-36">
+        <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
+          <circle cx="50" cy="50" r="44" fill="none" stroke="var(--color-border-strong)" strokeWidth="5" />
+          <circle
+            cx="50" cy="50" r="44" fill="none"
+            stroke="var(--color-primary)" strokeWidth="5" strokeLinecap="round"
+            strokeDasharray={`${2 * Math.PI * 44}`}
+            strokeDashoffset={`${2 * Math.PI * 44 * (1 - progress / 100)}`}
+            style={{ transition: 'stroke-dashoffset 0.1s linear' }}
+          />
+        </svg>
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <span className="text-2xl font-black" style={{ color: 'var(--color-text)' }}>{progress}%</span>
+          <Sparkles size={13} style={{ color: 'var(--color-primary)' }} />
+        </div>
+      </div>
 
-        return {
-          ...profile,
-          rawScore,
-          percentage,
-        };
-      })
-      .sort((a, b) => b.percentage - a.percentage);
-  }, [scoreBoard, selectedQuestions]);
+      <div>
+        <h2 className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>Đang phân tích văn hoá...</h2>
+        <p className="text-sm mt-1 font-mono" style={{ color: 'var(--color-primary)' }}>
+          Scanning: {companies[currentCompany]}
+        </p>
+      </div>
 
-  const completion = Math.round((selectedQuestions.length / scenarioQuestions.length) * 100);
-  const canSubmit = selectedQuestions.length === scenarioQuestions.length;
-  const topMatch = ranking[0];
+      <div className="flex flex-wrap justify-center gap-2 max-w-sm">
+        {companies.map((c, i) => (
+          <span
+            key={c}
+            className="text-xs rounded-full px-3 py-1 transition-all duration-200"
+            style={{
+              background: i === currentCompany ? 'var(--color-primary)' : 'var(--color-surface)',
+              color: i === currentCompany ? 'white' : 'var(--color-text-muted)',
+              border: '1px solid var(--color-border)',
+              transform: i === currentCompany ? 'scale(1.1)' : 'scale(1)',
+            }}
+          >
+            {c}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
 
-  const handleSelectOption = (questionId: string, optionId: string) => {
-    setAnswers(prev => ({ ...prev, [questionId]: optionId }));
+// ─── Result Screen ────────────────────────────────────────────────────────────
+function ResultScreen({ answers }: { answers: number[] }) {
+  const navigate = useNavigate();
+  const [selectedCompany, setSelectedCompany] = useState(0);
 
-    // Nếu đã submit mà người dùng đổi đáp án, yêu cầu submit lại để chốt kết quả mới.
-    if (isSubmitted) {
-      setIsSubmitted(false);
-      setSubmittedAt(null);
-    }
-  };
+  // Compute matches based on slider answers
+  const scoredCompanies = COMPANY_DATABASE.map(company => {
+    // Simplified scoring: companies with higher autonomy index match better with right-leaning answers
+    const avgAnswer = answers.reduce((s, v) => s + v, 0) / answers.length;
+    const autonomyBonus = company.name === 'VNG' || company.name === 'Base.vn' ? avgAnswer * 0.1 : (100 - avgAnswer) * 0.1;
+    return { ...company, match: Math.min(98, Math.round(company.match + autonomyBonus - 5)) };
+  }).sort((a, b) => b.match - a.match);
 
-  const handleReset = () => {
-    setAnswers({});
-    setIsSubmitted(false);
-    setSubmittedAt(null);
-  };
-
-  const handleSubmit = () => {
-    if (!canSubmit) return;
-
-    setIsSubmitted(true);
-    setSubmittedAt(new Date().toLocaleString('vi-VN'));
-  };
+  const topCompany = scoredCompanies[selectedCompany] ?? scoredCompanies[0];
 
   return (
     <div className="space-y-6">
-      <SectionTitle
-        title="Khảo sát & Đánh giá Văn hóa"
-        subtitle="Chọn cách xử lý theo thói quen làm việc của bạn. Hệ thống sẽ xếp hạng kiểu văn hóa doanh nghiệp tương thích cao nhất."
-        action={<Badge variant="info">Mục tiêu: {companyName}</Badge>}
-      />
-
-      <SurfaceCard className="overflow-hidden p-0">
-        <div className="grid gap-0 lg:grid-cols-[1.4fr_1fr]">
-          <div className="space-y-4 bg-gradient-to-r from-blue-600 to-indigo-600 p-5 text-white">
-            <div className="flex items-center gap-2">
-              <Flame size={18} />
-              <p className="text-sm font-semibold tracking-wide uppercase">Culture Quest</p>
-            </div>
-            <p className="text-sm text-blue-100">
-              Hoàn thành các thẻ tình huống để mở khóa kết quả phù hợp văn hóa của bạn.
-            </p>
-            <div>
-              <div className="mb-2 flex items-center justify-between text-sm">
-                <span>Tiến độ khảo sát</span>
-                <span className="font-semibold">{completion}%</span>
-              </div>
-              <div className="h-2 rounded-full bg-white/25">
-                <div className="h-full rounded-full bg-white" style={{ width: `${completion}%` }} />
-              </div>
-            </div>
-          </div>
-
-          <div className="space-y-4 p-5">
-            <div className="flex flex-wrap gap-2">
-              <Badge variant="success">
-                Đã trả lời: {selectedQuestions.length}/{scenarioQuestions.length}
-              </Badge>
-              <Badge variant="warning">Chuỗi hiện tại: {selectedQuestions.length} thẻ</Badge>
-              {isSubmitted ? <Badge variant="info">Đã submit</Badge> : <Badge>Chưa submit</Badge>}
-            </div>
-
-            <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
-              <p className="font-medium text-slate-900">Ngữ cảnh đánh giá</p>
-              <p className="mt-1">Vị trí mục tiêu: {targetJob ?? 'Chưa chọn từ trang việc làm'}</p>
-              <div className="mt-2 flex items-center gap-2 text-slate-500">
-                <Building2 size={15} />
-                <span>{companyName}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </SurfaceCard>
-
-      <div className="grid gap-5 xl:grid-cols-[1.2fr_1fr]">
-        <div className="space-y-4">
-          {scenarioQuestions.map((question, questionIndex) => {
-            const selectedOptionId = answers[question.id];
-
-            return (
-              <SurfaceCard key={question.id} className="space-y-4">
-                <div className="flex flex-wrap items-start justify-between gap-2">
-                  <div>
-                    <p className="text-xs font-semibold tracking-wide text-blue-600 uppercase">
-                      Thẻ tình huống #{questionIndex + 1}
-                    </p>
-                    <h3 className="mt-1 text-lg font-semibold text-slate-900">{question.title}</h3>
-                  </div>
-                  {selectedOptionId ? (
-                    <Badge variant="success">Đã chọn</Badge>
-                  ) : (
-                    <Badge>Chưa chọn</Badge>
-                  )}
-                </div>
-
-                <p className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
-                  {question.situation}
-                </p>
-
-                <div className="space-y-3">
-                  {question.options.map(option => {
-                    const isSelected = option.id === selectedOptionId;
-
-                    return (
-                      <button
-                        key={option.id}
-                        type="button"
-                        onClick={() => handleSelectOption(question.id, option.id)}
-                        className={cn(
-                          'w-full rounded-xl border p-3 text-left transition',
-                          isSelected
-                            ? 'border-blue-600 bg-blue-50 shadow-sm shadow-blue-100'
-                            : 'border-slate-200 bg-white hover:border-blue-200 hover:bg-blue-50/40',
-                        )}
-                      >
-                        <p className="text-sm font-semibold text-slate-900">{option.title}</p>
-                        <p className="mt-1 text-sm text-slate-600">{option.detail}</p>
-                      </button>
-                    );
-                  })}
-                </div>
-              </SurfaceCard>
-            );
-          })}
-
-          <SurfaceCard className="space-y-3">
-            <div className="flex flex-wrap items-center justify-end gap-2">
-              <Button size="sm" onClick={handleSubmit} disabled={!canSubmit}>
-                <Sparkles size={15} />
-                <span>Submit để xem kết quả</span>
-              </Button>
-              <Button variant="outline" size="sm" onClick={handleReset}>
-                <RefreshCw size={15} />
-                <span>Làm lại khảo sát</span>
-              </Button>
-            </div>
-
-            {isSubmitted && submittedAt && (
-              <p className="text-right text-xs text-slate-500">Thời điểm submit: {submittedAt}</p>
-            )}
-          </SurfaceCard>
-        </div>
-
-        <div className="space-y-4">
-          <SurfaceCard className="space-y-4">
-            <div className="flex items-center gap-2 text-slate-900">
-              <Medal size={18} />
-              <h3 className="text-lg font-semibold">Kết quả phù hợp văn hóa</h3>
-            </div>
-
-            {!isSubmitted ? (
-              <p className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-600">
-                Kết quả cuối sẽ xuất hiện sau khi bạn hoàn thành toàn bộ thẻ tình huống và bấm{' '}
-                <span className="font-semibold">Submit để xem kết quả</span>.
-              </p>
-            ) : (
-              <div className="space-y-3">
-                {topMatch && (
-                  <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
-                    <div className="flex items-center gap-2">
-                      <Sparkles size={17} className="text-emerald-600" />
-                      <p className="text-sm font-semibold text-emerald-700">
-                        Mức tương thích cao nhất
-                      </p>
-                    </div>
-                    <p className="mt-1 text-base font-semibold text-slate-900">{topMatch.name}</p>
-                    <p className="mt-1 text-sm text-slate-700">{topMatch.description}</p>
-                    <p className="mt-2 text-sm font-medium text-emerald-700">
-                      Độ tương thích: {topMatch.percentage}%
-                    </p>
-                  </div>
-                )}
-
-                <div className="space-y-3">
-                  {ranking.map(profile => (
-                    <div key={profile.id} className="rounded-xl border border-slate-200 p-3">
-                      <div className="mb-2 flex items-center justify-between gap-2">
-                        <div className="flex items-center gap-2">
-                          <Target size={15} className="text-slate-400" />
-                          <p className="text-sm font-semibold text-slate-900">{profile.name}</p>
-                        </div>
-                        <Badge variant={profile.badgeVariant}>{profile.percentage}%</Badge>
-                      </div>
-
-                      <div className="h-2 rounded-full bg-slate-200">
-                        <div
-                          className={cn(
-                            'h-full rounded-full transition-all duration-500',
-                            profile.barClass,
-                          )}
-                          style={{ width: `${profile.percentage}%` }}
-                        />
-                      </div>
-
-                      <p className="mt-2 text-xs leading-relaxed text-slate-600">
-                        {profile.description}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </SurfaceCard>
-
-          <SurfaceCard className="space-y-2">
-            <h4 className="font-semibold text-slate-900">Gợi ý hành động</h4>
-            <p className="text-sm text-slate-700">
-              Dùng kết quả top 1 + top 2 để ưu tiên công ty phù hợp phong cách làm việc, rồi quay
-              lại trang việc làm để lọc JD theo mức độ tương thích.
-            </p>
-          </SurfaceCard>
+      {/* Header */}
+      <div
+        className="relative overflow-hidden rounded-3xl p-7 text-white"
+        style={{ background: 'var(--hero-bg)' }}
+      >
+        <div className="pointer-events-none absolute -top-10 -right-10 h-48 w-48 rounded-full blur-3xl" style={{ background: 'var(--hero-orb-a)', opacity: 0.4 }} />
+        <div className="relative z-10">
+          <div className="text-4xl mb-3">🎯</div>
+          <h1 className="text-3xl font-black">
+            You are a <span style={{ color: '#5eead4' }}>{topCompany.name}-er!</span>
+          </h1>
+          <p className="mt-2 text-base opacity-80 font-semibold">{topCompany.match}% Culture Match</p>
+          <p className="mt-1 text-sm opacity-60 max-w-md">{topCompany.tagline}</p>
         </div>
       </div>
+
+      {/* Company cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {scoredCompanies.map((company, i) => (
+          <button
+            key={company.name}
+            onClick={() => setSelectedCompany(i)}
+            className="rounded-2xl p-4 text-left transition-all hover:scale-[1.02]"
+            style={{
+              background: selectedCompany === i ? `${company.color}15` : 'var(--color-surface)',
+              border: `2px solid ${selectedCompany === i ? company.color : 'var(--color-border)'}`,
+            }}
+          >
+            <div className="text-2xl mb-2">{company.emoji}</div>
+            <p className="font-bold text-sm" style={{ color: selectedCompany === i ? company.color : 'var(--color-text)' }}>{company.name}</p>
+            <p className="text-xs font-black mt-1" style={{ color: company.color }}>{company.match}% Match</p>
+          </button>
+        ))}
+      </div>
+
+      {/* Detail dashboard */}
+      <div className="grid gap-5 lg:grid-cols-[220px_1fr]">
+        {/* Radar */}
+        <div className="rounded-3xl p-5 space-y-3" style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
+          <p className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>Biểu đồ văn hoá</p>
+          <RadarChart scores={topCompany.radarScores} color={topCompany.color} />
+          <div className="space-y-1.5">
+            {RADAR_LABELS.map((label, i) => (
+              <div key={label} className="flex items-center justify-between text-xs">
+                <span style={{ color: 'var(--color-text-muted)' }}>{label}</span>
+                <span className="font-bold" style={{ color: topCompany.color }}>{topCompany.radarScores[i]}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Why fit + CTA */}
+        <div className="space-y-4">
+          {/* Why fit */}
+          <div className="rounded-3xl p-5 space-y-3" style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
+            <div className="flex items-center gap-2">
+              <CheckCircle size={16} style={{ color: topCompany.color }} />
+              <p className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>Tại sao bạn hợp với {topCompany.name}?</p>
+            </div>
+            <div className="rounded-2xl p-4" style={{ background: `${topCompany.color}10`, border: `1px solid ${topCompany.color}30` }}>
+              <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
+                {topCompany.whyFit}
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {RADAR_LABELS.slice(0, 3).map((label, i) => (
+                <span key={label} className="text-xs rounded-full px-3 py-1 font-semibold"
+                  style={{ background: `${topCompany.color}15`, color: topCompany.color }}>
+                  {label}: {topCompany.radarScores[i]}%
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Match bar for others */}
+          <div className="rounded-3xl p-5 space-y-3" style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
+            <p className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>Các lựa chọn tiềm năng</p>
+            {scoredCompanies.map((company, i) => (
+              <div key={company.name} className="flex items-center gap-3">
+                <span className="text-base w-7 text-center">{company.emoji}</span>
+                <span className="text-xs font-semibold w-16 shrink-0" style={{ color: 'var(--color-text)' }}>{company.name}</span>
+                <div className="flex-1 h-2 rounded-full" style={{ background: 'var(--color-border-strong)' }}>
+                  <div
+                    className="h-full rounded-full transition-all duration-700"
+                    style={{ width: `${company.match}%`, background: i === 0 ? company.color : 'var(--color-border-strong)' }}
+                  />
+                </div>
+                <span className="text-xs font-black w-12 text-right" style={{ color: i === 0 ? company.color : 'var(--color-text-muted)' }}>
+                  {company.match}%
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {/* CTA */}
+          <div
+            className="rounded-3xl p-5 flex items-center gap-4"
+            style={{ background: `${topCompany.color}12`, border: `1px solid ${topCompany.color}30` }}
+          >
+            <div className="flex-1">
+              <p className="font-bold text-sm" style={{ color: 'var(--color-text)' }}>
+                Luyện phỏng vấn theo phong cách {topCompany.name}
+              </p>
+              <p className="text-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>
+                AI sẽ hỏi theo văn hoá và phong cách tuyển dụng của {topCompany.name}.
+              </p>
+            </div>
+            <Button variant="primary" onClick={() => navigate('/interview')} className="font-bold shrink-0">
+              <Sparkles size={14} />
+              Luyện ngay
+              <ArrowRight size={14} />
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Main ─────────────────────────────────────────────────────────────────────
+export default function CultureMatchingPage() {
+  const [step, setStep] = useState<Step>('hook');
+  const [answers, setAnswers] = useState<number[]>([]);
+
+  const handleSurveyComplete = (vals: number[]) => {
+    setAnswers(vals);
+    setStep('matching');
+  };
+
+  const handleMatchingDone = useCallback(() => {
+    setStep('result');
+  }, []);
+
+  const handleRestart = () => {
+    setAnswers([]);
+    setStep('hook');
+  };
+
+  return (
+    <div>
+      {step !== 'hook' && step !== 'result' && (
+        <div className="mb-4 flex items-center gap-2 text-sm" style={{ color: 'var(--color-text-muted)' }}>
+          <button onClick={handleRestart} className="hover:opacity-70 transition">← Bắt đầu lại</button>
+          <span>/</span>
+          <span style={{ color: 'var(--color-text)' }}>
+            {step === 'survey' ? 'Khảo sát' : step === 'matching' ? 'Phân tích...' : 'Kết quả'}
+          </span>
+        </div>
+      )}
+
+      {step === 'hook' && <HookScreen onStart={() => setStep('survey')} />}
+      {step === 'survey' && <SurveyScreen onComplete={handleSurveyComplete} />}
+      {step === 'matching' && <MatchingScreen onDone={handleMatchingDone} />}
+      {step === 'result' && <ResultScreen answers={answers} />}
     </div>
   );
 }

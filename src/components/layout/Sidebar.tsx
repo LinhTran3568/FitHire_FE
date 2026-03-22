@@ -1,14 +1,13 @@
 import { cn } from '@lib/utils';
-import { Bookmark, BriefcaseBusiness, BookOpen, FileSearch, FileUser, LayoutDashboard } from 'lucide-react';
+import { Compass, FileSearch, FileUser, LayoutDashboard, Mic } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
 const NAV_ITEMS = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, end: true },
   { to: '/cv-builder', label: 'Tạo CV với AI', icon: FileSearch, end: false },
   { to: '/my-cv', label: 'CV của tôi', icon: FileUser, end: false },
-  { to: '/jobs', label: 'Tìm việc', icon: BriefcaseBusiness, end: false },
-  { to: '/saved-jobs', label: 'Đã lưu', icon: Bookmark, end: false },
-  { to: '/culture/tests', label: 'Test tính cách', icon: BookOpen, end: false },
+  { to: '/interview', label: 'Phỏng vấn giả lập', icon: Mic, end: false },
+  { to: '/culture/matching', label: 'Khảo sát văn hoá', icon: Compass, end: false },
 ];
 
 export function Sidebar() {
