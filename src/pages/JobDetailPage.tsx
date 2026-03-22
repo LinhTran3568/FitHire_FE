@@ -127,7 +127,6 @@ export default function JobDetailPage() {
           style={{
             background: 'var(--color-primary-muted)',
             border: '1px solid var(--color-primary)',
-            borderOpacity: '0.3',
           }}
         >
           <div className="flex items-center gap-2 mb-2">

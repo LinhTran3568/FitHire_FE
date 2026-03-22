@@ -17,8 +17,6 @@ import {
   Layout,
   Settings,
   User,
-  ShieldCheck,
-  Globe,
   Zap as ZapIcon
 } from 'lucide-react';
 import { Link } from 'react-router-dom';

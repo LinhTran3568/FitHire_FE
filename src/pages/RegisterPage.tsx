@@ -1,5 +1,5 @@
 import { Input } from '@components/ui';
-import { ArrowLeft, BriefcaseBusiness, FileText, MicVocal, Sparkles, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, BriefcaseBusiness, FileText, MicVocal, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const PERKS = [

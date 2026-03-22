@@ -1,6 +1,6 @@
 import { Button, SurfaceCard, Badge } from '@components/ui';
 import { ArrowRight, CheckCircle, ChevronLeft, ChevronRight, Sparkles, Building2, Compass, Target, CreditCard, ShoppingCart, CloudCog, Gamepad2 } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // ─── Types ──────────────────────────────────────────────────────────────────

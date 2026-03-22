@@ -122,7 +122,7 @@ export default function CultureProfilePage() {
         </div>
 
         <div className="flex flex-col md:flex-row items-center gap-4 mt-10 pt-6 border-t" style={{ borderColor: 'var(--color-border)' }}>
-          <Button variant="default" className="w-full md:w-auto h-12 px-6 font-bold shadow-sm rounded-xl">
+          <Button variant="secondary" className="w-full md:w-auto h-12 px-6 font-bold shadow-sm rounded-xl">
             <BookmarkPlus size={18} className="mr-2" /> Lưu báo cáo vào CV
           </Button>
           <Link to="/culture/matching" className="w-full md:w-auto flex-1">

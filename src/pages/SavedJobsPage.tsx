@@ -128,7 +128,6 @@ export default function SavedJobsPage() {
                   style={{
                     background: job.matchScore >= 85 ? 'var(--color-success-light)' : 'var(--color-primary-muted)',
                     border: `1px solid ${job.matchScore >= 85 ? 'var(--color-success)' : 'var(--color-primary)'}`,
-                    borderOpacity: '0.3',
                   }}
                 >
                   <p
