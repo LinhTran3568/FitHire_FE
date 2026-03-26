@@ -95,12 +95,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                 : 'border-[var(--color-border)] bg-[var(--color-surface)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary-muted)]',
               'text-[var(--color-text)]',
               sizeStyles[inputSize],
-              leftAddon
-                ? paddingStyles[inputSize].leftWithAddon
-                : paddingStyles[inputSize].left,
-              rightAddon
-                ? paddingStyles[inputSize].rightWithAddon
-                : paddingStyles[inputSize].right,
+              leftAddon ? paddingStyles[inputSize].leftWithAddon : paddingStyles[inputSize].left,
+              rightAddon ? paddingStyles[inputSize].rightWithAddon : paddingStyles[inputSize].right,
               className,
             )}
             {...props}
