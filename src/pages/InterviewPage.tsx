@@ -4,6 +4,7 @@ import {
   Brain,
   CheckCircle,
   Clock,
+  FileText,
   Lightbulb,
   Mic,
   RefreshCw,
@@ -289,9 +290,15 @@ function FillerTracker({ counts }: { counts: LiveMetrics['fillerCount'] }) {
 function SetupPhase({
   onStart,
 }: {
-  onStart: (cvFile: File | null, mode: InterviewMode, deviceReady: boolean) => void;
+  onStart: (
+    cvFile: File | null,
+    jdFile: File | null,
+    mode: InterviewMode,
+    deviceReady: boolean,
+  ) => void;
 }) {
-  const [file, setFile] = useState<File | null>(null);
+  const [cvFile, setCvFile] = useState<File | null>(null);
+  const [jdFile, setJdFile] = useState<File | null>(null);
   const [mode, setMode] = useState<InterviewMode>('standard');
   const [deviceReady, setDeviceReady] = useState(false);
   const [isChecking, setIsChecking] = useState(false);
@@ -362,8 +369,8 @@ function SetupPhase({
             className="mb-6 flex-1 text-sm leading-relaxed"
             style={{ color: 'var(--color-text-muted)' }}
           >
-            Tải lên CV của bạn (PDF) để AI có thể đặt câu hỏi xoáy sâu trúng đích vào dự án thực tế
-            bạn đã làm.
+            Tải lên CV và JD để AI mô phỏng câu hỏi sát với vị trí ứng tuyển, bám đúng kỹ năng và
+            yêu cầu công việc.
           </p>
           <div
             className="hover:border-primary group relative cursor-pointer rounded-xl border-2 border-dashed p-6 text-center transition-all"
@@ -375,17 +382,17 @@ function SetupPhase({
             <input
               type="file"
               accept=".pdf"
-              onChange={e => e.target.files && setFile(e.target.files[0])}
+              onChange={e => e.target.files && setCvFile(e.target.files[0])}
               className="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
               title="Upload CV"
             />
-            {file ? (
+            {cvFile ? (
               <div
                 className="flex items-center justify-center gap-2"
                 style={{ color: 'var(--color-success)' }}
               >
                 <CheckCircle size={18} />
-                <span className="max-w-[200px] truncate text-sm font-semibold">{file.name}</span>
+                <span className="max-w-[200px] truncate text-sm font-semibold">{cvFile.name}</span>
               </div>
             ) : (
               <div className="space-y-2">
@@ -399,6 +406,45 @@ function SetupPhase({
                 </p>
                 <p className="text-xs font-medium" style={{ color: 'var(--color-text-subtle)' }}>
                   Hoặc kéo thả vào đây
+                </p>
+              </div>
+            )}
+          </div>
+
+          <div
+            className="hover:border-primary group relative mt-4 cursor-pointer rounded-xl border-2 border-dashed p-6 text-center transition-all"
+            style={{
+              borderColor: 'var(--color-border-strong)',
+              background: 'var(--color-surface)',
+            }}
+          >
+            <input
+              type="file"
+              accept=".pdf,.doc,.docx,.txt"
+              onChange={e => e.target.files && setJdFile(e.target.files[0])}
+              className="absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
+              title="Upload JD"
+            />
+            {jdFile ? (
+              <div
+                className="flex items-center justify-center gap-2"
+                style={{ color: 'var(--color-success)' }}
+              >
+                <CheckCircle size={18} />
+                <span className="max-w-[200px] truncate text-sm font-semibold">{jdFile.name}</span>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <FileText
+                  size={24}
+                  style={{ color: 'var(--color-text-subtle)' }}
+                  className="mx-auto transition-transform group-hover:scale-110"
+                />
+                <p className="text-sm font-semibold" style={{ color: 'var(--color-primary)' }}>
+                  Nhấp để tải JD
+                </p>
+                <p className="text-xs font-medium" style={{ color: 'var(--color-text-subtle)' }}>
+                  PDF, DOC, DOCX hoặc TXT
                 </p>
               </div>
             )}
@@ -495,7 +541,7 @@ function SetupPhase({
         <Button
           variant="primary"
           disabled={!deviceReady}
-          onClick={() => onStart(file, mode, deviceReady)}
+          onClick={() => onStart(cvFile, jdFile, mode, deviceReady)}
           className="h-12 w-full px-8 text-sm font-bold md:w-auto"
         >
           Bắt đầu phỏng vấn
@@ -510,9 +556,13 @@ function SetupPhase({
 function InterviewPhase({
   mode,
   onFinish,
+  cvFileName,
+  jdFileName,
 }: {
   mode: InterviewMode;
   onFinish: (results: QuestionResult[]) => void;
+  cvFileName: string | null;
+  jdFileName: string | null;
 }) {
   const [qIndex, setQIndex] = useState(0);
   const [isAiSpeaking, setIsAiSpeaking] = useState(true);
@@ -684,6 +734,36 @@ function InterviewPhase({
             <div className="mt-4 flex justify-center">
               <AISoundWave active={isAiSpeaking} />
             </div>
+            {(cvFileName || jdFileName) && (
+              <div className="mt-4 flex flex-wrap justify-center gap-2">
+                {cvFileName && (
+                  <Badge
+                    variant="default"
+                    className="max-w-[280px] border text-xs"
+                    style={{
+                      borderColor: 'var(--color-border)',
+                      background: 'var(--color-surface-raised)',
+                      color: 'var(--color-text-secondary)',
+                    }}
+                  >
+                    CV: <span className="ml-1 truncate">{cvFileName}</span>
+                  </Badge>
+                )}
+                {jdFileName && (
+                  <Badge
+                    variant="default"
+                    className="max-w-[280px] border text-xs"
+                    style={{
+                      borderColor: 'var(--color-border)',
+                      background: 'var(--color-surface-raised)',
+                      color: 'var(--color-text-secondary)',
+                    }}
+                  >
+                    JD: <span className="ml-1 truncate">{jdFileName}</span>
+                  </Badge>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
@@ -1013,9 +1093,22 @@ export default function InterviewPage() {
   const [phase, setPhase] = useState<Phase>('setup');
   const [mode, setMode] = useState<InterviewMode>('standard');
   const [results, setResults] = useState<QuestionResult[]>([]);
+  const [referenceFiles, setReferenceFiles] = useState<{
+    cvFileName: string | null;
+    jdFileName: string | null;
+  }>({ cvFileName: null, jdFileName: null });
 
-  const handleStart = (_file: File | null, selectedMode: InterviewMode) => {
+  const handleStart = (
+    cvFile: File | null,
+    jdFile: File | null,
+    selectedMode: InterviewMode,
+    _deviceReady: boolean,
+  ) => {
     setMode(selectedMode);
+    setReferenceFiles({
+      cvFileName: cvFile?.name ?? null,
+      jdFileName: jdFile?.name ?? null,
+    });
     setPhase('interview');
   };
 
@@ -1026,6 +1119,7 @@ export default function InterviewPage() {
 
   const handleRetry = () => {
     setResults([]);
+    setReferenceFiles({ cvFileName: null, jdFileName: null });
     setPhase('setup');
   };
 
@@ -1051,7 +1145,14 @@ export default function InterviewPage() {
       )}
 
       {phase === 'setup' && <SetupPhase onStart={handleStart} />}
-      {phase === 'interview' && <InterviewPhase mode={mode} onFinish={handleFinish} />}
+      {phase === 'interview' && (
+        <InterviewPhase
+          mode={mode}
+          onFinish={handleFinish}
+          cvFileName={referenceFiles.cvFileName}
+          jdFileName={referenceFiles.jdFileName}
+        />
+      )}
       {phase === 'analytics' && (
         <AnalyticsPhase results={results} mode={mode} onRetry={handleRetry} />
       )}

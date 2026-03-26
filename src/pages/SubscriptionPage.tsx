@@ -92,7 +92,7 @@ const PLANS: Plan[] = [
   {
     id: 'pro',
     name: 'Pro',
-    price: '249.000',
+    price: '349.000',
     priceNote: 'VNĐ / tháng',
     description: 'Trải nghiệm cao cấp nhất với GPT-4o intelligence không giới hạn.',
     icon: Crown,
