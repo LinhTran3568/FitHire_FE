@@ -13,9 +13,33 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 const sizeStyles: Record<Size, string> = {
-  sm: 'h-8 px-2.5 text-sm',
-  md: 'h-11 px-3.5 text-sm',
-  lg: 'h-13 px-4 text-base',
+  sm: 'h-8 text-sm',
+  md: 'h-11 text-sm',
+  lg: 'h-13 text-base',
+};
+
+const paddingStyles: Record<
+  Size,
+  { left: string; right: string; leftWithAddon: string; rightWithAddon: string }
+> = {
+  sm: {
+    left: 'pl-2.5',
+    right: 'pr-2.5',
+    leftWithAddon: 'pl-8',
+    rightWithAddon: 'pr-8',
+  },
+  md: {
+    left: 'pl-3.5',
+    right: 'pr-3.5',
+    leftWithAddon: 'pl-10',
+    rightWithAddon: 'pr-10',
+  },
+  lg: {
+    left: 'pl-4',
+    right: 'pr-4',
+    leftWithAddon: 'pl-11',
+    rightWithAddon: 'pr-11',
+  },
 };
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
@@ -50,7 +74,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 
         <div className="relative flex items-center">
           {leftAddon && (
-            <span className="absolute left-3.5" style={{ color: 'var(--color-text-subtle)' }}>
+            <span
+              className="pointer-events-none absolute left-3.5"
+              style={{ color: 'var(--color-text-subtle)' }}
+            >
               {leftAddon}
             </span>
           )}
@@ -67,16 +94,23 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                 ? 'border-[var(--color-danger)] bg-[var(--color-danger-light)] focus:ring-2 focus:ring-[var(--color-danger)]/20'
                 : 'border-[var(--color-border)] bg-[var(--color-surface)] focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary-muted)]',
               'text-[var(--color-text)]',
-              leftAddon && 'pl-10',
-              rightAddon && 'pr-10',
               sizeStyles[inputSize],
+              leftAddon
+                ? paddingStyles[inputSize].leftWithAddon
+                : paddingStyles[inputSize].left,
+              rightAddon
+                ? paddingStyles[inputSize].rightWithAddon
+                : paddingStyles[inputSize].right,
               className,
             )}
             {...props}
           />
 
           {rightAddon && (
-            <span className="absolute right-3.5" style={{ color: 'var(--color-text-subtle)' }}>
+            <span
+              className="pointer-events-none absolute right-3.5"
+              style={{ color: 'var(--color-text-subtle)' }}
+            >
               {rightAddon}
             </span>
           )}
